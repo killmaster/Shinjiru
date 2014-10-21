@@ -1,0 +1,16 @@
+QWidget#centralWidget {
+  background-color: #F2F2F2;
+}
+
+
+QWidget#navigationBar, QMenuBar, QMenuBar::item {
+  background-color: #F2F2F2;
+}
+
+QTabWidget {
+  border:none;
+}
+
+QTabWidget::pane {
+  border: 0;
+}
