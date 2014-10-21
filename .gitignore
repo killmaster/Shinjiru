@@ -1,3 +1,8 @@
+# Dependency folders
+
+QtAwesome/
+anitomy/
+
 # C++ objects and libs
 
 *.slo
