@@ -43,6 +43,7 @@ private slots:
   void applySettings();
   void loadTorrents();
   void tick();
+  void filterTorrents(QString);
 };
 
 #endif // MAINWINDOW_H

@@ -66,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent):
   connect(eventTimer, SIGNAL(timeout()), SLOT(tick()));
   connect(torrentRefreshTimer, SIGNAL(timeout()), SLOT(loadTorrents()));
   connect(ui->refreshButton, SIGNAL(clicked()), SLOT(loadTorrents()));
+  connect(ui->torrentFilter, SIGNAL(textChanged(QString)),
+          SLOT(filterTorrents(QString)));
 
   ui->tabWidget->setCurrentIndex(0);
 
@@ -227,10 +229,24 @@ void MainWindow::loadTorrents() {
   }
 
   torrentRefreshTimer->start();
+  filterTorrents(ui->torrentFilter->text());
 }
 
 void MainWindow::tick() {
   int remainingTime = torrentRefreshTimer->remainingTime() / 1000;
   ui->refreshButton->setText("Refresh (" +QString::number(remainingTime)+ ")");
   eventTimer->start(1000);
+}
+
+void MainWindow::filterTorrents(QString text) {
+  for(int i = 0; i < ui->torrentTable->rowCount(); i++)
+    ui->torrentTable->hideRow(i);
+
+  QList<QTableWidgetItem *> items =
+    ui->torrentTable->findItems(text, Qt::MatchContains);
+
+  for(int i = 0; i < items.count(); i++) {
+    if(items.at(i)->column() != 0 ) continue;
+    ui->torrentTable->showRow(items.at(i)->row());
+  }
 }

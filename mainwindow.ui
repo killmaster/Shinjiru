@@ -164,7 +164,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -561,6 +561,13 @@
            <number>6</number>
           </property>
           <item>
+           <widget class="QPushButton" name="refreshButton">
+            <property name="text">
+             <string>Refresh (0)</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -574,16 +581,31 @@
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="refreshButton">
+           <widget class="QCheckBox" name="chkHideUnknown">
             <property name="text">
-             <string>Refresh (0)</string>
+             <string>Hide Unknown Anime</string>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
-            <property name="text">
-             <string>PushButton</string>
+           <widget class="QLineEdit" name="torrentFilter">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>300</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maxLength">
+             <number>64</number>
+            </property>
+            <property name="placeholderText">
+             <string>Filter anime...</string>
             </property>
            </widget>
           </item>
