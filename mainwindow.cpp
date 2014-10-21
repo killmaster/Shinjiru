@@ -9,6 +9,7 @@
 #include <QPixmap>
 #include <QTableWidgetItem>
 #include <QTimer>
+#include <QSignalMapper>
 
 #include <string>
 #include <regex>
@@ -42,10 +43,10 @@ MainWindow::MainWindow(QWidget *parent):
   black.insert("color-disabled", QColor(0, 0, 0));
   black.insert("color-selected", QColor(0, 0, 0));
 
-  ui->settingsButton->setIcon(awesome->icon(fa::gear,     black));
-  ui->currentlyAiringButton->setIcon(awesome->icon(fa::clocko,   black));
-  ui->torrentsButton->setIcon(awesome->icon(fa::rss,      black));
-  ui->animeButton->setIcon(awesome->icon(fa::bars,     black));
+  ui->settingsButton->setIcon(awesome->icon(fa::gear, black));
+  ui->currentlyAiringButton->setIcon(awesome->icon(fa::clocko, black));
+  ui->torrentsButton->setIcon(awesome->icon(fa::rss, black));
+  ui->animeButton->setIcon(awesome->icon(fa::bars, black));
   ui->statisticsButton->setIcon(awesome->icon(fa::piechart, black));
 
   QHeaderView *torrentHeader = ui->torrentTable->verticalHeader();
@@ -68,6 +69,9 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->refreshButton, SIGNAL(clicked()), SLOT(loadTorrents()));
   connect(ui->torrentFilter, SIGNAL(textChanged(QString)),
           SLOT(filterTorrents(QString)));
+
+  connect(ui->torrentTable,SIGNAL(customContextMenuRequested(QPoint)),
+          SLOT(torrentContextMenu(QPoint)));
 
   ui->tabWidget->setCurrentIndex(0);
 
@@ -181,9 +185,7 @@ void MainWindow::loadTorrents() {
       ui->torrentTable->insertRow(i);
 
     anitomy::Anitomy anitomy;
-    char* str = titles.at(i).toLocal8Bit().data();
-    std::wstring name(str, str+strlen(str));
-    std::basic_string<wchar_t> title = name.c_str();
+    std::basic_string<wchar_t> title = toAnitomyFormat(titles.at(i));
 
     try {
       anitomy.Parse(title);
@@ -249,4 +251,49 @@ void MainWindow::filterTorrents(QString text) {
     if(items.at(i)->column() != 0 ) continue;
     ui->torrentTable->showRow(items.at(i)->row());
   }
+}
+
+void MainWindow::torrentContextMenu(QPoint pos) {
+  QTableWidgetItem *item = ui->torrentTable->itemAt(pos);
+  int row = item->row();
+  pos.setY(pos.y() + 120);
+  QAction *pDownloadAction = new QAction("Download",ui->torrentTable);
+  QAction *pRuleAction = new QAction("Create rule",ui->torrentTable);
+
+  QSignalMapper *signalMapper1 = new QSignalMapper(this);
+  QSignalMapper *signalMapper2 = new QSignalMapper(this);
+
+  signalMapper1->setMapping(pDownloadAction, row);
+  signalMapper2->setMapping(pRuleAction, row);
+
+  connect(pDownloadAction, SIGNAL(triggered()), signalMapper1, SLOT (map()));
+  connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(download(int)));
+
+  connect(pRuleAction, SIGNAL(triggered()), signalMapper2, SLOT (map()));
+  connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(createRule(int)));
+
+  QMenu *pContextMenu = new QMenu( this);
+  pContextMenu->addAction(pDownloadAction);
+  pContextMenu->addAction(pRuleAction);
+  pContextMenu->exec(mapToGlobal(pos));
+  delete pContextMenu;
+  delete signalMapper1;
+  delete signalMapper2;
+  signalMapper1 = NULL;
+  signalMapper2 = NULL;
+  pContextMenu = NULL;
+}
+
+void MainWindow::download(int row) {
+    qDebug() << "Downloading " << row;
+}
+
+void MainWindow::createRule(int row) {
+    qDebug() << "Creating rule " << row;
+}
+
+std::basic_string<wchar_t> MainWindow::toAnitomyFormat(QString text) {
+  char* s = text.toLocal8Bit().data();
+  std::wstring w(s, s+strlen(s));
+  return w.c_str();
 }

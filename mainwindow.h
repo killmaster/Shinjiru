@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QCloseEvent>
 #include <QTimer>
+#include <QSignalMapper>
 
 #include "QtAwesome.h"
 
@@ -31,6 +32,8 @@ private:
   QTimer *torrentRefreshTimer;
   QTimer *eventTimer;
 
+  std::basic_string<wchar_t> toAnitomyFormat(QString);
+
 signals:
   void logged_in();
 
@@ -44,6 +47,9 @@ private slots:
   void loadTorrents();
   void tick();
   void filterTorrents(QString);
+  void torrentContextMenu(QPoint);
+  void download(int);
+  void createRule(int);
 };
 
 #endif // MAINWINDOW_H
