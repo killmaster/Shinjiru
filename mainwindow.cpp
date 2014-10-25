@@ -10,6 +10,7 @@
 #include <QTableWidgetItem>
 #include <QTimer>
 #include <QSignalMapper>
+#include <QDesktopServices>
 
 #include <string>
 #include <regex>
@@ -43,7 +44,6 @@ MainWindow::MainWindow(QWidget *parent):
   black.insert("color-disabled", QColor(0, 0, 0));
   black.insert("color-selected", QColor(0, 0, 0));
 
-  ui->settingsButton->setIcon(awesome->icon(fa::gear, black));
   ui->currentlyAiringButton->setIcon(awesome->icon(fa::clocko, black));
   ui->torrentsButton->setIcon(awesome->icon(fa::rss, black));
   ui->animeButton->setIcon(awesome->icon(fa::bars, black));
@@ -58,7 +58,7 @@ MainWindow::MainWindow(QWidget *parent):
   ui->tabWidget->tabBar()->hide();
 
   connect(ui->animeButton, SIGNAL(clicked()), SLOT(showAnimeTab()));
-  connect(ui->settingsButton, SIGNAL(clicked()), SLOT(showSettingsTab()));
+  connect(ui->actionSettings, SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->torrentsButton, SIGNAL(clicked()), SLOT(showTorrentsTab()));
   connect(this, SIGNAL(logged_in()), SLOT(refreshAll()));
   connect(ui->usernameText, SIGNAL(textEdited(QString)), SLOT(enableApply()));
@@ -285,7 +285,7 @@ void MainWindow::torrentContextMenu(QPoint pos) {
 }
 
 void MainWindow::download(int row) {
-    qDebug() << "Downloading " << row;
+    QDesktopServices::openUrl(ui->torrentTable->item(row, 4)->text());
 }
 
 void MainWindow::createRule(int row) {

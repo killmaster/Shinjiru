@@ -70,8 +70,12 @@ void Torrents::parseXml() {
     } else if (xml.isCharacters() && !xml.isWhitespace() && metItem) {
       if (currentTag == "title")
         titleString += xml.text().toString();
-      else if (currentTag == "link")
-        linkString += xml.text().toString();
+      else if (currentTag == "description") {
+        QString description = xml.text().toString();
+        int magnetStart = description.indexOf("magnet:");
+        int length= description.indexOf(">Magnet") - magnetStart - 1;
+        linkString += description.mid(magnetStart, length);
+      }
     }
   }
 }

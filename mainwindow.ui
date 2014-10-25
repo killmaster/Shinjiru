@@ -142,22 +142,6 @@
          </property>
         </widget>
        </item>
-       <item>
-        <widget class="QPushButton" name="settingsButton">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="autoFillBackground">
-          <bool>true</bool>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-        </widget>
-       </item>
       </layout>
      </widget>
     </item>
@@ -659,7 +643,7 @@
           </column>
           <column>
            <property name="text">
-            <string>Link</string>
+            <string>Magnet Link</string>
            </property>
           </column>
          </widget>
