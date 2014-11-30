@@ -6,10 +6,10 @@ TEMPLATE = app
 CONFIG += c++11
 
 include(QtAwesome/QtAwesome.pri)
+include(AniListAPI/AniListAPI.pri)
 
 SOURCES   += main.cpp\
              mainwindow.cpp \
-    anilist.cpp \
     torrents.cpp \
     anitomy/anitomy/anitomy.cpp \
     anitomy/anitomy/element.cpp \
@@ -19,11 +19,11 @@ SOURCES   += main.cpp\
     anitomy/anitomy/parser_number.cpp \
     anitomy/anitomy/string.cpp \
     anitomy/anitomy/token.cpp \
-    anitomy/anitomy/tokenizer.cpp
+    anitomy/anitomy/tokenizer.cpp \
+    filedownloader.cpp
 
 HEADERS   += mainwindow.h \
              app.h \
-    anilist.h \
     torrents.h \
     anitomy/anitomy/anitomy.h \
     anitomy/anitomy/element.h \
@@ -31,7 +31,8 @@ HEADERS   += mainwindow.h \
     anitomy/anitomy/parser.h \
     anitomy/anitomy/string.h \
     anitomy/anitomy/token.h \
-    anitomy/anitomy/tokenizer.h
+    anitomy/anitomy/tokenizer.h \
+    filedownloader.h
 
 FORMS     += mainwindow.ui
 

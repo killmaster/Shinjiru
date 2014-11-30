@@ -5,8 +5,12 @@
 #include <QCloseEvent>
 #include <QTimer>
 #include <QSignalMapper>
+#include <QFuture>
+#include <QFutureWatcher>
 
 #include "QtAwesome.h"
+#include "anilistapi.h"
+#include "filedownloader.h"
 
 namespace Ui {
   class MainWindow;
@@ -31,8 +35,15 @@ private:
   QtAwesome *awesome;
   QTimer *torrentRefreshTimer;
   QTimer *eventTimer;
+  AniListAPI *api;
+
+  QFuture<QJsonObject> userJson;
+  QFutureWatcher<QJsonObject> userWatcher;
+  FileDownloader *userImageCtrl;
 
   std::basic_string<wchar_t> toAnitomyFormat(QString);
+
+  QString aniListDisplayName;
 
 signals:
   void logged_in();
@@ -42,10 +53,13 @@ private slots:
   void showSettingsTab();
   void showTorrentsTab();
   void refreshAll();
+  void refreshUser();
   void enableApply();
   void applySettings();
   void loadTorrents();
+  void loadUser();
   void tick();
+  void setUserImage();
   void filterTorrents(QString);
   void torrentContextMenu(QPoint);
   void download(int);

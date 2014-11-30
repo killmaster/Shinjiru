@@ -11,14 +11,17 @@
 #include <QTimer>
 #include <QSignalMapper>
 #include <QDesktopServices>
+#include <QFuture>
+#include <QFutureWatcher>
+#include <QtConcurrent/QtConcurrent>
 
 #include <string>
 #include <regex>
 
 #include "QtAwesome.h"
 #include "app.h"
-#include "anilist.h"
 #include "torrents.h"
+#include "anilistapi.h"
 
 #include "anitomy/anitomy/anitomy.h"
 
@@ -72,18 +75,30 @@ MainWindow::MainWindow(QWidget *parent):
 
   connect(ui->torrentTable,SIGNAL(customContextMenuRequested(QPoint)),
           SLOT(torrentContextMenu(QPoint)));
+  connect(&userWatcher, SIGNAL(finished()), SLOT(refreshUser()));
 
   ui->tabWidget->setCurrentIndex(0);
 
-  if(aniListUsername != "" && aniListPassword != "") {
-    if(AniList::login()) {
-      emit logged_in();
+  api = new AniListAPI(this, "Shinjiru", "");
 
-      loadTorrents();
-      ui->torrentTable->resizeColumnsToContents();
-      ui->currentlyWatchingTable->resizeColumnsToContents();
-    }
+  if(api->init() == AniListAPI::OK) {
+    emit logged_in();
+
+    loadUser();
+    ui->currentlyWatchingTable->resizeColumnsToContents();
+  } else {
+    api->setAuthorizationCode("");
+
+    if(api->init() != AniListAPI::OK) exit(8);
+
+    emit logged_in();
+
+    loadUser();
+    ui->currentlyWatchingTable->resizeColumnsToContents();
   }
+
+  loadTorrents();
+  ui->torrentTable->resizeColumnsToContents();
 
   eventTimer->start(1000);
 }
@@ -104,12 +119,7 @@ void MainWindow::readSettings() {
   QPoint pos = settings.value("window/pos", QPoint(200, 200)).toPoint();
   QSize size = settings.value("window/size", QSize(800, 600)).toSize();
   bool wasMaximized = settings.value("window/maximized", false).toBool();
-  aniListUsername = settings.value("anilist/user", "").toString();
-  aniListPassword = settings.value("anilist/pass", "").toString();
   int torrentRefreshInterval = settings.value("tinterval", 3600).toInt();
-
-  ui->usernameText->setText(aniListUsername);
-  ui->passwordText->setText(aniListPassword);
 
   torrentRefreshTimer->setInterval(torrentRefreshInterval);
 
@@ -131,8 +141,6 @@ void MainWindow::writeSettings() {
     settings.setValue("window/maximized", false);
   }
 
-  settings.setValue("anilist/user", ui->usernameText->text());
-  settings.setValue("anilist/pass", ui->passwordText->text());
   settings.setValue("tinterval", 3600 * 1000);
 }
 
@@ -161,10 +169,6 @@ void MainWindow::enableApply() {
 
 void MainWindow::applySettings() {
   writeSettings();
-
-  if(aniListUsername != ui->usernameText->text() ||
-    aniListPassword != ui->passwordText->text()) {
-  }
 }
 
 void MainWindow::loadTorrents() {
@@ -296,4 +300,26 @@ std::basic_string<wchar_t> MainWindow::toAnitomyFormat(QString text) {
   char* s = text.toLocal8Bit().data();
   std::wstring w(s, s+strlen(s));
   return w.c_str();
+}
+
+void MainWindow::loadUser() {
+  userJson = QtConcurrent::run([&]() {
+    return api->get(api->API_USER);
+  });
+
+  userWatcher.setFuture(userJson);
+}
+
+void MainWindow::refreshUser() {
+  QJsonObject userData = userJson.result();
+  ui->displayName->setText(userData.value("display_name").toString());
+  QUrl imageUrl(userData.value("image_url_med").toString());
+  userImageCtrl = new FileDownloader(imageUrl, this);
+  connect(userImageCtrl, SIGNAL(downloaded()), SLOT(setUserImage()));
+}
+
+void MainWindow::setUserImage() {
+  QPixmap u_image;
+  u_image.loadFromData(userImageCtrl->downloadedData());
+  ui->userImage->setPixmap(u_image);
 }
