@@ -282,8 +282,29 @@
                </property>
                <item>
                 <widget class="QTableWidget" name="completedTable">
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="selectionMode">
+                  <enum>QAbstractItemView::SingleSelection</enum>
+                 </property>
+                 <property name="selectionBehavior">
+                  <enum>QAbstractItemView::SelectRows</enum>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="horizontalHeaderDefaultSectionSize">
+                  <number>200</number>
+                 </attribute>
                  <attribute name="horizontalHeaderStretchLastSection">
                   <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
@@ -331,8 +352,29 @@
                </property>
                <item>
                 <widget class="QTableWidget" name="onHoldTable">
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="selectionMode">
+                  <enum>QAbstractItemView::SingleSelection</enum>
+                 </property>
+                 <property name="selectionBehavior">
+                  <enum>QAbstractItemView::SelectRows</enum>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="horizontalHeaderDefaultSectionSize">
+                  <number>200</number>
+                 </attribute>
                  <attribute name="horizontalHeaderStretchLastSection">
                   <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
@@ -380,8 +422,29 @@
                </property>
                <item>
                 <widget class="QTableWidget" name="droppedTable">
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="selectionMode">
+                  <enum>QAbstractItemView::SingleSelection</enum>
+                 </property>
+                 <property name="selectionBehavior">
+                  <enum>QAbstractItemView::SelectRows</enum>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="horizontalHeaderDefaultSectionSize">
+                  <number>200</number>
+                 </attribute>
                  <attribute name="horizontalHeaderStretchLastSection">
                   <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
@@ -429,8 +492,29 @@
                </property>
                <item>
                 <widget class="QTableWidget" name="planToWatchTable">
+                 <property name="editTriggers">
+                  <set>QAbstractItemView::NoEditTriggers</set>
+                 </property>
+                 <property name="alternatingRowColors">
+                  <bool>true</bool>
+                 </property>
+                 <property name="selectionMode">
+                  <enum>QAbstractItemView::SingleSelection</enum>
+                 </property>
+                 <property name="selectionBehavior">
+                  <enum>QAbstractItemView::SelectRows</enum>
+                 </property>
+                 <property name="sortingEnabled">
+                  <bool>true</bool>
+                 </property>
+                 <attribute name="horizontalHeaderDefaultSectionSize">
+                  <number>200</number>
+                 </attribute>
                  <attribute name="horizontalHeaderStretchLastSection">
                   <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderVisible">
+                  <bool>false</bool>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
