@@ -14,6 +14,7 @@
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QtConcurrent/QtConcurrent>
+#include <QInputDialog>
 
 #include <string>
 #include <regex>
@@ -76,6 +77,8 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->torrentTable,SIGNAL(customContextMenuRequested(QPoint)),
           SLOT(torrentContextMenu(QPoint)));
   connect(&userWatcher, SIGNAL(finished()), SLOT(refreshUser()));
+  connect(&userListWatcher, SIGNAL(finished()), SLOT(refreshList()));
+  connect(this, SIGNAL(displayNameAvailable()), SLOT(loadList()));
 
   ui->tabWidget->setCurrentIndex(0);
 
@@ -87,7 +90,13 @@ MainWindow::MainWindow(QWidget *parent):
     loadUser();
     ui->currentlyWatchingTable->resizeColumnsToContents();
   } else {
-    api->setAuthorizationCode("");
+    bool ok;
+    QString message = "Authorization code:                                                                                    ";
+    QString text = QInputDialog::getText(this, tr("Authorization Code Request"),
+                                         tr(message.toLocal8Bit().data()),
+                                         QLineEdit::Normal, "", &ok);
+    if (ok && !text.isEmpty())
+      api->setAuthorizationCode(text);
 
     if(api->init() != AniListAPI::OK) exit(8);
 
@@ -145,7 +154,7 @@ void MainWindow::writeSettings() {
 }
 
 void MainWindow::refreshAll() {
-  ui->displayName->setText(aniListDisplayName);
+  ui->displayName->setText("");
 
   QImage userImage;
   ui->userImage->setPixmap(QPixmap::fromImage(userImage));
@@ -313,6 +322,7 @@ void MainWindow::loadUser() {
 void MainWindow::refreshUser() {
   QJsonObject userData = userJson.result();
   ui->displayName->setText(userData.value("display_name").toString());
+  emit displayNameAvailable();
   QUrl imageUrl(userData.value("image_url_med").toString());
   userImageCtrl = new FileDownloader(imageUrl, this);
   connect(userImageCtrl, SIGNAL(downloaded()), SLOT(setUserImage()));
@@ -322,4 +332,20 @@ void MainWindow::setUserImage() {
   QPixmap u_image;
   u_image.loadFromData(userImageCtrl->downloadedData());
   ui->userImage->setPixmap(u_image);
+}
+
+void MainWindow::loadList() {
+  userListJson = QtConcurrent::run([&]() {
+    return api->get(api->API_USER_LIST(ui->displayName->text()));
+  });
+
+  userListWatcher.setFuture(userListJson);
+}
+
+void MainWindow::refreshList() {
+  QJsonObject userListData = userListJson.result();
+  QJsonDocument doc(userListData);
+  QByteArray bytes = doc.toJson();
+
+  qDebug() << bytes;
 }

@@ -41,12 +41,16 @@ private:
   QFutureWatcher<QJsonObject> userWatcher;
   FileDownloader *userImageCtrl;
 
+  QFuture<QJsonObject> userListJson;
+  QFutureWatcher<QJsonObject> userListWatcher;
+
   std::basic_string<wchar_t> toAnitomyFormat(QString);
 
   QString aniListDisplayName;
 
 signals:
   void logged_in();
+  void displayNameAvailable();
 
 private slots:
   void showAnimeTab();
@@ -59,6 +63,8 @@ private slots:
   void loadTorrents();
   void loadUser();
   void tick();
+  void loadList();
+  void refreshList();
   void setUserImage();
   void filterTorrents(QString);
   void torrentContextMenu(QPoint);
