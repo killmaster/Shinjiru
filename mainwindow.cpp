@@ -82,23 +82,40 @@ MainWindow::MainWindow(QWidget *parent):
 
   ui->tabWidget->setCurrentIndex(0);
 
-  api = new AniListAPI(this, "Shinjiru", "");
+  api = new AniListAPI(this, api_id, api_secret);
 
-  if(api->init() == AniListAPI::OK) {
-    emit logged_in();
 
-    loadUser();
-    ui->currentlyWatchingTable->resizeColumnsToContents();
+
+  if(api->hasAuthorizationCode()) {
+    if (api->init() == AniListAPI::OK) {
+      QEventLoop waitForInit;
+      connect(api, SIGNAL(access_granted()), &waitForInit, SLOT(quit()));
+      connect(api, SIGNAL(access_denied()), &waitForInit, SLOT(quit()));
+      waitForInit.exec();
+      emit logged_in();
+
+      loadUser();
+      ui->currentlyWatchingTable->resizeColumnsToContents();
+    } else exit(9);
   } else {
     bool ok;
+    QDesktopServices::openUrl(QUrl("http://auth.shinjiru.me", QUrl::TolerantMode));
     QString message = "Authorization code:                                                                                    ";
     QString text = QInputDialog::getText(this, tr("Authorization Code Request"),
                                          tr(message.toLocal8Bit().data()),
                                          QLineEdit::Normal, "", &ok);
-    if (ok && !text.isEmpty())
+    if (ok && !text.isEmpty()) {
       api->setAuthorizationCode(text);
+    } else {
+      exit(12);
+    }
 
     if(api->init() != AniListAPI::OK) exit(8);
+
+    QEventLoop waitForInit;
+    connect(api, SIGNAL(access_granted()), &waitForInit, SLOT(quit()));
+    connect(api, SIGNAL(access_denied()), &waitForInit, SLOT(quit()));
+    waitForInit.exec();
 
     emit logged_in();
 
@@ -115,6 +132,7 @@ MainWindow::MainWindow(QWidget *parent):
 MainWindow::~MainWindow() {
   delete ui;
   delete awesome;
+  delete api;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
