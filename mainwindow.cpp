@@ -15,6 +15,7 @@
 #include <QFutureWatcher>
 #include <QtConcurrent/QtConcurrent>
 #include <QInputDialog>
+#include <QTextDocument>
 
 #include <string>
 #include <regex>
@@ -362,8 +363,45 @@ void MainWindow::loadList() {
 
 void MainWindow::refreshList() {
   QJsonObject userListData = userListJson.result();
-  QJsonDocument doc(userListData);
-  QByteArray bytes = doc.toJson();
 
-  qDebug() << bytes;
+  userListData = userListData.value("lists").toObject();
+
+  QStringList listNames = (QStringList() << "watching"
+                                         << "completed"
+                                         << "on_hold"
+                                         << "dropped"
+                                         << "plan_to_watch");
+
+  QList<QTableWidget *> tableNames = (QList<QTableWidget *>() << ui->currentlyWatchingTable
+                           << ui->completedTable
+                           << ui->onHoldTable
+                           << ui->droppedTable
+                           << ui->planToWatchTable);
+
+  for(int i = 0; i < listNames.length(); i++) {
+    for(QJsonValue ary : userListData.value(listNames.at(i)).toArray()) {
+      QJsonObject anime = ary.toObject();
+      int row = tableNames.at(i)->rowCount();
+      QString title = anime.value("anime").toObject().value("title_romaji").toString();
+      QTextDocument text;
+      text.setHtml(title);
+      QString plain_title = text.toPlainText();
+      QTableWidgetItem *titleData = new QTableWidgetItem(plain_title);
+      QTableWidgetItem *progressData = new QTableWidgetItem(QString::number(anime.value("episodes_watched").toInt()));
+      QTableWidgetItem *scoreData = new QTableWidgetItem(QString::number(anime.value("score").toInt()));
+      QTableWidgetItem *typeData = new QTableWidgetItem(anime.value("anime").toObject().value("type").toString());
+      tableNames.at(i)->insertRow(row);
+      tableNames.at(i)->setItem(row, 0, titleData);
+      tableNames.at(i)->setItem(row, 1, progressData);
+      tableNames.at(i)->setItem(row, 2, scoreData);
+      tableNames.at(i)->setItem(row, 3, typeData);
+    }
+    QString tab_title = listNames.at(i);
+    tab_title.replace(QString("_"), QString(" "));
+    tableNames.at(i)->resizeColumnsToContents();
+    ui->tabWidget_2->setTabText(i, tab_title + " (" + QString::number(tableNames.at(i)->rowCount()) + ")");
+    QFont font = ui->tabWidget_2->tabBar()->font();
+    font.setCapitalization(QFont::Capitalize);
+    ui->tabWidget_2->tabBar()->setFont(font);
+  }
 }

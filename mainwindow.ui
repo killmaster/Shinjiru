@@ -148,7 +148,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -191,11 +191,11 @@
               <enum>QTabWidget::Rounded</enum>
              </property>
              <property name="currentIndex">
-              <number>0</number>
+              <number>4</number>
              </property>
              <widget class="QWidget" name="currentlyWatchingTab">
               <attribute name="title">
-               <string>Currently Watching (0)</string>
+               <string>Watching (0)</string>
               </attribute>
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <property name="leftMargin">
@@ -230,11 +230,14 @@
                  <attribute name="horizontalHeaderDefaultSectionSize">
                   <number>200</number>
                  </attribute>
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
                  <attribute name="verticalHeaderVisible">
                   <bool>false</bool>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
-                  <bool>true</bool>
+                  <bool>false</bool>
                  </attribute>
                  <column>
                   <property name="text">
@@ -278,7 +281,34 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QTableWidget" name="tableWidget_2"/>
+                <widget class="QTableWidget" name="completedTable">
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderStretchLastSection">
+                  <bool>false</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Anime Title</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Progress</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Score</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Type</string>
+                  </property>
+                 </column>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -300,7 +330,34 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QTableWidget" name="tableWidget_3"/>
+                <widget class="QTableWidget" name="onHoldTable">
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderStretchLastSection">
+                  <bool>false</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Anime Title</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Progress</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Score</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Type</string>
+                  </property>
+                 </column>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -322,7 +379,34 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QTableWidget" name="tableWidget_4"/>
+                <widget class="QTableWidget" name="droppedTable">
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderStretchLastSection">
+                  <bool>false</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Anime Title</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Progress</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Score</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Type</string>
+                  </property>
+                 </column>
+                </widget>
                </item>
               </layout>
              </widget>
@@ -344,7 +428,34 @@
                 <number>0</number>
                </property>
                <item>
-                <widget class="QTableWidget" name="tableWidget"/>
+                <widget class="QTableWidget" name="planToWatchTable">
+                 <attribute name="horizontalHeaderStretchLastSection">
+                  <bool>true</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderStretchLastSection">
+                  <bool>false</bool>
+                 </attribute>
+                 <column>
+                  <property name="text">
+                   <string>Anime Title</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Progress</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Score</string>
+                  </property>
+                 </column>
+                 <column>
+                  <property name="text">
+                   <string>Type</string>
+                  </property>
+                 </column>
+                </widget>
                </item>
               </layout>
              </widget>
