@@ -71,6 +71,9 @@ private slots:
   void applySettings();
   void loadTorrents();
   void loadUser();
+  void viewDashboard();
+  void viewProfile();
+  void viewAnimeList();
   void tick();
   void loadList();
   void refreshList();

@@ -85,21 +85,21 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->actionSettings, SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->torrentsButton, SIGNAL(clicked()), SLOT(showTorrentsTab()));
   connect(this, SIGNAL(logged_in()), SLOT(refreshAll()));
-  connect(ui->usernameText, SIGNAL(textEdited(QString)), SLOT(enableApply()));
-  connect(ui->passwordText, SIGNAL(textEdited(QString)), SLOT(enableApply()));
   connect(ui->applyButton, SIGNAL(clicked()), SLOT(applySettings()));
   connect(eventTimer, SIGNAL(timeout()), SLOT(tick()));
   connect(torrentRefreshTimer, SIGNAL(timeout()), SLOT(loadTorrents()));
   connect(ui->refreshButton, SIGNAL(clicked()), SLOT(loadTorrents()));
   connect(ui->torrentFilter, SIGNAL(textChanged(QString)),
           SLOT(filterTorrents(QString)));
-
   connect(ui->torrentTable,SIGNAL(customContextMenuRequested(QPoint)),
           SLOT(torrentContextMenu(QPoint)));
   connect(&userWatcher, SIGNAL(finished()), SLOT(refreshUser()));
   connect(&userListWatcher, SIGNAL(finished()), SLOT(refreshList()));
   connect(this, SIGNAL(displayNameAvailable()), SLOT(loadList()));
   connect(ui->chkHideUnknown,SIGNAL(toggled(bool)), SLOT(filterTorrents(bool)));
+  connect(ui->actionView_Anime_List,SIGNAL(triggered()), SLOT(viewAnimeList()));
+  connect(ui->actionView_Profile,SIGNAL(triggered()), SLOT(viewProfile()));
+  connect(ui->actionView_Dashboard,SIGNAL(triggered()), SLOT(viewDashboard()));
 
   ui->tabWidget->setCurrentIndex(0);
 
@@ -518,4 +518,18 @@ void MainWindow::refreshList() {
 
   progressBar->setValue(0);
   progressBar->setFormat("");
+}
+
+void MainWindow::viewDashboard() {
+  QDesktopServices::openUrl(QString("http://anilist.co/home"));
+}
+
+void MainWindow::viewProfile() {
+  QDesktopServices::openUrl(QString("http://anilist.co/user/") +
+                            aniListDisplayName);
+}
+
+void MainWindow::viewAnimeList() {
+  QDesktopServices::openUrl(QString("http://anilist.co/animelist/") +
+                            aniListDisplayName);
 }
