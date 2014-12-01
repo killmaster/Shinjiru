@@ -94,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent):
   connect(&userWatcher, SIGNAL(finished()), SLOT(refreshUser()));
   connect(&userListWatcher, SIGNAL(finished()), SLOT(refreshList()));
   connect(this, SIGNAL(displayNameAvailable()), SLOT(loadList()));
+  connect(ui->chkHideUnknown,SIGNAL(toggled(bool)), SLOT(filterTorrents(bool)));
 
   ui->tabWidget->setCurrentIndex(0);
 
@@ -164,7 +165,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 
   p.drawPixmap(width() - 55, 25, 48, 48, userImage);
   p.drawRect(width() - 55, 25, 48, 48);
-  p.drawText(0, 38, width() - 60, 40, Qt::AlignRight, aniListDisplayName);
+  p.drawText(0, 30, width() - 60, 40, Qt::AlignRight, aniListDisplayName);
   event->accept();
 }
 
@@ -260,14 +261,21 @@ void MainWindow::loadTorrents() {
     QString videoType = QString::fromWCharArray(
                 elements.get(anitomy::kElementVideoResolution).c_str());
 
-    QTableWidgetItem *titleItem = new QTableWidgetItem(QString(parsedTitle));
-    QTableWidgetItem *epItem = new QTableWidgetItem(QString(episodeNumber));
-    QTableWidgetItem *subItem = new QTableWidgetItem(QString(subGroup));
-    QTableWidgetItem *videoItem = new QTableWidgetItem(QString(videoType));
-    QTableWidgetItem *linkItem = new QTableWidgetItem(QString(links.at(i)));
+    QTableWidgetItem *titleItem = new QTableWidgetItem(parsedTitle);
+    QTableWidgetItem *epItem = new QTableWidgetItem(episodeNumber);
+    QTableWidgetItem *subItem = new QTableWidgetItem(subGroup);
+    QTableWidgetItem *videoItem = new QTableWidgetItem(videoType);
+    QTableWidgetItem *fileNameItem = new QTableWidgetItem(titles.at(i));
+    QTableWidgetItem *linkItem = new QTableWidgetItem(links.at(i));
 
     if(episodeNumber == "") {
       qDebug() << "Unknown episode for: " << parsedTitle << ", skipping";
+      offset++;
+      continue;
+    }
+
+    if(links.at(i) == "") {
+      qDebug() << "Unknown link for: " << parsedTitle << ", skipping";
       offset++;
       continue;
     }
@@ -276,7 +284,8 @@ void MainWindow::loadTorrents() {
     ui->torrentTable->setItem(i - offset, 1, epItem);
     ui->torrentTable->setItem(i - offset, 2, subItem);
     ui->torrentTable->setItem(i - offset, 3, videoItem);
-    ui->torrentTable->setItem(i - offset, 4, linkItem);
+    ui->torrentTable->setItem(i - offset, 4, fileNameItem);
+    ui->torrentTable->setItem(i - offset, 5, linkItem);
   }
 
   while(offset > 0) {
@@ -285,7 +294,8 @@ void MainWindow::loadTorrents() {
   }
 
   torrentRefreshTimer->start();
-  filterTorrents(ui->torrentFilter->text());
+  filterTorrents(ui->torrentFilter->text(), ui->chkHideUnknown->isChecked());
+  filterTorrents(ui->chkHideUnknown->isChecked());
 }
 
 void MainWindow::tick() {
@@ -294,7 +304,7 @@ void MainWindow::tick() {
   eventTimer->start(1000);
 }
 
-void MainWindow::filterTorrents(QString text) {
+void MainWindow::filterTorrents(QString text, bool checked) {
   for(int i = 0; i < ui->torrentTable->rowCount(); i++)
     ui->torrentTable->hideRow(i);
 
@@ -303,8 +313,29 @@ void MainWindow::filterTorrents(QString text) {
 
   for(int i = 0; i < items.count(); i++) {
     if(items.at(i)->column() != 0 ) continue;
-    ui->torrentTable->showRow(items.at(i)->row());
+    int count = 1;
+
+    if(checked) {
+      QString f_title = items.at(i)->text();
+      Qt::MatchFlag flag = Qt::MatchExactly;
+      count = ui->currentlyWatchingTable->findItems(f_title, flag).count() +
+          ui->completedTable->findItems(f_title, flag).count() +
+          ui->onHoldTable->findItems(f_title, flag).count() +
+          ui->planToWatchTable->findItems(f_title, flag).count() +
+          ui->droppedTable->findItems(f_title, flag).count();
+    }
+
+    if(count > 0)
+      ui->torrentTable->showRow(items.at(i)->row());
   }
+}
+
+void MainWindow::filterTorrents(bool checked) {
+  filterTorrents(ui->torrentFilter->text(), checked);
+}
+
+void MainWindow::filterTorrents(QString text) {
+  filterTorrents(text, ui->chkHideUnknown->isChecked());
 }
 
 void MainWindow::torrentContextMenu(QPoint pos) {

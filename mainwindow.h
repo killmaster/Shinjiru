@@ -72,6 +72,8 @@ private slots:
   void loadList();
   void refreshList();
   void setUserImage();
+  void filterTorrents(QString, bool);
+  void filterTorrents(bool);
   void filterTorrents(QString);
   void torrentContextMenu(QPoint);
   void download(int);
