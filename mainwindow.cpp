@@ -114,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent):
     } else exit(9);
   } else {
     bool ok;
-    QDesktopServices::openUrl(QUrl("http://auth.shinjiru.me", QUrl::TolerantMode));
+    QDesktopServices::openUrl(QUrl("http://auth.shinjiru.me"));
     QString message = "Authorization code:                                                                                    ";
     QString text = QInputDialog::getText(this, tr("Authorization Code Request"),
                                          tr(message.toLocal8Bit().data()),
