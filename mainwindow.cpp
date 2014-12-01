@@ -43,6 +43,10 @@ MainWindow::MainWindow(QWidget *parent):
   torrentRefreshTimer = new QTimer(this);
   eventTimer = new QTimer(this);
 
+  QFont font = ui->tabWidget_2->tabBar()->font();
+  font.setCapitalization(QFont::Capitalize);
+  ui->tabWidget_2->tabBar()->setFont(font);
+
   QVariantMap black;
   black.insert("color", QColor(0, 0, 0));
   black.insert("color-active", QColor(0, 0, 0));
@@ -55,6 +59,16 @@ MainWindow::MainWindow(QWidget *parent):
   ui->statisticsButton->setIcon(awesome->icon(fa::piechart, black));
 
   QHeaderView *torrentHeader = ui->torrentTable->verticalHeader();
+  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
+  torrentHeader = ui->currentlyWatchingTable->verticalHeader();
+  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
+  torrentHeader = ui->planToWatchTable->verticalHeader();
+  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
+  torrentHeader = ui->completedTable->verticalHeader();
+  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
+  torrentHeader = ui->onHoldTable->verticalHeader();
+  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
+  torrentHeader = ui->droppedTable->verticalHeader();
   torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
 
   readSettings();
@@ -141,6 +155,19 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   event->accept();
 }
 
+void MainWindow::paintEvent(QPaintEvent *event) {
+  QPainter p(this);
+
+  QFont font = p.font();
+  font.setPointSize(14);
+  p.setFont(font);
+
+  p.drawPixmap(width() - 55, 25, 48, 48, userImage);
+  p.drawRect(width() - 55, 25, 48, 48);
+  p.drawText(0, 38, width() - 60, 40, Qt::AlignRight, aniListDisplayName);
+  event->accept();
+}
+
 void MainWindow::readSettings() {
   QSettings settings;
 
@@ -172,12 +199,7 @@ void MainWindow::writeSettings() {
   settings.setValue("tinterval", 3600 * 1000);
 }
 
-void MainWindow::refreshAll() {
-  ui->displayName->setText("");
-
-  QImage userImage;
-  ui->userImage->setPixmap(QPixmap::fromImage(userImage));
-}
+void MainWindow::refreshAll() {}
 
 void MainWindow::showAnimeTab() {
   ui->tabWidget->setCurrentIndex(0);
@@ -340,7 +362,22 @@ void MainWindow::loadUser() {
 
 void MainWindow::refreshUser() {
   QJsonObject userData = userJson.result();
-  ui->displayName->setText(userData.value("display_name").toString());
+  this->aniListDisplayName = userData.value("display_name").toString();
+  repaint();
+  score_type = userData.value("score_type").toInt();
+  switch(score_type) {
+    case 0:
+      max_score = "10"; break;
+    case 1:
+      max_score = "100"; break;
+    case 2:
+      max_score = "5"; break;
+    case 3:
+      max_score = "3"; break;
+    case 4:
+      max_score = "10.0"; break;
+  };
+
   emit displayNameAvailable();
   QUrl imageUrl(userData.value("image_url_med").toString());
   userImageCtrl = new FileDownloader(imageUrl, this);
@@ -350,12 +387,13 @@ void MainWindow::refreshUser() {
 void MainWindow::setUserImage() {
   QPixmap u_image;
   u_image.loadFromData(userImageCtrl->downloadedData());
-  ui->userImage->setPixmap(u_image);
+  this->userImage = u_image;
+  repaint();
 }
 
 void MainWindow::loadList() {
   userListJson = QtConcurrent::run([&]() {
-    return api->get(api->API_USER_LIST(ui->displayName->text()));
+    return api->get(api->API_USER_LIST(aniListDisplayName));
   });
 
   userListWatcher.setFuture(userListJson);
@@ -372,7 +410,8 @@ void MainWindow::refreshList() {
                                          << "dropped"
                                          << "plan_to_watch");
 
-  QList<QTableWidget *> tableNames = (QList<QTableWidget *>() << ui->currentlyWatchingTable
+  QList<QTableWidget *> tableNames = (QList<QTableWidget *>()
+                           << ui->currentlyWatchingTable
                            << ui->completedTable
                            << ui->onHoldTable
                            << ui->droppedTable
@@ -381,27 +420,42 @@ void MainWindow::refreshList() {
   for(int i = 0; i < listNames.length(); i++) {
     for(QJsonValue ary : userListData.value(listNames.at(i)).toArray()) {
       QJsonObject anime = ary.toObject();
+
       int row = tableNames.at(i)->rowCount();
-      QString title = anime.value("anime").toObject().value("title_romaji").toString();
-      QTextDocument text;
-      text.setHtml(title);
+
+      QString title = anime.value("anime").toObject()
+                           .value("title_romaji").toString();
+      QTextDocument text; text.setHtml(title);
+
       QString plain_title = text.toPlainText();
-      QTableWidgetItem *titleData = new QTableWidgetItem(plain_title);
-      QTableWidgetItem *progressData = new QTableWidgetItem(QString::number(anime.value("episodes_watched").toInt()));
-      QTableWidgetItem *scoreData = new QTableWidgetItem(QString::number(anime.value("score").toInt()));
-      QTableWidgetItem *typeData = new QTableWidgetItem(anime.value("anime").toObject().value("type").toString());
+      QString eps = QString::number(anime.value("episodes_watched").toInt());
+      QString eptotal = QString::number(anime.value("anime").toObject()
+                                             .value("total_episodes").toInt());
+      QString score = QString::number(anime.value("score").toInt());
+      QString type = anime.value("anime").toObject().value("type").toString();
+      if (eptotal == "0") eptotal = "-";
+      QString progress = QString(eps + " / " + eptotal);
+
+      QTableWidgetItem *titleData    = new QTableWidgetItem(plain_title);
+      QTableWidgetItem *progressData = new QTableWidgetItem(progress);
+      QTableWidgetItem *scoreData    = new QTableWidgetItem(score);
+      QTableWidgetItem *typeData     = new QTableWidgetItem(type);
+
       tableNames.at(i)->insertRow(row);
+
       tableNames.at(i)->setItem(row, 0, titleData);
       tableNames.at(i)->setItem(row, 1, progressData);
       tableNames.at(i)->setItem(row, 2, scoreData);
       tableNames.at(i)->setItem(row, 3, typeData);
     }
+
     QString tab_title = listNames.at(i);
+    QString tab_total = QString::number(tableNames.at(i)->rowCount());
+
     tab_title.replace(QString("_"), QString(" "));
+
+    ui->tabWidget_2->setTabText(i, tab_title + " (" + tab_total + ")");
+
     tableNames.at(i)->resizeColumnsToContents();
-    ui->tabWidget_2->setTabText(i, tab_title + " (" + QString::number(tableNames.at(i)->rowCount()) + ")");
-    QFont font = ui->tabWidget_2->tabBar()->font();
-    font.setCapitalization(QFont::Capitalize);
-    ui->tabWidget_2->tabBar()->setFont(font);
   }
 }

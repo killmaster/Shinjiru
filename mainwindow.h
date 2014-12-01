@@ -7,6 +7,7 @@
 #include <QSignalMapper>
 #include <QFuture>
 #include <QFutureWatcher>
+#include <QPaintEvent>
 
 #include "QtAwesome.h"
 #include "anilistapi.h"
@@ -25,6 +26,7 @@ public:
 
 protected:
   void closeEvent(QCloseEvent *);
+  void paintEvent(QPaintEvent *);
 
 private:
   Ui::MainWindow *ui;
@@ -44,9 +46,13 @@ private:
   QFuture<QJsonObject> userListJson;
   QFutureWatcher<QJsonObject> userListWatcher;
 
+  QPixmap userImage;
+
   std::basic_string<wchar_t> toAnitomyFormat(QString);
 
   QString aniListDisplayName;
+  int score_type;
+  QString max_score;
 
 signals:
   void logged_in();
