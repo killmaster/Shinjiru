@@ -14,6 +14,7 @@
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QtConcurrent/QtConcurrent>
+#include <QtConcurrent/QtConcurrentMap>
 #include <QInputDialog>
 #include <QTextDocument>
 #include <QProgressBar>
@@ -25,6 +26,7 @@
 #include "app.h"
 #include "torrents.h"
 #include "anilistapi.h"
+#include "anime.h"
 
 #include "anitomy/anitomy/anitomy.h"
 
@@ -100,6 +102,7 @@ MainWindow::MainWindow(QWidget *parent):
   connect(ui->actionView_Anime_List,SIGNAL(triggered()), SLOT(viewAnimeList()));
   connect(ui->actionView_Profile,SIGNAL(triggered()), SLOT(viewProfile()));
   connect(ui->actionView_Dashboard,SIGNAL(triggered()), SLOT(viewDashboard()));
+  connect(&animeFutureData, SIGNAL(finished()), SLOT(resetProgress()));
 
   ui->tabWidget->setCurrentIndex(0);
 
@@ -452,6 +455,27 @@ void MainWindow::loadList() {
   userListWatcher.setFuture(userListJson);
 }
 
+
+void MainWindow::loadAnimeData() {
+  progressBar->setValue(0);
+  progressBar->setFormat("Loading anime data");
+  progressBar->setMaximum(animeData.length());
+
+  animeFutureData.setFuture(QtConcurrent::map(animeData, [&](Anime *& anime) {
+    QString id = anime->getID();
+
+    QJsonObject animeDataObject = api->get(api->API_ANIME(id));
+
+    QJsonArray synArr = animeDataObject.value("synonyms").toArray();
+    for(const QJsonValue &value : synArr) {
+      anime->addSynonym(value.toString());
+      knownAnime.append(value.toString());
+    }
+
+    QMetaObject::invokeMethod(this, "updateProgess", Qt::QueuedConnection);
+  }));
+}
+
 void MainWindow::refreshList() {
   QJsonObject userListData = userListJson.result();
   int progress_value = progressBar->value();
@@ -481,6 +505,12 @@ void MainWindow::refreshList() {
                            .value("title_romaji").toString();
       QTextDocument text; text.setHtml(title);
 
+      knownAnime.append(title);
+      knownAnime.append(anime.value("anime").toObject()
+                        .value("title_japanese").toString());
+      knownAnime.append(anime.value("anime").toObject()
+                        .value("title_english").toString());
+
       QString plain_title = text.toPlainText();
       QString eps = QString::number(anime.value("episodes_watched").toInt());
       QString eptotal = QString::number(anime.value("anime").toObject()
@@ -489,6 +519,12 @@ void MainWindow::refreshList() {
       QString type = anime.value("anime").toObject().value("type").toString();
       if (eptotal == "0") eptotal = "-";
       QString progress = QString(eps + " / " + eptotal);
+
+      Anime *an = new Anime();
+      an->setID(QString::number(anime.value("anime").toObject()
+                                    .value("id").toInt()));
+
+      animeData.append(an);
 
       QTableWidgetItem *titleData    = new QTableWidgetItem(plain_title);
       QTableWidgetItem *progressData = new QTableWidgetItem(progress);
@@ -518,6 +554,7 @@ void MainWindow::refreshList() {
 
   progressBar->setValue(0);
   progressBar->setFormat("");
+  loadAnimeData();
 }
 
 void MainWindow::viewDashboard() {
@@ -532,4 +569,13 @@ void MainWindow::viewProfile() {
 void MainWindow::viewAnimeList() {
   QDesktopServices::openUrl(QString("http://anilist.co/animelist/") +
                             aniListDisplayName);
+}
+
+void MainWindow::resetProgress() {
+  progressBar->setFormat("");
+  progressBar->setValue(0);
+}
+
+void MainWindow::updateProgess() {
+  progressBar->setValue(progressBar->value() + 1);
 }

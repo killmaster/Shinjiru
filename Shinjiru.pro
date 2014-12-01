@@ -1,4 +1,4 @@
-QT       += core gui widgets network
+QT       += core gui widgets network concurrent
 
 TARGET = Shinjiru
 TEMPLATE = app
@@ -20,7 +20,8 @@ SOURCES   += main.cpp\
     anitomy/anitomy/string.cpp \
     anitomy/anitomy/token.cpp \
     anitomy/anitomy/tokenizer.cpp \
-    filedownloader.cpp
+    filedownloader.cpp \
+    anime.cpp
 
 HEADERS   += mainwindow.h \
              app.h \
@@ -32,7 +33,8 @@ HEADERS   += mainwindow.h \
     anitomy/anitomy/string.h \
     anitomy/anitomy/token.h \
     anitomy/anitomy/tokenizer.h \
-    filedownloader.h
+    filedownloader.h \
+    anime.h
 
 FORMS     += mainwindow.ui
 
