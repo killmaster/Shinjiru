@@ -8,6 +8,7 @@
 #include <QFuture>
 #include <QFutureWatcher>
 #include <QPaintEvent>
+#include <QProgressBar>
 
 #include "QtAwesome.h"
 #include "anilistapi.h"
@@ -30,6 +31,8 @@ protected:
 
 private:
   Ui::MainWindow *ui;
+
+  QProgressBar *progressBar;
 
   void readSettings();
   void writeSettings();

@@ -16,6 +16,7 @@
 #include <QtConcurrent/QtConcurrent>
 #include <QInputDialog>
 #include <QTextDocument>
+#include <QProgressBar>
 
 #include <string>
 #include <regex>
@@ -42,10 +43,14 @@ MainWindow::MainWindow(QWidget *parent):
 
   torrentRefreshTimer = new QTimer(this);
   eventTimer = new QTimer(this);
+  progressBar = new QProgressBar(ui->statusBar);
+
+  ui->statusBar->addWidget(progressBar);
 
   QFont font = ui->tabWidget_2->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
   ui->tabWidget_2->tabBar()->setFont(font);
+
 
   QVariantMap black;
   black.insert("color", QColor(0, 0, 0));
@@ -101,7 +106,9 @@ MainWindow::MainWindow(QWidget *parent):
   api = new AniListAPI(this, api_id, api_secret);
 
 
-
+  progressBar->setRange(0, 100);
+  progressBar->setValue(5);
+  progressBar->setFormat("Authorizing");
   if(api->hasAuthorizationCode()) {
     if (api->init() == AniListAPI::OK) {
       QEventLoop waitForInit;
@@ -109,6 +116,9 @@ MainWindow::MainWindow(QWidget *parent):
       connect(api, SIGNAL(access_denied()), &waitForInit, SLOT(quit()));
       waitForInit.exec();
       emit logged_in();
+
+      progressBar->setValue(20);
+      progressBar->setFormat("Loading user");
 
       loadUser();
       ui->currentlyWatchingTable->resizeColumnsToContents();
@@ -133,11 +143,16 @@ MainWindow::MainWindow(QWidget *parent):
     connect(api, SIGNAL(access_denied()), &waitForInit, SLOT(quit()));
     waitForInit.exec();
 
+    progressBar->setValue(20);
+    progressBar->setFormat("Loading user");
+
     emit logged_in();
 
     loadUser();
     ui->currentlyWatchingTable->resizeColumnsToContents();
   }
+
+
 
   loadTorrents();
   ui->torrentTable->resizeColumnsToContents();
@@ -409,6 +424,9 @@ void MainWindow::refreshUser() {
       max_score = "10.0"; break;
   };
 
+  progressBar->setValue(30);
+  progressBar->setFormat("Loading user image");
+
   emit displayNameAvailable();
   QUrl imageUrl(userData.value("image_url_med").toString());
   userImageCtrl = new FileDownloader(imageUrl, this);
@@ -419,10 +437,14 @@ void MainWindow::setUserImage() {
   QPixmap u_image;
   u_image.loadFromData(userImageCtrl->downloadedData());
   this->userImage = u_image;
+  progressBar->setValue(40);
   repaint();
 }
 
 void MainWindow::loadList() {
+  progressBar->setValue(40);
+  progressBar->setFormat("Loading anime list");
+
   userListJson = QtConcurrent::run([&]() {
     return api->get(api->API_USER_LIST(aniListDisplayName));
   });
@@ -432,6 +454,7 @@ void MainWindow::loadList() {
 
 void MainWindow::refreshList() {
   QJsonObject userListData = userListJson.result();
+  int progress_value = progressBar->value();
 
   userListData = userListData.value("lists").toObject();
 
@@ -478,6 +501,9 @@ void MainWindow::refreshList() {
       tableNames.at(i)->setItem(row, 1, progressData);
       tableNames.at(i)->setItem(row, 2, scoreData);
       tableNames.at(i)->setItem(row, 3, typeData);
+
+      progressBar->setValue(progress_value +
+        (double)(i / (double)listNames.length()) * (100 - progress_value));
     }
 
     QString tab_title = listNames.at(i);
@@ -489,4 +515,7 @@ void MainWindow::refreshList() {
 
     tableNames.at(i)->resizeColumnsToContents();
   }
+
+  progressBar->setValue(0);
+  progressBar->setFormat("");
 }
