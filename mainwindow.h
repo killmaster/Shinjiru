@@ -65,15 +65,18 @@ private:
   int score_type;
   QString max_score;
 
+  enum ErrorCode {
+    NO_AUTHCODE,
+    API_ERROR
+  };
+
 signals:
-  void logged_in();
   void displayNameAvailable();
 
 private slots:
   void showAnimeTab();
   void showSettingsTab();
   void showTorrentsTab();
-  void refreshAll();
   void refreshUser();
   void enableApply();
   void applySettings();

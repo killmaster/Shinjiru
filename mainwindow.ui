@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -154,12 +154,12 @@
             <number>0</number>
            </property>
            <item>
-            <widget class="QTabWidget" name="tabWidget_2">
+            <widget class="QTabWidget" name="listTabs">
              <property name="tabShape">
               <enum>QTabWidget::Rounded</enum>
              </property>
              <property name="currentIndex">
-              <number>4</number>
+              <number>0</number>
              </property>
              <widget class="QWidget" name="currentlyWatchingTab">
               <attribute name="title">
@@ -203,6 +203,9 @@
                  </attribute>
                  <attribute name="verticalHeaderVisible">
                   <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>19</number>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
@@ -274,6 +277,9 @@
                  <attribute name="verticalHeaderVisible">
                   <bool>false</bool>
                  </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>19</number>
+                 </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
                  </attribute>
@@ -343,6 +349,9 @@
                  </attribute>
                  <attribute name="verticalHeaderVisible">
                   <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>19</number>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
@@ -414,6 +423,9 @@
                  <attribute name="verticalHeaderVisible">
                   <bool>false</bool>
                  </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>19</number>
+                 </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
                  </attribute>
@@ -475,14 +487,14 @@
                  <property name="sortingEnabled">
                   <bool>true</bool>
                  </property>
-                 <attribute name="horizontalHeaderDefaultSectionSize">
-                  <number>200</number>
-                 </attribute>
                  <attribute name="horizontalHeaderStretchLastSection">
                   <bool>true</bool>
                  </attribute>
                  <attribute name="verticalHeaderVisible">
                   <bool>false</bool>
+                 </attribute>
+                 <attribute name="verticalHeaderDefaultSectionSize">
+                  <number>19</number>
                  </attribute>
                  <attribute name="verticalHeaderStretchLastSection">
                   <bool>false</bool>
@@ -781,10 +793,10 @@
     <property name="title">
      <string>AniList</string>
     </property>
-    <addaction name="actionRefresh_List"/>
-    <addaction name="actionView_Profile"/>
-    <addaction name="actionView_Dashboard"/>
-    <addaction name="actionView_Anime_List"/>
+    <addaction name="actionRL"/>
+    <addaction name="actionVP"/>
+    <addaction name="actionVD"/>
+    <addaction name="actionVAL"/>
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
@@ -809,23 +821,27 @@
    <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="sizeGripEnabled">
+    <bool>false</bool>
+   </property>
+  </widget>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
-  <action name="actionRefresh_List">
+  <action name="actionRL">
    <property name="text">
     <string>Refresh List</string>
    </property>
   </action>
-  <action name="actionView_Profile">
+  <action name="actionVP">
    <property name="text">
     <string>View Profile</string>
    </property>
   </action>
-  <action name="actionView_Dashboard">
+  <action name="actionVD">
    <property name="text">
     <string>View Dashboard</string>
    </property>
@@ -835,7 +851,7 @@
     <string>View Notifications</string>
    </property>
   </action>
-  <action name="actionView_Anime_List">
+  <action name="actionVAL">
    <property name="text">
     <string>View Anime List</string>
    </property>

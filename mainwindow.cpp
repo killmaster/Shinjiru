@@ -31,28 +31,24 @@
 #include "anitomy/anitomy/anitomy.h"
 
 
-MainWindow::MainWindow(QWidget *parent):
-  QMainWindow(parent), ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
+  /*
+   * Setup window and application preferences
+   */
   ui->setupUi(this);
 
-  QFile styleFile(":/style.css");
-  styleFile.open(QFile::ReadOnly);
-  QString styleSheet = QLatin1String(styleFile.readAll());
-  qApp->setStyleSheet(styleSheet);
+  QFile styleFile(":/style.css"); styleFile.open(QFile::ReadOnly);
+  QString styleSheet = QLatin1String(styleFile.readAll()); qApp->setStyleSheet(styleSheet);
 
-  awesome = new QtAwesome(qApp);
-  awesome->initFontAwesome();
-
+  awesome             = new QtAwesome(qApp);             awesome->initFontAwesome();
   torrentRefreshTimer = new QTimer(this);
-  eventTimer = new QTimer(this);
-  progressBar = new QProgressBar(ui->statusBar);
+  eventTimer          = new QTimer(this);
+  progressBar         = new QProgressBar(ui->statusBar); ui->statusBar->addWidget(progressBar);
+  api                 = new AniListAPI(this, api_id, api_secret);
 
-  ui->statusBar->addWidget(progressBar);
-
-  QFont font = ui->tabWidget_2->tabBar()->font();
+  QFont font = ui->listTabs->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
-  ui->tabWidget_2->tabBar()->setFont(font);
-
+  ui->listTabs->tabBar()->setFont(font);
 
   QVariantMap black;
   black.insert("color", QColor(0, 0, 0));
@@ -60,87 +56,64 @@ MainWindow::MainWindow(QWidget *parent):
   black.insert("color-disabled", QColor(0, 0, 0));
   black.insert("color-selected", QColor(0, 0, 0));
 
-  ui->currentlyAiringButton->setIcon(awesome->icon(fa::clocko, black));
-  ui->torrentsButton->setIcon(awesome->icon(fa::rss, black));
-  ui->animeButton->setIcon(awesome->icon(fa::bars, black));
-  ui->statisticsButton->setIcon(awesome->icon(fa::piechart, black));
-
-  QHeaderView *torrentHeader = ui->torrentTable->verticalHeader();
-  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
-  torrentHeader = ui->currentlyWatchingTable->verticalHeader();
-  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
-  torrentHeader = ui->planToWatchTable->verticalHeader();
-  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
-  torrentHeader = ui->completedTable->verticalHeader();
-  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
-  torrentHeader = ui->onHoldTable->verticalHeader();
-  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
-  torrentHeader = ui->droppedTable->verticalHeader();
-  torrentHeader->setDefaultSectionSize(torrentHeader->minimumSectionSize());
-
-  readSettings();
-  refreshAll();
+  ui->currentlyAiringButton->setIcon(awesome->icon(fa::clocko,   black));
+  ui->torrentsButton       ->setIcon(awesome->icon(fa::rss,      black));
+  ui->animeButton          ->setIcon(awesome->icon(fa::bars,     black));
+  ui->statisticsButton     ->setIcon(awesome->icon(fa::piechart, black));
 
   ui->tabWidget->tabBar()->hide();
-
-  connect(ui->animeButton, SIGNAL(clicked()), SLOT(showAnimeTab()));
-  connect(ui->actionSettings, SIGNAL(triggered()), SLOT(showSettingsTab()));
-  connect(ui->torrentsButton, SIGNAL(clicked()), SLOT(showTorrentsTab()));
-  connect(this, SIGNAL(logged_in()), SLOT(refreshAll()));
-  connect(ui->applyButton, SIGNAL(clicked()), SLOT(applySettings()));
-  connect(eventTimer, SIGNAL(timeout()), SLOT(tick()));
-  connect(torrentRefreshTimer, SIGNAL(timeout()), SLOT(loadTorrents()));
-  connect(ui->refreshButton, SIGNAL(clicked()), SLOT(loadTorrents()));
-  connect(ui->torrentFilter, SIGNAL(textChanged(QString)),
-          SLOT(filterTorrents(QString)));
-  connect(ui->torrentTable,SIGNAL(customContextMenuRequested(QPoint)),
-          SLOT(torrentContextMenu(QPoint)));
-  connect(&userWatcher, SIGNAL(finished()), SLOT(refreshUser()));
-  connect(&userListWatcher, SIGNAL(finished()), SLOT(refreshList()));
-  connect(this, SIGNAL(displayNameAvailable()), SLOT(loadList()));
-  connect(ui->chkHideUnknown,SIGNAL(toggled(bool)), SLOT(filterTorrents(bool)));
-  connect(ui->actionView_Anime_List,SIGNAL(triggered()), SLOT(viewAnimeList()));
-  connect(ui->actionView_Profile,SIGNAL(triggered()), SLOT(viewProfile()));
-  connect(ui->actionView_Dashboard,SIGNAL(triggered()), SLOT(viewDashboard()));
-  connect(&animeFutureData, SIGNAL(finished()), SLOT(resetProgress()));
-
   ui->tabWidget->setCurrentIndex(0);
-
-  api = new AniListAPI(this, api_id, api_secret);
-
-
+  ui->listTabs->setCurrentIndex(0);
   progressBar->setRange(0, 100);
+
+  readSettings();
+
+  /*
+   * Connect signals to slots
+   */
+  connect(this,                SIGNAL(displayNameAvailable()),             SLOT(loadList()));
+
+  connect(ui->actionSettings,  SIGNAL(triggered()),                        SLOT(showSettingsTab()));
+  connect(ui->applyButton,     SIGNAL(clicked()),                          SLOT(applySettings()));
+
+  connect(ui->animeButton,     SIGNAL(clicked()),                          SLOT(showAnimeTab()));
+
+  connect(ui->torrentsButton,  SIGNAL(clicked()),                          SLOT(showTorrentsTab()));
+  connect(ui->torrentFilter,   SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
+  connect(ui->chkHideUnknown,  SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));
+  connect(ui->refreshButton,   SIGNAL(clicked()),                          SLOT(loadTorrents()));
+  connect(torrentRefreshTimer, SIGNAL(timeout()),                          SLOT(loadTorrents()));
+  connect(eventTimer,          SIGNAL(timeout()),                          SLOT(tick()));
+  connect(ui->torrentTable,    SIGNAL(customContextMenuRequested(QPoint)), SLOT(torrentContextMenu(QPoint)));
+
+  connect(&userWatcher,        SIGNAL(finished()),                         SLOT(refreshUser()));
+  connect(&userListWatcher,    SIGNAL(finished()),                         SLOT(refreshList()));
+  connect(&animeFutureData,    SIGNAL(finished()),                         SLOT(resetProgress()));
+
+  connect(ui->actionVAL,       SIGNAL(triggered()),                        SLOT(viewAnimeList()));
+  connect(ui->actionVP,        SIGNAL(triggered()),                        SLOT(viewProfile()));
+  connect(ui->actionVD,        SIGNAL(triggered()),                        SLOT(viewDashboard()));
+
+  /*
+   * Connect to AniList and fetch the user
+   */
   progressBar->setValue(5);
   progressBar->setFormat("Authorizing");
-  if(api->hasAuthorizationCode()) {
-    if (api->init() == AniListAPI::OK) {
-      QEventLoop waitForInit;
-      connect(api, SIGNAL(access_granted()), &waitForInit, SLOT(quit()));
-      connect(api, SIGNAL(access_denied()), &waitForInit, SLOT(quit()));
-      waitForInit.exec();
-      emit logged_in();
 
-      progressBar->setValue(20);
-      progressBar->setFormat("Loading user");
-
-      loadUser();
-      ui->currentlyWatchingTable->resizeColumnsToContents();
-    } else exit(9);
-  } else {
+  if(!api->hasAuthorizationCode()) {
     bool ok;
     QDesktopServices::openUrl(QUrl("http://auth.shinjiru.me"));
     QString message = "Authorization code:                                                                                    ";
-    QString text = QInputDialog::getText(this, tr("Authorization Code Request"),
-                                         tr(message.toLocal8Bit().data()),
-                                         QLineEdit::Normal, "", &ok);
+    QString text = QInputDialog::getText(this, tr("Authorization Code Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
+
     if (ok && !text.isEmpty()) {
       api->setAuthorizationCode(text);
     } else {
-      exit(12);
+      exit(NO_AUTHCODE);
     }
+  }
 
-    if(api->init() != AniListAPI::OK) exit(8);
-
+  if (api->init() == AniListAPI::OK) {
     QEventLoop waitForInit;
     connect(api, SIGNAL(access_granted()), &waitForInit, SLOT(quit()));
     connect(api, SIGNAL(access_denied()), &waitForInit, SLOT(quit()));
@@ -149,17 +122,14 @@ MainWindow::MainWindow(QWidget *parent):
     progressBar->setValue(20);
     progressBar->setFormat("Loading user");
 
-    emit logged_in();
-
     loadUser();
     ui->currentlyWatchingTable->resizeColumnsToContents();
+  } else {
+    exit(API_ERROR);
   }
-
-
 
   loadTorrents();
   ui->torrentTable->resizeColumnsToContents();
-
   eventTimer->start(1000);
 }
 
@@ -167,6 +137,8 @@ MainWindow::~MainWindow() {
   delete ui;
   delete awesome;
   delete api;
+  delete torrentRefreshTimer;
+  delete eventTimer;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -177,22 +149,25 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 void MainWindow::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
+  // Draw the username on the screen
   QFont font = p.font();
   font.setPointSize(14);
   p.setFont(font);
-
-  p.drawPixmap(width() - 55, 25, 48, 48, userImage);
-  p.drawRect(width() - 55, 25, 48, 48);
   p.drawText(0, 30, width() - 60, 40, Qt::AlignRight, aniListDisplayName);
+
+  // Draw the userimage on the screen
+  p.drawPixmap(width() - 55, 25, 48, 48, userImage);
+  p.drawRect  (width() - 55, 25, 48, 48);
+
   event->accept();
 }
 
 void MainWindow::readSettings() {
   QSettings settings;
 
-  QPoint pos = settings.value("window/pos", QPoint(200, 200)).toPoint();
-  QSize size = settings.value("window/size", QSize(800, 600)).toSize();
-  bool wasMaximized = settings.value("window/maximized", false).toBool();
+  QPoint pos                 = settings.value("window/pos", QPoint(200, 200)).toPoint();
+  QSize size                 = settings.value("window/size", QSize(800, 600)).toSize();
+  bool wasMaximized          = settings.value("window/maximized", false).toBool();
   int torrentRefreshInterval = settings.value("tinterval", 3600).toInt();
 
   torrentRefreshTimer->setInterval(torrentRefreshInterval);
@@ -218,27 +193,19 @@ void MainWindow::writeSettings() {
   settings.setValue("tinterval", 3600 * 1000);
 }
 
-void MainWindow::refreshAll() {}
+void MainWindow::showAnimeTab()    { ui->tabWidget->setCurrentIndex(0); }
+void MainWindow::showSettingsTab() { ui->tabWidget->setCurrentIndex(1); }
+void MainWindow::showTorrentsTab() { ui->tabWidget->setCurrentIndex(2); }
 
-void MainWindow::showAnimeTab() {
-  ui->tabWidget->setCurrentIndex(0);
-}
+void MainWindow::enableApply()   { ui->applyButton->setEnabled(true); }
+void MainWindow::applySettings() { writeSettings(); }
 
-void MainWindow::showSettingsTab() {
-  ui->tabWidget->setCurrentIndex(1);
-}
+void MainWindow::viewDashboard() { QDesktopServices::openUrl(QString("http://anilist.co/home")); }
+void MainWindow::viewProfile()   { QDesktopServices::openUrl(QString("http://anilist.co/user/") + aniListDisplayName); }
+void MainWindow::viewAnimeList() { QDesktopServices::openUrl(QString("http://anilist.co/animelist/") + aniListDisplayName); }
 
-void MainWindow::showTorrentsTab() {
-  ui->tabWidget->setCurrentIndex(2);
-}
-
-void MainWindow::enableApply() {
-  ui->applyButton->setEnabled(true);
-}
-
-void MainWindow::applySettings() {
-  writeSettings();
-}
+void MainWindow::resetProgress() { progressBar->setFormat(""); progressBar->setValue(0); }
+void MainWindow::updateProgess() { progressBar->setValue(progressBar->value() + 1); }
 
 void MainWindow::loadTorrents() {
   torrentRefreshTimer->stop();
@@ -318,7 +285,7 @@ void MainWindow::loadTorrents() {
 
 void MainWindow::tick() {
   int remainingTime = torrentRefreshTimer->remainingTime() / 1000;
-  ui->refreshButton->setText("Refresh (" +QString::number(remainingTime)+ ")");
+  ui->refreshButton->setText("Refresh (" + QString::number(remainingTime) + ")");
   eventTimer->start(1000);
 }
 
@@ -545,7 +512,7 @@ void MainWindow::refreshList() {
 
     tab_title.replace(QString("_"), QString(" "));
 
-    ui->tabWidget_2->setTabText(i, tab_title + " (" + tab_total + ")");
+    ui->listTabs->setTabText(i, tab_title + " (" + tab_total + ")");
 
     tableNames.at(i)->resizeColumnsToContents();
   }
@@ -553,27 +520,4 @@ void MainWindow::refreshList() {
   progressBar->setValue(0);
   progressBar->setFormat("");
   //loadAnimeData();
-}
-
-void MainWindow::viewDashboard() {
-  QDesktopServices::openUrl(QString("http://anilist.co/home"));
-}
-
-void MainWindow::viewProfile() {
-  QDesktopServices::openUrl(QString("http://anilist.co/user/") +
-                            aniListDisplayName);
-}
-
-void MainWindow::viewAnimeList() {
-  QDesktopServices::openUrl(QString("http://anilist.co/animelist/") +
-                            aniListDisplayName);
-}
-
-void MainWindow::resetProgress() {
-  progressBar->setFormat("");
-  progressBar->setValue(0);
-}
-
-void MainWindow::updateProgess() {
-  progressBar->setValue(progressBar->value() + 1);
 }
