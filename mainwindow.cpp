@@ -478,7 +478,6 @@ void MainWindow::loadAnimeData() {
 
 void MainWindow::refreshList() {
   QJsonObject userListData = userListJson.result();
-  int progress_value = progressBar->value();
 
   userListData = userListData.value("lists").toObject();
 
@@ -538,8 +537,7 @@ void MainWindow::refreshList() {
       tableNames.at(i)->setItem(row, 2, scoreData);
       tableNames.at(i)->setItem(row, 3, typeData);
 
-      progressBar->setValue(progress_value +
-        (double)(i / (double)listNames.length()) * (100 - progress_value));
+      progressBar->setValue((int)((i / (double)listNames.length()) * 100));
     }
 
     QString tab_title = listNames.at(i);
@@ -554,7 +552,7 @@ void MainWindow::refreshList() {
 
   progressBar->setValue(0);
   progressBar->setFormat("");
-  loadAnimeData();
+  //loadAnimeData();
 }
 
 void MainWindow::viewDashboard() {
