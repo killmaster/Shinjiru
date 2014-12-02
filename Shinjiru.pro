@@ -5,7 +5,7 @@ TEMPLATE = app
 
 CONFIG += c++11
 
-include(QtAwesome/QtAwesome.pri)
+include(QtAwesome/QtAwesome/QtAwesome.pri)
 include(AniListAPI/AniListAPI.pri)
 
 SOURCES   += main.cpp\
