@@ -18,7 +18,7 @@
 #include <QInputDialog>
 #include <QTextDocument>
 #include <QProgressBar>
-
+#include <QHBoxLayout>
 #include <string>
 #include <regex>
 
@@ -27,6 +27,7 @@
 #include "torrents.h"
 #include "anilistapi.h"
 #include "anime.h"
+#include "progresstablewidgetitem.h"
 
 #include "anitomy/anitomy/anitomy.h"
 
@@ -66,6 +67,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   ui->listTabs->setCurrentIndex(0);
   progressBar->setRange(0, 100);
 
+  defaultListLabels << "Title" << "Episodes" << "Score" << "Type";
+
   readSettings();
 
   /*
@@ -90,6 +93,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(&userListWatcher,    SIGNAL(finished()),                         SLOT(refreshList()));
   connect(&animeFutureData,    SIGNAL(finished()),                         SLOT(resetProgress()));
 
+  connect(ui->actionRL,        SIGNAL(triggered()),                        SLOT(loadList()));
   connect(ui->actionVAL,       SIGNAL(triggered()),                        SLOT(viewAnimeList()));
   connect(ui->actionVP,        SIGNAL(triggered()),                        SLOT(viewProfile()));
   connect(ui->actionVD,        SIGNAL(triggered()),                        SLOT(viewDashboard()));
@@ -123,7 +127,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     progressBar->setFormat("Loading user");
 
     loadUser();
-    ui->currentlyWatchingTable->resizeColumnsToContents();
   } else {
     exit(API_ERROR);
   }
@@ -293,24 +296,18 @@ void MainWindow::filterTorrents(QString text, bool checked) {
   for(int i = 0; i < ui->torrentTable->rowCount(); i++)
     ui->torrentTable->hideRow(i);
 
-  QList<QTableWidgetItem *> items =
-    ui->torrentTable->findItems(text, Qt::MatchContains);
+  QList<QTableWidgetItem *> items = ui->torrentTable->findItems(text, Qt::MatchContains);
 
   for(int i = 0; i < items.count(); i++) {
     if(items.at(i)->column() != 0 ) continue;
-    int count = 1;
+    bool show = true;
 
     if(checked) {
       QString f_title = items.at(i)->text();
-      Qt::MatchFlag flag = Qt::MatchExactly;
-      count = ui->currentlyWatchingTable->findItems(f_title, flag).count() +
-          ui->completedTable->findItems(f_title, flag).count() +
-          ui->onHoldTable->findItems(f_title, flag).count() +
-          ui->planToWatchTable->findItems(f_title, flag).count() +
-          ui->droppedTable->findItems(f_title, flag).count();
+      if(!airingTitles.contains(f_title)) show = false;
     }
 
-    if(count > 0)
+    if(show)
       ui->torrentTable->showRow(items.at(i)->row());
   }
 }
@@ -415,6 +412,8 @@ void MainWindow::loadList() {
   progressBar->setValue(40);
   progressBar->setFormat("Loading anime list");
 
+  if(aniListDisplayName.isEmpty()) return;
+
   userListJson = QtConcurrent::run([&]() {
     return api->get(api->API_USER_LIST(aniListDisplayName));
   });
@@ -422,102 +421,131 @@ void MainWindow::loadList() {
   userListWatcher.setFuture(userListJson);
 }
 
-
-void MainWindow::loadAnimeData() {
-  progressBar->setValue(0);
-  progressBar->setFormat("Loading anime data");
-  progressBar->setMaximum(animeData.length());
-
-  animeFutureData.setFuture(QtConcurrent::map(animeData, [&](Anime *& anime) {
-    QString id = anime->getID();
-
-    QJsonObject animeDataObject = api->get(api->API_ANIME(id));
-
-    QJsonArray synArr = animeDataObject.value("synonyms").toArray();
-    for(const QJsonValue &value : synArr) {
-      anime->addSynonym(value.toString());
-      knownAnime.append(value.toString());
-    }
-
-    QMetaObject::invokeMethod(this, "updateProgess", Qt::QueuedConnection);
-  }));
-}
-
 void MainWindow::refreshList() {
+  while(ui->listTabs->count()) {
+    delete ui->listTabs->widget(ui->listTabs->currentIndex());
+  }
+  ui->listTabs->clear();
+
   QJsonObject userListData = userListJson.result();
 
   userListData = userListData.value("lists").toObject();
 
-  QStringList listNames = (QStringList() << "watching"
-                                         << "completed"
-                                         << "on_hold"
-                                         << "dropped"
-                                         << "plan_to_watch");
+  QStringList listNames = userListData.keys();
+  int offset = 0;
+  int index = 0;
 
-  QList<QTableWidget *> tableNames = (QList<QTableWidget *>()
-                           << ui->currentlyWatchingTable
-                           << ui->completedTable
-                           << ui->onHoldTable
-                           << ui->droppedTable
-                           << ui->planToWatchTable);
+  if((index = listNames.indexOf("watching")) != -1) {
+    listNames.move(index, 0 - offset);
+  } else offset++;
+
+  if((index = listNames.indexOf("completed")) != -1) {
+    listNames.move(index, 1 - offset);
+  }else offset++;
+
+  if((index = listNames.indexOf("on_hold")) != -1) {
+    listNames.move(index, 2 - offset);
+  }else offset++;
+
+  if((index = listNames.indexOf("dropped")) != -1) {
+    listNames.move(index, 3 - offset);
+  }else offset++;
+
+  if((index = listNames.indexOf("plan_to_watch")) != -1) {
+    listNames.move(index, 4 - offset);
+  }else offset++;
 
   for(int i = 0; i < listNames.length(); i++) {
+    QTableWidget *table = new QTableWidget(this);
+
+    table->setColumnCount(4);
+    table->setHorizontalHeaderLabels(defaultListLabels);
+    table->verticalHeader()->hide();
+    table->setEditTriggers(QTableWidget::NoEditTriggers);
+    table->setAlternatingRowColors(true);
+    table->setSelectionMode(QTableWidget::SingleSelection);
+    table->setSelectionBehavior(QTableWidget::SelectRows);
+    table->verticalHeader()->setDefaultSectionSize(19);
+    table->horizontalHeader()->setStretchLastSection(true);
+    table->setSortingEnabled(true);
+
     for(QJsonValue ary : userListData.value(listNames.at(i)).toArray()) {
       QJsonObject anime = ary.toObject();
+      QJsonObject inner_anime = anime.value("anime").toObject();
 
-      int row = tableNames.at(i)->rowCount();
+      QString romaji_title  =                 inner_anime.value("title_romaji")    .toString();
+      QString japan_title   =                 inner_anime.value("title_japanese")  .toString();
+      QString eng_title     =                 inner_anime.value("title_english")   .toString();
+      QString type          =                 inner_anime.value("type")            .toString();
+      QString id            = QString::number(inner_anime.value("id")              .toInt());
+      QString air_status    =                 inner_anime.value("airing_status")   .toString();
+      int     i_eps_total   =                 inner_anime.value("total_episodes")  .toInt();
 
-      QString title = anime.value("anime").toObject()
-                           .value("title_romaji").toString();
-      QTextDocument text; text.setHtml(title);
+      int     i_eps_watched =                 anime      .value("episodes_watched").toInt();
+      int     i_score       =                 anime      .value("score")           .toInt();
 
-      knownAnime.append(title);
-      knownAnime.append(anime.value("anime").toObject()
-                        .value("title_japanese").toString());
-      knownAnime.append(anime.value("anime").toObject()
-                        .value("title_english").toString());
+      QString eps_total     = QString::number(i_eps_total);
+      QString eps_watched   = QString::number(i_eps_watched);
+      QString score         = QString::number(i_score);
 
-      QString plain_title = text.toPlainText();
-      QString eps = QString::number(anime.value("episodes_watched").toInt());
-      QString eptotal = QString::number(anime.value("anime").toObject()
-                                             .value("total_episodes").toInt());
-      QString score = QString::number(anime.value("score").toInt());
-      QString type = anime.value("anime").toObject().value("type").toString();
-      if (eptotal == "0") eptotal = "-";
-      QString progress = QString(eps + " / " + eptotal);
+      romaji_title = QTextDocument(romaji_title).toPlainText();
+      japan_title  = QTextDocument(japan_title) .toPlainText();
+      eng_title    = QTextDocument(eng_title)   .toPlainText();
+      eps_total    = (eps_total == "0") ? "-" : eps_total;
 
-      Anime *an = new Anime();
-      an->setID(QString::number(anime.value("anime").toObject()
-                                    .value("id").toInt()));
+      if(air_status == "currently airing") {
+        airingTitles.insert(romaji_title);
+        airingTitles.insert(japan_title);
+        airingTitles.insert(eng_title);
+      }
 
-      animeData.append(an);
+      Anime *newAnime = new Anime();
+      newAnime->setRomajiTitle(romaji_title);
+      newAnime->setJapaneseTitle(japan_title);
+      newAnime->setEnglishTitle(eng_title);
+      newAnime->setType(type);
+      newAnime->setEpisodeCount(i_eps_total);
+      newAnime->setID(id);
+      newAnime->setAiringStatus(air_status);
 
-      QTableWidgetItem *titleData    = new QTableWidgetItem(plain_title);
-      QTableWidgetItem *progressData = new QTableWidgetItem(progress);
-      QTableWidgetItem *scoreData    = new QTableWidgetItem(score);
-      QTableWidgetItem *typeData     = new QTableWidgetItem(type);
+      animeData.insert(romaji_title, newAnime);
 
-      tableNames.at(i)->insertRow(row);
+      QTableWidgetItem        *titleData    = new QTableWidgetItem(romaji_title);
+      ProgressTableWidgetItem *progressData = new ProgressTableWidgetItem;
+      QTableWidgetItem        *scoreData    = new QTableWidgetItem();
+      QTableWidgetItem        *typeData     = new QTableWidgetItem(type);
 
-      tableNames.at(i)->setItem(row, 0, titleData);
-      tableNames.at(i)->setItem(row, 1, progressData);
-      tableNames.at(i)->setItem(row, 2, scoreData);
-      tableNames.at(i)->setItem(row, 3, typeData);
+      scoreData->setData(Qt::DisplayRole, i_score);
+      progressData->setText(eps_watched + " / " + eps_total);
+
+      int row = table->rowCount();
+      table->insertRow(row);
+
+      table->setItem(row, 0, titleData);
+      table->setItem(row, 1, progressData);
+      table->setItem(row, 2, scoreData);
+      table->setItem(row, 3, typeData);
 
       progressBar->setValue((int)((i / (double)listNames.length()) * 100));
     }
 
     QString tab_title = listNames.at(i);
-    QString tab_total = QString::number(tableNames.at(i)->rowCount());
+    QString tab_total = QString::number(table->rowCount());
 
     tab_title.replace(QString("_"), QString(" "));
 
-    ui->listTabs->setTabText(i, tab_title + " (" + tab_total + ")");
+    QWidget *page = new QWidget(ui->listTabs);
+    QHBoxLayout *layout = new QHBoxLayout(ui->listTabs);
+    layout->addWidget(table);
+    page->setLayout(layout);
 
-    tableNames.at(i)->resizeColumnsToContents();
+    ui->listTabs->addTab(page, tab_title + " (" + tab_total + ")");
+
+    table->resizeColumnToContents(0);
+    table->resizeColumnToContents(1);
+    table->resizeColumnToContents(2);
   }
 
   progressBar->setValue(0);
   progressBar->setFormat("");
-  //loadAnimeData();
 }

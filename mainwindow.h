@@ -55,11 +55,13 @@ private:
 
   QPixmap userImage;
 
-  QStringList knownAnime;
+  QSet<QString> airingTitles;
 
   std::basic_string<wchar_t> toAnitomyFormat(QString);
 
-  QList<Anime *> animeData;
+  QMap<QString, Anime *> animeData;
+
+  QStringList defaultListLabels;
 
   QString aniListDisplayName;
   int score_type;
@@ -84,7 +86,6 @@ private slots:
   void loadUser();
   void viewDashboard();
   void viewProfile();
-  void loadAnimeData();
   void viewAnimeList();
   void resetProgress();
   void tick();

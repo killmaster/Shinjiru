@@ -34,7 +34,8 @@ HEADERS   += mainwindow.h \
     anitomy/anitomy/token.h \
     anitomy/anitomy/tokenizer.h \
     filedownloader.h \
-    anime.h
+    anime.h \
+    progresstablewidgetitem.h
 
 FORMS     += mainwindow.ui
 
