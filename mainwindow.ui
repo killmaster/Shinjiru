@@ -447,7 +447,6 @@
      <string>Tools</string>
     </property>
     <addaction name="actionEnable_Anime_Recognition"/>
-    <addaction name="actionEnable_Auto_Syncronization"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
