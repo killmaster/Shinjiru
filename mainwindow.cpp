@@ -28,6 +28,7 @@
 #include "anilistapi.h"
 #include "anime.h"
 #include "progresstablewidgetitem.h"
+#include "animepanel.h"
 
 #include "anitomy/anitomy/anitomy.h"
 
@@ -92,6 +93,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(&userWatcher,        SIGNAL(finished()),                         SLOT(refreshUser()));
   connect(&userListWatcher,    SIGNAL(finished()),                         SLOT(refreshList()));
   connect(&animeFutureData,    SIGNAL(finished()),                         SLOT(resetProgress()));
+  connect(&animeDataWatcher,   SIGNAL(finished()),                         SLOT(processAnimeData()));
 
   connect(ui->actionRL,        SIGNAL(triggered()),                        SLOT(loadList()));
   connect(ui->actionVAL,       SIGNAL(triggered()),                        SLOT(viewAnimeList()));
@@ -469,6 +471,8 @@ void MainWindow::refreshList() {
     table->horizontalHeader()->setStretchLastSection(true);
     table->setSortingEnabled(true);
 
+    connect(table, SIGNAL(cellDoubleClicked(int,int)), SLOT(showAnimePanel(int, int)));
+
     for(QJsonValue ary : userListData.value(listNames.at(i)).toArray()) {
       QJsonObject anime = ary.toObject();
       QJsonObject inner_anime = anime.value("anime").toObject();
@@ -480,6 +484,7 @@ void MainWindow::refreshList() {
       QString id            = QString::number(inner_anime.value("id")              .toInt());
       QString air_status    =                 inner_anime.value("airing_status")   .toString();
       int     i_eps_total   =                 inner_anime.value("total_episodes")  .toInt();
+      QString i_avg_score   =                 inner_anime.value("average_score")   .toString();
 
       int     i_eps_watched =                 anime      .value("episodes_watched").toInt();
       int     i_score       =                 anime      .value("score")           .toInt();
@@ -507,6 +512,7 @@ void MainWindow::refreshList() {
       newAnime->setEpisodeCount(i_eps_total);
       newAnime->setID(id);
       newAnime->setAiringStatus(air_status);
+      newAnime->setAverageScore(i_avg_score);
 
       animeData.insert(romaji_title, newAnime);
 
@@ -548,4 +554,39 @@ void MainWindow::refreshList() {
 
   progressBar->setValue(0);
   progressBar->setFormat("");
+}
+
+void MainWindow::showAnimePanel(int row, int column) {
+  Q_UNUSED(column);
+
+  QTableWidget *source = static_cast<QTableWidget *>(sender());
+  QString title = source->item(row, 0)->text();
+
+  AnimePanel *ap = new AnimePanel(this, animeData[title.toUtf8().data()]);
+
+  if(ap->loadNeeded) {
+    loadAnimeData(animeData[title.toUtf8().data()]->getID());
+  }
+  ap->show();
+}
+
+void MainWindow::loadAnimeData(QString ID) {
+  userAnimeData = QtConcurrent::run([&]() {
+    return api->get(api->API_ANIME(ID));
+  });
+
+  animeDataWatcher.setFuture(userAnimeData);
+}
+
+void MainWindow::processAnimeData() {
+  QJsonObject result = userAnimeData.result();
+
+  QJsonArray synonyms = result.value("synonyms").toArray();
+  QString id = result.value("title_romaji").toString();
+
+  for(int i = 0; i < synonyms.count(); i++) {
+    animeData.value(id)->addSynonym(synonyms.at(i).toString());
+  }
+
+  animeData.value(id)->finishReload();
 }

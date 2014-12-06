@@ -51,6 +51,10 @@ private:
   QFuture<QJsonObject> userListJson;
   QFutureWatcher<QJsonObject> userListWatcher;
 
+
+  QFuture<QJsonObject> userAnimeData;
+  QFutureWatcher<QJsonObject> animeDataWatcher;
+
   QFutureWatcher<void> animeFutureData;
 
   QPixmap userImage;
@@ -87,8 +91,10 @@ private slots:
   void viewDashboard();
   void viewProfile();
   void viewAnimeList();
+  void loadAnimeData(QString);
   void resetProgress();
   void tick();
+  void showAnimePanel(int, int);
   void loadList();
   void updateProgess();
   void refreshList();
@@ -98,6 +104,7 @@ private slots:
   void filterTorrents(QString);
   void torrentContextMenu(QPoint);
   void download(int);
+  void processAnimeData();
   void createRule(int);
 };
 

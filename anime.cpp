@@ -1,6 +1,10 @@
 #include "anime.h"
 
-Anime::Anime() {}
+Anime::Anime(QObject *parent) : QObject(parent) {}
+
+void Anime::finishReload() { emit finishedReloading(); needLoad = false;}
+bool Anime::needsLoad() { return needLoad; }
+
 
 QString     Anime::getID()                                { return id; }
 void        Anime::setID(QString id)                      { this ->id = id; }
@@ -21,7 +25,10 @@ QString     Anime::getType()                              { return type; }
 void        Anime::setType(QString type)                  { this ->type = type; }
 
 QString     Anime::getAiringStatus()                      { return airing_status; }
-void        Anime::setAiringStatus(QString airing_status) {this ->airing_status = airing_status; }
+void        Anime::setAiringStatus(QString airing_status) { this ->airing_status = airing_status; }
 
 int         Anime::getEpisodeCount()                      { return episode_count; }
 void        Anime::setEpisodeCount(int episode_count)     { this ->episode_count = episode_count; }
+
+QString     Anime::getAverageScore()                      { return average_score; }
+void        Anime::setAverageScore(QString average_score) { this ->average_score = average_score; }

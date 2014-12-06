@@ -5,6 +5,8 @@ TEMPLATE = app
 
 CONFIG += c++11
 
+CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
+
 include(QtAwesome/QtAwesome/QtAwesome.pri)
 include(AniListAPI/AniListAPI.pri)
 
@@ -21,7 +23,8 @@ SOURCES   += main.cpp\
     anitomy/anitomy/token.cpp \
     anitomy/anitomy/tokenizer.cpp \
     filedownloader.cpp \
-    anime.cpp
+    anime.cpp \
+    animepanel.cpp
 
 HEADERS   += mainwindow.h \
              app.h \
@@ -35,8 +38,10 @@ HEADERS   += mainwindow.h \
     anitomy/anitomy/tokenizer.h \
     filedownloader.h \
     anime.h \
-    progresstablewidgetitem.h
+    progresstablewidgetitem.h \
+    animepanel.h
 
-FORMS     += mainwindow.ui
+FORMS     += mainwindow.ui \
+    animepanel.ui
 
 RESOURCES += res.qrc
