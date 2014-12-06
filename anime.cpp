@@ -32,3 +32,29 @@ void        Anime::setEpisodeCount(int episode_count)     { this ->episode_count
 
 QString     Anime::getAverageScore()                      { return average_score; }
 void        Anime::setAverageScore(QString average_score) { this ->average_score = average_score; }
+
+QString     Anime::getSynopsis()                          { return synopsis; }
+void        Anime::setSynopsis(QString synopsis)          { this ->synopsis = synopsis; }
+
+QUrl        Anime::getCoverURL()                          { return cover_url; }
+void        Anime::setCoverURL(QUrl cover_url)            { this ->cover_url = cover_url; }
+
+QPixmap     Anime::getCoverImage()                        { return cover_image; }
+void        Anime::setCoverImageData(QByteArray data)     { this->cover_image.loadFromData(data);
+                                                            emit new_image();}
+
+int         Anime::getMyProgress()                        { return my_progress; }
+void        Anime::setMyProgress(int progress)            { this ->my_progress = progress; }
+
+QString     Anime::getMyScore()                           { return my_score; }
+void        Anime::setMyScore(QString score)              { this ->my_score = score; }
+
+QString     Anime::getMyNotes()                           { return my_notes; }
+void        Anime::setMyNotes(QString notes)              { this ->my_notes = notes; }
+
+int         Anime::getMyRewatch()                         { return rewatch_count; }
+void        Anime::setMyRewatch(int rewatch)              { this ->rewatch_count = rewatch; }
+
+QString     Anime::getMyStatus()                          { return my_status; }
+void        Anime::setMyStatus(QString status)            { this ->my_status = status; }
+

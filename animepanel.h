@@ -18,6 +18,11 @@ public:
   ~AnimePanel();
   bool loadNeeded = false;
 
+
+protected:
+  void paintEvent(QPaintEvent *);
+
+
 private:
   Ui::AnimePanel *ui;
   Anime *anime;

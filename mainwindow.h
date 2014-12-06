@@ -27,6 +27,8 @@ public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 
+  int scoreType();
+
 protected:
   void closeEvent(QCloseEvent *);
   void paintEvent(QPaintEvent *);
@@ -47,6 +49,7 @@ private:
   QFuture<QJsonObject> userJson;
   QFutureWatcher<QJsonObject> userWatcher;
   FileDownloader *userImageCtrl;
+  FileDownloader *animeImageCtrl;
 
   QFuture<QJsonObject> userListJson;
   QFutureWatcher<QJsonObject> userListWatcher;
@@ -91,7 +94,7 @@ private slots:
   void viewDashboard();
   void viewProfile();
   void viewAnimeList();
-  void loadAnimeData(QString);
+  void loadAnimeData(QString, QString);
   void resetProgress();
   void tick();
   void showAnimePanel(int, int);

@@ -3,6 +3,8 @@
 
 #include <QString>
 #include <QStringList>
+#include <QUrl>
+#include <QPixmap>
 
 class Anime : public QObject {
   Q_OBJECT
@@ -40,8 +42,33 @@ public:
   QString getAverageScore();
   void setAverageScore(QString average_score);
 
+  QString getSynopsis();
+  void setSynopsis(QString synopsis);
+
+  QUrl getCoverURL();
+  void setCoverURL(QUrl cover_url);
+
+  QPixmap getCoverImage();
+  void setCoverImageData(QByteArray data);
+
+  int getMyProgress();
+  void setMyProgress(int progress);
+
+  QString getMyScore();
+  void setMyScore(QString score);
+
+  QString getMyNotes();
+  void setMyNotes(QString notes);
+
+  int getMyRewatch();
+  void setMyRewatch(int rewatch);
+
+  QString getMyStatus();
+  void setMyStatus(QString status);
+
 signals:
   void finishedReloading();
+  void new_image();
 
 private:
   QString id;
@@ -54,6 +81,15 @@ private:
   int episode_count;
   QString average_score;
   bool needLoad = true;
+  QString synopsis;
+  QUrl cover_url;
+  QPixmap cover_image;
+
+  int my_progress;
+  QString my_score;
+  QString my_notes;
+  int rewatch_count;
+  QString my_status;
 };
 
 #endif // ANIME_H

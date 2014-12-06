@@ -47,6 +47,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   eventTimer          = new QTimer(this);
   progressBar         = new QProgressBar(ui->statusBar); ui->statusBar->addWidget(progressBar);
   api                 = new AniListAPI(this, api_id, api_secret);
+  animeImageCtrl      = nullptr;
 
   QFont font = ui->listTabs->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
@@ -485,17 +486,34 @@ void MainWindow::refreshList() {
       QString air_status    =                 inner_anime.value("airing_status")   .toString();
       int     i_eps_total   =                 inner_anime.value("total_episodes")  .toInt();
       QString i_avg_score   =                 inner_anime.value("average_score")   .toString();
+      QUrl    image_url     =            QUrl(inner_anime.value("image_url_lge")   .toString());
 
-      int     i_eps_watched =                 anime      .value("episodes_watched").toInt();
-      int     i_score       =                 anime      .value("score")           .toInt();
+      int     i_eps_watched =                 anime      .value("episodes_watched").toInt(0);
+      QString notes         =                 anime      .value("notes")           .toString();
+      int     i_rewatch     =                 anime      .value("rewatched")       .toInt(0);
+      QString watch_status  =                 anime      .value("list_status")     .toString();
+
+
+      QString score;
+      int i_score;
+      double f_score;
+
+      if(score_type == 0 || score_type == 1) {
+        i_score =  anime.value("score").toInt();
+        score = QString::number(i_score);
+      } else if(score_type == 4) {
+        f_score = anime.value("score").toDouble();
+        score = QString::number(f_score);
+      } else {
+        score = anime.value("score").toString();
+      }
 
       QString eps_total     = QString::number(i_eps_total);
       QString eps_watched   = QString::number(i_eps_watched);
-      QString score         = QString::number(i_score);
 
-      romaji_title = QTextDocument(romaji_title).toPlainText();
-      japan_title  = QTextDocument(japan_title) .toPlainText();
-      eng_title    = QTextDocument(eng_title)   .toPlainText();
+      romaji_title = QTextDocument(romaji_title).toPlainText().trimmed();
+      japan_title  = QTextDocument(japan_title) .toPlainText().trimmed();
+      eng_title    = QTextDocument(eng_title)   .toPlainText().trimmed();
       eps_total    = (eps_total == "0") ? "-" : eps_total;
 
       if(air_status == "currently airing") {
@@ -513,6 +531,12 @@ void MainWindow::refreshList() {
       newAnime->setID(id);
       newAnime->setAiringStatus(air_status);
       newAnime->setAverageScore(i_avg_score);
+      newAnime->setCoverURL(image_url);
+      newAnime->setMyProgress(i_eps_watched);
+      newAnime->setMyScore(score);
+      newAnime->setMyNotes(notes);
+      newAnime->setMyRewatch(i_rewatch);
+      newAnime->setMyStatus(watch_status);
 
       animeData.insert(romaji_title, newAnime);
 
@@ -521,7 +545,11 @@ void MainWindow::refreshList() {
       QTableWidgetItem        *scoreData    = new QTableWidgetItem();
       QTableWidgetItem        *typeData     = new QTableWidgetItem(type);
 
-      scoreData->setData(Qt::DisplayRole, i_score);
+      if(score_type == 0 || score_type == 1) {
+        scoreData->setData(Qt::DisplayRole, i_score);
+      } else if(score_type == 4) {
+        scoreData->setData(Qt::DisplayRole, f_score);
+      }
       progressData->setText(eps_watched + " / " + eps_total);
 
       int row = table->rowCount();
@@ -565,15 +593,21 @@ void MainWindow::showAnimePanel(int row, int column) {
   AnimePanel *ap = new AnimePanel(this, animeData[title.toUtf8().data()]);
 
   if(ap->loadNeeded) {
-    loadAnimeData(animeData[title.toUtf8().data()]->getID());
+    loadAnimeData(animeData[title.toUtf8().data()]->getID(), animeData[title.toUtf8().data()]->getRomajiTitle());
   }
   ap->show();
 }
 
-void MainWindow::loadAnimeData(QString ID) {
+void MainWindow::loadAnimeData(QString ID, QString name) {
   userAnimeData = QtConcurrent::run([&]() {
     return api->get(api->API_ANIME(ID));
   });
+
+  if(animeImageCtrl != nullptr) delete animeImageCtrl;
+  animeImageCtrl = new FileDownloader(animeData[name]->getCoverURL(), this);
+  connect(animeImageCtrl, &FileDownloader::downloaded, [&, name] () {
+    animeData[name]->setCoverImageData(animeImageCtrl->downloadedData());
+});
 
   animeDataWatcher.setFuture(userAnimeData);
 }
@@ -582,11 +616,18 @@ void MainWindow::processAnimeData() {
   QJsonObject result = userAnimeData.result();
 
   QJsonArray synonyms = result.value("synonyms").toArray();
-  QString id = result.value("title_romaji").toString();
+  QString title       = result.value("title_romaji").toString().trimmed();
+  QString description = result.value("description").toString();
+
+  Anime *anime = animeData.value(title);
 
   for(int i = 0; i < synonyms.count(); i++) {
-    animeData.value(id)->addSynonym(synonyms.at(i).toString());
+    anime->addSynonym(synonyms.at(i).toString());
   }
 
-  animeData.value(id)->finishReload();
+  anime->setSynopsis(description);
+
+  anime->finishReload();
 }
+
+int MainWindow::scoreType() { return score_type; }
