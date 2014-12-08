@@ -29,6 +29,8 @@
 #include "anime.h"
 #include "progresstablewidgetitem.h"
 #include "animepanel.h"
+#include "airinganime.h"
+#include "flowlayout.h"
 
 #include "anitomy/anitomy/anitomy.h"
 
@@ -53,16 +55,21 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   font.setCapitalization(QFont::Capitalize);
   ui->listTabs->tabBar()->setFont(font);
 
+  QWidget *container = new QWidget(ui->scrollArea);
+  FlowLayout *layout = new FlowLayout(container);
+  ui->scrollArea->setWidget(container);
+  container->setLayout(layout);
+
   QVariantMap black;
   black.insert("color", QColor(0, 0, 0));
   black.insert("color-active", QColor(0, 0, 0));
   black.insert("color-disabled", QColor(0, 0, 0));
   black.insert("color-selected", QColor(0, 0, 0));
 
-  ui->currentlyAiringButton->setIcon(awesome->icon(fa::clocko,   black));
-  ui->torrentsButton       ->setIcon(awesome->icon(fa::rss,      black));
-  ui->animeButton          ->setIcon(awesome->icon(fa::bars,     black));
-  ui->statisticsButton     ->setIcon(awesome->icon(fa::piechart, black));
+  ui->airingButton    ->setIcon(awesome->icon(fa::clocko,   black));
+  ui->torrentsButton  ->setIcon(awesome->icon(fa::rss,      black));
+  ui->animeButton     ->setIcon(awesome->icon(fa::bars,     black));
+  ui->statisticsButton->setIcon(awesome->icon(fa::piechart, black));
 
   ui->tabWidget->tabBar()->hide();
   ui->tabWidget->setCurrentIndex(0);
@@ -82,6 +89,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->applyButton,     SIGNAL(clicked()),                          SLOT(applySettings()));
 
   connect(ui->animeButton,     SIGNAL(clicked()),                          SLOT(showAnimeTab()));
+
+  connect(ui->airingButton,    SIGNAL(clicked()),                          SLOT(showAiringTab()));
 
   connect(ui->torrentsButton,  SIGNAL(clicked()),                          SLOT(showTorrentsTab()));
   connect(ui->torrentFilter,   SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
@@ -202,6 +211,7 @@ void MainWindow::writeSettings() {
 void MainWindow::showAnimeTab()    { ui->tabWidget->setCurrentIndex(0); }
 void MainWindow::showSettingsTab() { ui->tabWidget->setCurrentIndex(1); }
 void MainWindow::showTorrentsTab() { ui->tabWidget->setCurrentIndex(2); }
+void MainWindow::showAiringTab()   { ui->tabWidget->setCurrentIndex(3); }
 
 void MainWindow::enableApply()   { ui->applyButton->setEnabled(true); }
 void MainWindow::applySettings() { writeSettings(); }
@@ -582,6 +592,8 @@ void MainWindow::refreshList() {
 
   progressBar->setValue(0);
   progressBar->setFormat("");
+
+  loadAiring();
 }
 
 void MainWindow::showAnimePanel(int row, int column) {
@@ -599,15 +611,19 @@ void MainWindow::showAnimePanel(int row, int column) {
 }
 
 void MainWindow::loadAnimeData(QString ID, QString name) {
+  loadingData = true;
+  if(ID.isEmpty()) return;
+
   userAnimeData = QtConcurrent::run([&]() {
     return api->get(api->API_ANIME(ID));
   });
 
-  if(animeImageCtrl != nullptr) delete animeImageCtrl;
+  if(animeImageCtrl != nullptr && !loadingData) delete animeImageCtrl;
   animeImageCtrl = new FileDownloader(animeData[name]->getCoverURL(), this);
   connect(animeImageCtrl, &FileDownloader::downloaded, [&, name] () {
     animeData[name]->setCoverImageData(animeImageCtrl->downloadedData());
-});
+    loadingData = false;
+  });
 
   animeDataWatcher.setFuture(userAnimeData);
 }
@@ -631,3 +647,19 @@ void MainWindow::processAnimeData() {
 }
 
 int MainWindow::scoreType() { return score_type; }
+
+void MainWindow::loadAiring() {
+  QSetIterator<QString> i(airingTitles);
+  while (i.hasNext()) {
+    AiringAnime *newPanel = new AiringAnime(this);
+    Anime *anime = animeData.value(i.next());
+    if(anime == 0) continue;
+    newPanel->setAnime(anime);
+
+    if(anime->needsLoad()) {
+      loadAnimeData(anime->getID(), anime->getRomajiTitle());
+      while(loadingData) QCoreApplication::processEvents();
+    }
+    ui->scrollArea->widget()->layout()->addWidget(newPanel);
+  }
+}

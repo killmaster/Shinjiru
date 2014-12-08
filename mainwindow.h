@@ -73,6 +73,7 @@ private:
   QString aniListDisplayName;
   int score_type;
   QString max_score;
+  bool loadingData;
 
   enum ErrorCode {
     NO_AUTHCODE,
@@ -86,6 +87,7 @@ private slots:
   void showAnimeTab();
   void showSettingsTab();
   void showTorrentsTab();
+  void showAiringTab();
   void refreshUser();
   void enableApply();
   void applySettings();
@@ -102,6 +104,7 @@ private slots:
   void updateProgess();
   void refreshList();
   void setUserImage();
+  void loadAiring();
   void filterTorrents(QString, bool);
   void filterTorrents(bool);
   void filterTorrents(QString);

@@ -24,7 +24,10 @@ SOURCES   += main.cpp\
     anitomy/anitomy/tokenizer.cpp \
     filedownloader.cpp \
     anime.cpp \
-    animepanel.cpp
+    animepanel.cpp \
+    airinganime.cpp \
+    flowlayout.cpp \
+    scrolltext.cpp
 
 HEADERS   += mainwindow.h \
              app.h \
@@ -39,9 +42,13 @@ HEADERS   += mainwindow.h \
     filedownloader.h \
     anime.h \
     progresstablewidgetitem.h \
-    animepanel.h
+    animepanel.h \
+    airinganime.h \
+    flowlayout.h \
+    scrolltext.h
 
 FORMS     += mainwindow.ui \
-    animepanel.ui
+    animepanel.ui \
+    airinganime.ui
 
 RESOURCES += res.qrc
