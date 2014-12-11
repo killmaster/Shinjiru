@@ -6,6 +6,8 @@
 #include <QUrl>
 #include <QPixmap>
 
+#include "../lib/filedownloader.h"
+
 class Anime : public QObject {
   Q_OBJECT
 
@@ -66,6 +68,8 @@ public:
   QString getMyStatus();
   void setMyStatus(QString status);
 
+  void downloadCover();
+
 signals:
   void finishedReloading();
   void new_image();
@@ -84,6 +88,8 @@ private:
   QString synopsis;
   QUrl cover_url;
   QPixmap cover_image;
+
+  FileDownloader *anime_image_control;
 
   int my_progress;
   QString my_score;

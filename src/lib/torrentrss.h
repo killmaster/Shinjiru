@@ -1,5 +1,5 @@
-#ifndef TORRENTS_H
-#define TORRENTS_H
+#ifndef TORRENT_RSS_H
+#define TORRENT_RSS_H
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -9,12 +9,12 @@
 #include <QUrl>
 #include <QList>
 
-class Torrents : public QWidget
+class TorrentRSS : public QWidget
 {
   Q_OBJECT
 
 public:
-  Torrents(QWidget *widget = 0);
+  TorrentRSS(QWidget *widget = 0);
 
   QList<QString> *getLinks();
   QList<QString> *getTitles();

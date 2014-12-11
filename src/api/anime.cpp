@@ -1,6 +1,8 @@
 #include "anime.h"
 
-Anime::Anime(QObject *parent) : QObject(parent) {}
+Anime::Anime(QObject *parent) : QObject(parent) {
+  anime_image_control = nullptr;
+}
 
 void Anime::finishReload() { emit finishedReloading(); needLoad = false;}
 bool Anime::needsLoad() { return needLoad; }
@@ -58,3 +60,11 @@ void        Anime::setMyRewatch(int rewatch)              { this ->rewatch_count
 QString     Anime::getMyStatus()                          { return my_status; }
 void        Anime::setMyStatus(QString status)            { this ->my_status = status; }
 
+void Anime::downloadCover() {
+  anime_image_control = new FileDownloader(getCoverURL());
+  connect(anime_image_control, &FileDownloader::downloaded, [&]() {
+    this->setCoverImageData(anime_image_control->downloadedData());
+    delete anime_image_control;
+    anime_image_control = nullptr;
+  });
+}

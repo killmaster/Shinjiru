@@ -10,7 +10,7 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime) : QDialog(parent), ui(new 
 
   this->anime = anime;
   MainWindow *par = static_cast<MainWindow *>(parent);
-  int score_type = par->scoreType();
+  int score_type = 0;//par->scoreType();
   QString airing_status = anime->getAiringStatus();
   airing_status = airing_status.at(0).toUpper() + airing_status.right(airing_status.length() - 1);
 

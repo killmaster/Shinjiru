@@ -7,48 +7,59 @@ CONFIG += c++11
 
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
-include(QtAwesome/QtAwesome/QtAwesome.pri)
-include(AniListAPI/AniListAPI.pri)
+include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
+include(lib/AniListAPI/AniListAPI.pri)
 
-SOURCES   += main.cpp\
-             mainwindow.cpp \
-    torrents.cpp \
-    anitomy/anitomy/anitomy.cpp \
-    anitomy/anitomy/element.cpp \
-    anitomy/anitomy/keyword.cpp \
-    anitomy/anitomy/parser.cpp \
-    anitomy/anitomy/parser_helper.cpp \
-    anitomy/anitomy/parser_number.cpp \
-    anitomy/anitomy/string.cpp \
-    anitomy/anitomy/token.cpp \
-    anitomy/anitomy/tokenizer.cpp \
-    filedownloader.cpp \
-    anime.cpp \
-    animepanel.cpp \
-    airinganime.cpp \
-    flowlayout.cpp \
-    scrolltext.cpp
+SOURCES   += \
+    lib/anitomy/anitomy/anitomy.cpp \
+    lib/anitomy/anitomy/element.cpp \
+    lib/anitomy/anitomy/keyword.cpp \
+    lib/anitomy/anitomy/parser.cpp \
+    lib/anitomy/anitomy/parser_helper.cpp \
+    lib/anitomy/anitomy/parser_number.cpp \
+    lib/anitomy/anitomy/string.cpp \
+    lib/anitomy/anitomy/token.cpp \
+    lib/anitomy/anitomy/tokenizer.cpp \
+    src/anitomy/anitomywrapper.cpp \
+    src/api/anime.cpp \
+    src/gui/airinganime.cpp \
+    src/gui/animepanel.cpp \
+    src/gui/flowlayout.cpp \
+    src/gui/mainwindow.cpp \
+    src/gui/scrolltext.cpp \
+    src/lib/filedownloader.cpp \
+    src/main.cpp \
+    src/lib/torrentrss.cpp \
+    src/api/user.cpp \
+    src/api/api.cpp \
+    src/settings.cpp
 
-HEADERS   += mainwindow.h \
-             app.h \
-    torrents.h \
-    anitomy/anitomy/anitomy.h \
-    anitomy/anitomy/element.h \
-    anitomy/anitomy/keyword.h \
-    anitomy/anitomy/parser.h \
-    anitomy/anitomy/string.h \
-    anitomy/anitomy/token.h \
-    anitomy/anitomy/tokenizer.h \
-    filedownloader.h \
-    anime.h \
-    progresstablewidgetitem.h \
-    animepanel.h \
-    airinganime.h \
-    flowlayout.h \
-    scrolltext.h
+HEADERS   += \
+    lib/anitomy/anitomy/anitomy.h \
+    lib/anitomy/anitomy/element.h \
+    lib/anitomy/anitomy/keyword.h \
+    lib/anitomy/anitomy/parser.h \
+    lib/anitomy/anitomy/string.h \
+    lib/anitomy/anitomy/token.h \
+    lib/anitomy/anitomy/tokenizer.h \
+    src/anitomy/anitomywrapper.h \
+    src/api/anime.h \
+    src/gui/airinganime.h \
+    src/gui/animepanel.h \
+    src/gui/flowlayout.h \
+    src/gui/mainwindow.h \
+    src/gui/progresstablewidgetitem.h \
+    src/gui/scrolltext.h \
+    src/lib/filedownloader.h \
+    src/app.h \
+    src/lib/torrentrss.h \
+    src/api/user.h \
+    src/api/api.h \
+    src/settings.h
 
-FORMS     += mainwindow.ui \
-    animepanel.ui \
-    airinganime.ui
+FORMS     += \
+    src/gui/airinganime.ui \
+    src/gui/animepanel.ui \
+    src/gui/mainwindow.ui
 
-RESOURCES += res.qrc
+RESOURCES += res/res.qrc

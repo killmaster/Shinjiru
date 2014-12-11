@@ -4,7 +4,7 @@
 #include <QDialog>
 #include <QString>
 
-#include "anime.h"
+#include "../api/anime.h"
 
 namespace Ui {
   class AnimePanel;

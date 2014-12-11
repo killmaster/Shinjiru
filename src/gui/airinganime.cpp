@@ -1,7 +1,7 @@
 #include "airinganime.h"
 #include "ui_airinganime.h"
 
-#include "anime.h"
+#include "../api/anime.h"
 #include "scrolltext.h"
 
 #include <QPainter>

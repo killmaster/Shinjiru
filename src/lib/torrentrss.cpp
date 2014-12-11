@@ -1,13 +1,13 @@
-#include "torrents.h"
+#include "torrentrss.h"
 
-Torrents::Torrents(QWidget *parent) : QWidget(parent), currentReply(0) {
+TorrentRSS::TorrentRSS(QWidget *parent) : QWidget(parent), currentReply(0) {
   connect(&manager, SIGNAL(finished(QNetworkReply*)),
           SLOT(finished(QNetworkReply*)));
   links = new QList<QString>;
   titles = new QList<QString>;
 }
 
-void Torrents::get(const QUrl &url) {
+void TorrentRSS::get(const QUrl &url) {
   QNetworkRequest request(url);
   if (currentReply) {
     currentReply->disconnect(this);
@@ -20,13 +20,13 @@ void Torrents::get(const QUrl &url) {
           SLOT(error(QNetworkReply::NetworkError)));
 }
 
-void Torrents::fetch() {
+void TorrentRSS::fetch() {
   xml.clear();
   QUrl url("http://tokyotosho.info/rss.php?filter=1&zwnj=0");
   get(url);
 }
 
-void Torrents::metaDataChanged() {
+void TorrentRSS::metaDataChanged() {
   QUrl redirectionTarget = currentReply->
           attribute(QNetworkRequest::RedirectionTargetAttribute).toUrl();
   if (redirectionTarget.isValid()) {
@@ -34,7 +34,7 @@ void Torrents::metaDataChanged() {
   }
 }
 
-void Torrents::readyRead() {
+void TorrentRSS::readyRead() {
   int statusCode = currentReply->
           attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
   if (statusCode >= 200 && statusCode < 300) {
@@ -44,12 +44,12 @@ void Torrents::readyRead() {
   }
 }
 
-void Torrents::finished(QNetworkReply *reply) {
+void TorrentRSS::finished(QNetworkReply *reply) {
   Q_UNUSED(reply);
   emit done();
 }
 
-void Torrents::parseXml() {
+void TorrentRSS::parseXml() {
   bool metItem = false;
   while (!xml.atEnd()) {
     xml.readNext();
@@ -80,17 +80,15 @@ void Torrents::parseXml() {
   }
 }
 
-QList<QString>* Torrents::getTitles() {
+QList<QString>* TorrentRSS::getTitles() {
   return titles;
 }
 
-QList<QString>* Torrents::getLinks() {
+QList<QString>* TorrentRSS::getLinks() {
   return links;
 }
 
-
-
-void Torrents::error(QNetworkReply::NetworkError) {
+void TorrentRSS::error(QNetworkReply::NetworkError) {
   currentReply->disconnect(this);
   currentReply->deleteLater();
   currentReply = 0;

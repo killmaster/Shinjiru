@@ -3,7 +3,7 @@
 
 #include <QWidget>
 
-#include "anime.h"
+#include "../api/anime.h"
 
 #include <QPaintEvent>
 
