@@ -1,11 +1,9 @@
 # Dependency folders
 
-QtAwesome/
-anitomy/
-AniListAPI/
+lib/
 
 # Sensitive API data thing
-app.h
+
 
 # C++ objects and libs
 
