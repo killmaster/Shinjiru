@@ -9,7 +9,7 @@ bool Anime::needsLoad() { return needLoad; }
 
 
 QString     Anime::getID()                                { return id; }
-void        Anime::setID(QString id)                      { this ->id = id; }
+void        Anime::setID(QString id)                      { this ->id = id.trimmed(); }
 
 QStringList Anime::getSynonyms()                          { return synonyms; }
 void        Anime::addSynonym(QString synonym)            { synonyms.append(synonym); }
@@ -64,7 +64,6 @@ void Anime::downloadCover() {
   anime_image_control = new FileDownloader(getCoverURL());
   connect(anime_image_control, &FileDownloader::downloaded, [&]() {
     this->setCoverImageData(anime_image_control->downloadedData());
-    delete anime_image_control;
-    anime_image_control = nullptr;
+    //delete anime_image_control;
   });
 }

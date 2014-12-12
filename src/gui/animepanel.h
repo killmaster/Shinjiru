@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QString>
+
 #include <anilistapi.h>
 
 #include "../api/anime.h"

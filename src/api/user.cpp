@@ -110,7 +110,10 @@ Anime *User::getAnimeByTitle(QString title) {
 }
 
 void User::loadAnimeData(Anime *anime) {
-  QJsonObject result = api->get(api->API_ANIME(anime->getID()));
+  QString ID = anime->getID();
+  QUrl ID_URL = api->API_ANIME(ID);
+
+  QJsonObject result = api->get(ID_URL);
 
   anime->downloadCover();
 

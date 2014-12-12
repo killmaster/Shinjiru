@@ -1,11 +1,11 @@
 #ifndef USER_H
 #define USER_H
 
-#include <QString>
 #include <QPixmap>
 #include <QMap>
 
-#include "anilistapi.h"
+#include <anilistapi.h>
+
 #include "anime.h"
 #include "../lib/filedownloader.h"
 

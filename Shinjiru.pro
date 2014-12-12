@@ -32,7 +32,9 @@ SOURCES   += \
     src/lib/torrentrss.cpp \
     src/api/user.cpp \
     src/api/api.cpp \
-    src/settings.cpp
+    src/settings.cpp \
+    src/gui/userlisthelper.cpp \
+    src/gui/userhelper.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \

@@ -2,20 +2,19 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QCloseEvent>
-#include <QTimer>
 #include <QFuture>
 #include <QFutureWatcher>
-#include <QPaintEvent>
 #include <QProgressBar>
+#include <QTableWidget>
 
 #include <QtAwesome.h>
 #include <anilistapi.h>
 
-#include "../api/user.h"
-#include "../lib/filedownloader.h"
-#include "../api/anime.h"
 #include "../settings.h"
+#include "../api/user.h"
+#include "../api/anime.h"
+#include "airinganime.h"
+#include "flowlayout.h"
 
 namespace Ui {
   class MainWindow;
@@ -31,6 +30,7 @@ public:
 protected:
   void closeEvent(QCloseEvent *);
   void paintEvent(QPaintEvent *);
+  void resizeEvent(QResizeEvent *);
 
 private:
   Ui::MainWindow *ui;
@@ -38,6 +38,8 @@ private:
   AniListAPI *api;
   Settings *settings;
   User *user;
+
+  FlowLayout *layout;
 
   QFuture<User *> user_future;
   QFutureWatcher<User *> user_future_watcher;
@@ -47,8 +49,6 @@ private:
 
   QTimer *event_timer;
   QProgressBar *progress_bar;
-
-signals:
 
 private slots:
   void loadUser();
@@ -68,6 +68,10 @@ private slots:
   void showStatisticsTab();
 
   void showAnimePanel(int, int);
+
+  QTableWidget *getListTable();
+
+  AiringAnime *addAiring(Anime *);
 };
 
 #endif // MAINWINDOW_H

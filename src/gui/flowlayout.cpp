@@ -79,9 +79,9 @@ QSize FlowLayout::minimumSize() const {
 }
 
 int FlowLayout::doLayout(const QRect &rect, bool testOnly) const {
-  int left, top, right, bottom;
-  getContentsMargins(&left, &top, &right, &bottom);
-  QRect effectiveRect = rect.adjusted(+left, +top, -right, -bottom);
+  int *left = new int;
+  this->getContentsMargins(left, 0, 0, 0);
+  QRect effectiveRect = rect.adjusted(+*left, 0, 0, 0);
   int x = effectiveRect.x();
   int y = effectiveRect.y();
   int lineHeight = 0;
@@ -114,7 +114,7 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const {
     lineHeight = qMax(lineHeight, item->sizeHint().height());
   }
 
-  return y + lineHeight - rect.y() + bottom;
+  return y + lineHeight - rect.y();
 }
 
 int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
@@ -122,8 +122,6 @@ int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
     int ourWidth = this->geometry().width();
     int oneContentWidth = itemList.at(0)->widget()->width();
     int numberOfContent = ourWidth / oneContentWidth - 1;
-
-    qDebug() << ourWidth << oneContentWidth << numberOfContent;
 
     return (ourWidth - (oneContentWidth * numberOfContent)) / numberOfContent;
   }

@@ -2,11 +2,9 @@
 #define AIRINGANIME_H
 
 #include <QWidget>
-
-#include "../api/anime.h"
-
 #include <QPaintEvent>
 
+#include "../api/anime.h"
 #include "scrolltext.h"
 
 namespace Ui {
