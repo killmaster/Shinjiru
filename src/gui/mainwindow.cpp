@@ -283,7 +283,7 @@ void MainWindow::showAnimePanel(int row, int column) {
   QString title = source->item(row, 0)->text();
   Anime *anime = user->getAnimeByTitle(title);
 
-  AnimePanel *ap = new AnimePanel(this, anime);
+  AnimePanel *ap = new AnimePanel(this, anime, user->scoreType(), api);
 
   if(anime->needsLoad()) {
     user->loadAnimeData(anime);
