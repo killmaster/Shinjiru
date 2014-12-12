@@ -34,7 +34,7 @@ We'll talk about this later.
 
 Here are some things I plan to do in no real order.
 
-+ Actually update lists from the AnimePanel
++ <s>Actually update lists from the AnimePanel</s>
 + Implement the statistics page
 + Implement the airing page
 + Implement auto downloading of torrents as rules
