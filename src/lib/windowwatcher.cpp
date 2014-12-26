@@ -1,0 +1,51 @@
+#include "windowwatcher.h"
+
+#include <QDebug>
+
+WindowWatcher::WindowWatcher(QObject *parent) : QObject(parent) {
+  timer = new QTimer(this);
+
+  connect(timer, SIGNAL(timeout()), SLOT(timeOut()));
+
+  timer->setInterval(5000);
+  timer->start();
+}
+
+BOOL CALLBACK EnumWindowsProc(HWND wnd, LPARAM lParam) {
+    return reinterpret_cast<WindowWatcher*>(lParam)->parseWindow(wnd);
+}
+
+BOOL CALLBACK WindowWatcher::parseWindow(HWND hwnd) {
+  int size = GetWindowTextLength(hwnd);
+  if (size > 0 && IsWindowVisible(hwnd)) {
+    wchar_t title[size];
+    GetWindowText(hwnd, title, sizeof(title));
+    windowList << QString::fromWCharArray(title);
+  }
+
+  return TRUE;
+}
+
+void WindowWatcher::timeOut() {
+  windowList.clear();
+
+  EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(this));
+
+  for(int i = 0; i < windowList.length(); i++) {
+    QString window = windowList.at(i);
+
+    if(!isMediaPlayer(window)) continue;
+
+    emit title_found(found_title);
+  }
+}
+
+bool WindowWatcher::isMediaPlayer(QString window_title) {
+  QRegExp video("(.*(\\.mkv|\\.mp4|\\.avi)).*");
+  if(video.exactMatch(window_title)) {
+    return true;
+  }
+  return false;
+}
+
+
