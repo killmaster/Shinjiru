@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   awesome             = new QtAwesome(qApp);
   api                 = new AniListAPI(this, api_id, api_secret);
   settings            = new Settings(this);
+  window_watcher      = new WindowWatcher(this);
 
   awesome->initFontAwesome();
 
@@ -70,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionVAL,      SIGNAL(triggered()), SLOT(viewAnimeList()));
   connect(ui->actionVD,       SIGNAL(triggered()), SLOT(viewDashboard()));
   connect(ui->actionVP,       SIGNAL(triggered()), SLOT(viewProfile()));
+
+  connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
 
   API *instance = new API(this);
   int result = instance->verify(api);

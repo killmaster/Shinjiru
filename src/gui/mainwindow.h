@@ -16,6 +16,8 @@
 #include "airinganime.h"
 #include "flowlayout.h"
 
+#include "../lib/windowwatcher.h"
+
 namespace Ui {
   class MainWindow;
 }
@@ -38,6 +40,7 @@ private:
   AniListAPI *api;
   Settings *settings;
   User *user;
+  WindowWatcher *window_watcher;
 
   FlowLayout *layout;
 
@@ -72,6 +75,8 @@ private slots:
   QTableWidget *getListTable();
 
   AiringAnime *addAiring(Anime *);
+
+  void watch(QString);
 };
 
 #endif // MAINWINDOW_H
