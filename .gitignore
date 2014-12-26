@@ -1,6 +1,6 @@
 # Dependency folders
 
-lib/
+/lib/
 
 # Sensitive API data thing
 app.h
