@@ -34,7 +34,8 @@ SOURCES   += \
     src/api/api.cpp \
     src/settings.cpp \
     src/gui/userlisthelper.cpp \
-    src/gui/userhelper.cpp
+    src/gui/userhelper.cpp \
+    src/lib/windowwatcher.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -57,7 +58,8 @@ HEADERS   += \
     src/lib/torrentrss.h \
     src/api/user.h \
     src/api/api.h \
-    src/settings.h
+    src/settings.h \
+    src/lib/windowwatcher.h
 
 FORMS     += \
     src/gui/airinganime.ui \
