@@ -19,6 +19,8 @@ signals:
 
 public slots:
   void timeOut();
+  void enable();
+  void disable();
 
 private:
   QTimer *timer;

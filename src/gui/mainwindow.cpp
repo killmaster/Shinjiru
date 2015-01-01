@@ -64,13 +64,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
-  connect(ui->actionExit,     &QAction::triggered, []() {exit(0);});
-  connect(ui->actionAbout,    &QAction::triggered, []() {return;});
-  connect(ui->actionHelp,     &QAction::triggered, []() {return;});
-  connect(ui->actionRL,       &QAction::triggered, [&]() {loadUserList();});
-  connect(ui->actionVAL,      SIGNAL(triggered()), SLOT(viewAnimeList()));
-  connect(ui->actionVD,       SIGNAL(triggered()), SLOT(viewDashboard()));
-  connect(ui->actionVP,       SIGNAL(triggered()), SLOT(viewProfile()));
+  connect(ui->actionExit,     &QAction::triggered,     []() {exit(0);});
+  connect(ui->actionAbout,    &QAction::triggered,     []() {return;});
+  connect(ui->actionHelp,     &QAction::triggered,     []() {return;});
+  connect(ui->actionRL,       &QAction::triggered,     [&]() {loadUserList();});
+  connect(ui->actionVAL,      SIGNAL(triggered()),     SLOT(viewAnimeList()));
+  connect(ui->actionVD,       SIGNAL(triggered()),     SLOT(viewDashboard()));
+  connect(ui->actionVP,       SIGNAL(triggered()),     SLOT(viewProfile()));
+  connect(ui->actionEAR,      SIGNAL(triggered(bool)), SLOT(toggleAnimeRecognition(bool)));
 
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
 
@@ -147,3 +148,15 @@ void MainWindow::showAnimePanel(int row, int column) {
 void MainWindow::viewDashboard() { QDesktopServices::openUrl(QString("http://anilist.co/home")); }
 void MainWindow::viewProfile()   { QDesktopServices::openUrl(QString("http://anilist.co/user/") + user->displayName()); }
 void MainWindow::viewAnimeList() { QDesktopServices::openUrl(QString("http://anilist.co/animelist/") + user->displayName()); }
+
+void MainWindow::toggleAnimeRecognition(bool checked) {
+  if(checked) {
+    window_watcher->enable();
+  } else {
+    window_watcher->disable();
+  }
+}
+
+void MainWindow::watch(QString title) {
+  qDebug() << "Watching" << title;
+}
