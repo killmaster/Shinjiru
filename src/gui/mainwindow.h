@@ -64,6 +64,8 @@ private slots:
   void viewProfile();
   void viewAnimeList();
 
+  void toggleAnimeRecognition(bool);
+
   void showAnimeTab();
   void showSettingsTab();
   void showTorrentsTab();

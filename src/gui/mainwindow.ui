@@ -482,7 +482,7 @@
     <property name="title">
      <string>Tools</string>
     </property>
-    <addaction name="actionEnable_Anime_Recognition"/>
+    <addaction name="actionEAR"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
@@ -535,7 +535,7 @@
     <string>View Anime List</string>
    </property>
   </action>
-  <action name="actionEnable_Anime_Recognition">
+  <action name="actionEAR">
    <property name="checkable">
     <bool>true</bool>
    </property>
