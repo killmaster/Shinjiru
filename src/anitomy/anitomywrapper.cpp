@@ -20,6 +20,7 @@ QMap<QString, QString> AnitomyWrapper::parse(QString file_name) {
   try {
     anitomy.Parse(title);
   } catch(std::regex_error& e) {
+    Q_UNUSED(e)
     qDebug() << "Error parsing: " << QString::fromWCharArray(title.c_str());
     return QMap<QString, QString>();
   }

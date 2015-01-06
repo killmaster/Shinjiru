@@ -17,7 +17,7 @@ BOOL CALLBACK EnumWindowsProc(HWND wnd, LPARAM lParam) {
 BOOL CALLBACK WindowWatcher::parseWindow(HWND hwnd) {
   int size = GetWindowTextLength(hwnd);
   if (size > 0 && IsWindowVisible(hwnd)) {
-    wchar_t title[size];
+    wchar_t title[256];
     GetWindowText(hwnd, title, sizeof(title));
     windowList << QString::fromWCharArray(title);
   }
@@ -60,5 +60,3 @@ bool WindowWatcher::isMediaPlayer(QString window_title) {
   }
   return false;
 }
-
-
