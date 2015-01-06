@@ -4,7 +4,8 @@
 #include <QString>
 #include <QMap>
 
-#include <lib/anitomy/anitomy/anitomy.h>
+#include "../../lib/anitomy/anitomy/anitomy.h"
+
 
 typedef std::basic_string<wchar_t> anitomy_string;
 
