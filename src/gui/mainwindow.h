@@ -15,7 +15,7 @@
 #include "../api/anime.h"
 #include "airinganime.h"
 #include "flowlayout.h"
-
+#include "../anitomy/anitomywrapper.h"
 #include "../lib/windowwatcher.h"
 
 namespace Ui {
@@ -41,6 +41,7 @@ private:
   Settings *settings;
   User *user;
   WindowWatcher *window_watcher;
+  AnitomyWrapper *anitomy;
 
   FlowLayout *layout;
 
@@ -52,6 +53,11 @@ private:
 
   QTimer *event_timer;
   QProgressBar *progress_bar;
+
+  QTimer *watch_timer;
+  QString currently_watching;
+  QString cw_title;
+  QString cw_episode;
 
 private slots:
   void loadUser();
@@ -79,6 +85,7 @@ private slots:
   AiringAnime *addAiring(Anime *);
 
   void watch(QString);
+  void updateEpisode();
 };
 
 #endif // MAINWINDOW_H
