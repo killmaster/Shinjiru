@@ -180,11 +180,15 @@ void MainWindow::watch(QString title) {
 }
 
 void MainWindow::updateEpisode() {
-    Anime *anime = this->user->getAnimeByTitle(cw_title);
+  Anime *anime = this->user->getAnimeByTitle(cw_title);
 
-    QMap<QString, QString> data;
-    data.insert("id",               anime->getID());
-    data.insert("episodes_watched", cw_episode);
+  if(anime->getMyProgress() > cw_episode.toInt()) {
+    return;
+  }
 
-    api->put(api->API_EDIT_LIST, data);
+  QMap<QString, QString> data;
+  data.insert("id",               anime->getID());
+  data.insert("episodes_watched", cw_episode);
+
+  api->put(api->API_EDIT_LIST, data);
 }
