@@ -20,10 +20,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   api                 = new AniListAPI(this, api_id, api_secret);
   settings            = new Settings(this);
   window_watcher      = new WindowWatcher(this);
+  anitomy             = new AnitomyWrapper();
 
   awesome->initFontAwesome();
 
   event_timer         = new QTimer(this);
+  watch_timer         = new QTimer(this);
   progress_bar        = new QProgressBar(ui->statusBar);
 
   QFont font = ui->listTabs->tabBar()->font();
@@ -74,6 +76,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionEAR,      SIGNAL(triggered(bool)), SLOT(toggleAnimeRecognition(bool)));
 
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
+  connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
 
   API *instance = new API(this);
   int result = instance->verify(api);
@@ -93,6 +96,7 @@ MainWindow::~MainWindow() {
   delete ui;
   delete awesome;
   delete api;
+  delete anitomy;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
@@ -158,5 +162,29 @@ void MainWindow::toggleAnimeRecognition(bool checked) {
 }
 
 void MainWindow::watch(QString title) {
-  qDebug() << "Watching" << title;
+  if(this->currently_watching != title) {
+    this->currently_watching = title;
+    this->watch_timer->stop();
+
+    QMap<QString, QString> results = anitomy->parse(title);
+
+    this->cw_title   = results.value("title");
+    this->cw_episode = results.value("episode");
+
+    if(cw_title.isEmpty() || cw_episode.isEmpty()) {
+        return;
+    }
+
+    this->watch_timer->start(1000 * 60 * 2); // Start timer to expire after 2 minutes
+  }
+}
+
+void MainWindow::updateEpisode() {
+    Anime *anime = this->user->getAnimeByTitle(cw_title);
+
+    QMap<QString, QString> data;
+    data.insert("id",               anime->getID());
+    data.insert("episodes_watched", cw_episode);
+
+    api->put(api->API_EDIT_LIST, data);
 }
