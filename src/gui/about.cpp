@@ -16,7 +16,7 @@ About::About(QWidget *parent) : QDialog(parent), ui(new Ui::About) {
     QByteArray data = f.readAll();
     mascot.loadFromData(data);
 
-    ui->versionLabel->setText("Version " + QCoreApplication::applicationVersion());
+    ui->versionLabel->setText("Version " + qApp->applicationVersion());
 }
 
 About::~About()
