@@ -9,6 +9,8 @@
 
 RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file) : QDialog(parent), ui(new Ui::RuleWizard) {
   ui->setupUi(this);
+  setAttribute(Qt::WA_DeleteOnClose);
+  setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   ui->animeTitleLineEdit->setText(title);
   ui->subGroupLineEdit->setText(sub);

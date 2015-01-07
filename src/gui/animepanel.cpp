@@ -7,6 +7,7 @@
 AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI *api) : QDialog(parent), ui(new Ui::AnimePanel) {
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
+  setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   this->anime = anime;
   this->score_type = score_type;

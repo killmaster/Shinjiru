@@ -50,12 +50,12 @@ Here are some things I plan to do in no real order.
 + <s>Implement anime recognition</s> *
 + Add some actual settings
 + Add help pane
-+ Add about pane
++ <s>Add about pane</s>
 + <s>Add updater</s>
 + Better support for custom lists
 + Better support for Japanese and English titles
-+ Add an icon
-+ Minimize to tray / Close to tray
++ <s>Add an icon</s>
++ <s>Minimize to tray / Close to tray</s> *
 + <s>Fix the weird menubar bug</s>
 + Probably some other stuff I'm forgetting.
 

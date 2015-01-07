@@ -2,11 +2,13 @@
 #include "ui_mainwindow.h"
 
 #include <QDesktopServices>
+#include <QIcon>
 
 #include "../app.h"
 #include "../api/api.h"
 #include "animepanel.h"
 #include "fvupdater.h"
+#include "about.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -15,6 +17,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   styleFile.open(QFile::ReadOnly);
   QString styleSheet = QLatin1String(styleFile.readAll());
   qApp->setStyleSheet(styleSheet);
+  QPixmap window_icon;
+  QFile iconFile(":/icon.png");
+  iconFile.open(QFile::ReadOnly);
+  QByteArray icon_data = iconFile.readAll();
+  window_icon.loadFromData(icon_data);
+  qApp->setWindowIcon(QIcon(window_icon));
 
   user                 = nullptr;
   awesome              = new QtAwesome(qApp);
@@ -67,14 +75,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
-  connect(ui->actionExit,     &QAction::triggered,                           []() {exit(0);});
-  connect(ui->actionAbout,    &QAction::triggered,                           []() {return;});
-  connect(ui->actionHelp,     &QAction::triggered,                           []() {return;});
-  connect(ui->actionRL,       &QAction::triggered,                           [&]() {loadUserList();});
-  connect(ui->actionVAL,      SIGNAL(triggered()),                           SLOT(viewAnimeList()));
-  connect(ui->actionVD,       SIGNAL(triggered()),                           SLOT(viewDashboard()));
-  connect(ui->actionVP,       SIGNAL(triggered()),                           SLOT(viewProfile()));
-  connect(ui->actionEAR,      SIGNAL(triggered(bool)),                       SLOT(toggleAnimeRecognition(bool)));
+  connect(ui->actionExit,   &QAction::triggered,                             []()  {exit(0);});
+  connect(ui->actionAbout,  &QAction::triggered,                             [&]() {showAbout();});
+  connect(ui->actionHelp,   &QAction::triggered,                             [&]() {showAbout();});
+  connect(ui->actionRL,     &QAction::triggered,                             [&]() {loadUserList();});
+  connect(ui->actionVAL,    SIGNAL(triggered()),                             SLOT(viewAnimeList()));
+  connect(ui->actionVD,     SIGNAL(triggered()),                             SLOT(viewDashboard()));
+  connect(ui->actionVP,     SIGNAL(triggered()),                             SLOT(viewProfile()));
+  connect(ui->actionEAR,    SIGNAL(triggered(bool)),                         SLOT(toggleAnimeRecognition(bool)));
   connect(ui->actionUpdate, SIGNAL(triggered()), FvUpdater::sharedUpdater(), SLOT(CheckForUpdatesNotSilent()));
 
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
@@ -233,4 +241,9 @@ void MainWindow::eventTick() {
   ui->refreshButton->setText("Refresh (" + QString::number(torrent_refresh_time) + ")");
 
   event_timer->start(1000);
+}
+
+void MainWindow::showAbout() {
+  About *about = new About(this);
+  about->show();
 }

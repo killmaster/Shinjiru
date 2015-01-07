@@ -10,6 +10,7 @@ void MainWindow::initTray() {
 
   trayIcon = new QSystemTrayIcon(this);
   trayIcon->setContextMenu(trayIconMenu);
+  trayIcon->setIcon(windowIcon());
 }
 
 

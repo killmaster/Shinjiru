@@ -1,7 +1,7 @@
 QT       += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 0.0.1
+VERSION = 0.0.2
 TEMPLATE = app
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -41,7 +41,9 @@ SOURCES   += \
     src/lib/windowwatcher.cpp \
     src/gui/rulewizard.cpp \
     src/gui/trayhelper.cpp \
-    src/gui/torrentshelper.cpp
+    src/gui/torrentshelper.cpp \
+    src/lib/skinmanager.cpp \
+    src/gui/about.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -66,12 +68,15 @@ HEADERS   += \
     src/api/api.h \
     src/settings.h \
     src/lib/windowwatcher.h \
-    src/gui/rulewizard.h
+    src/gui/rulewizard.h \
+    src/lib/skinmanager.h \
+    src/gui/about.h
 
 FORMS     += \
     src/gui/airinganime.ui \
     src/gui/animepanel.ui \
     src/gui/mainwindow.ui \
-    src/gui/rulewizard.ui
+    src/gui/rulewizard.ui \
+    src/gui/about.ui
 
 RESOURCES += res/res.qrc

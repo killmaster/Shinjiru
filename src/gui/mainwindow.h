@@ -101,6 +101,8 @@ private slots:
   void showAiringTab();
   void showStatisticsTab();
 
+  void showAbout();
+
   void showAnimePanel(int, int);
 
   QTableWidget *getListTable();
