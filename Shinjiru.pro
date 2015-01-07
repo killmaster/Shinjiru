@@ -1,14 +1,17 @@
 QT       += core gui widgets network concurrent
 
 TARGET = Shinjiru
+VERSION = 0.0.1
 TEMPLATE = app
 
-CONFIG += c++11
+DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
+CONFIG += c++11
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
+include(lib/fervor/fervor.pri)
 
 SOURCES   += \
     lib/anitomy/anitomy/anitomy.cpp \

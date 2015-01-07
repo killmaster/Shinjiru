@@ -21,11 +21,14 @@ Shinjiru requires a few dependencies to compile and work properly, fortunately t
 - **AniListAPI** - [https://github.com/matt4682/AniListAPI](https://github.com/matt4682/AniListAPI)
 - **Anitomy** - [https://github.com/erengy/anitomy](https://github.com/erengy/anitomy)
 - **OpenSSL** - [http://www.openssl.org/](http://www.openssl.org/)
+- **Fervor** - [https://github.com/pypt/fervor](https://github.com/pypt/fervor)
 
 **app.h**
 
 The file `app.h` contains two const QStrings, `api_id` and `api_secret`.  
 Set the two aforementioned variables to your own client id and client secret if you are building it yourself, mine belong to me. :)
+
+If you are using your own api information you should also change the update URL and authorization page URL.
 
 ## Contribute ##
 

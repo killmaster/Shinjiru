@@ -6,6 +6,7 @@
 #include "../app.h"
 #include "../api/api.h"
 #include "animepanel.h"
+#include "fvupdater.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -66,14 +67,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
-  connect(ui->actionExit,     &QAction::triggered,     []() {exit(0);});
-  connect(ui->actionAbout,    &QAction::triggered,     []() {return;});
-  connect(ui->actionHelp,     &QAction::triggered,     []() {return;});
-  connect(ui->actionRL,       &QAction::triggered,     [&]() {loadUserList();});
-  connect(ui->actionVAL,      SIGNAL(triggered()),     SLOT(viewAnimeList()));
-  connect(ui->actionVD,       SIGNAL(triggered()),     SLOT(viewDashboard()));
-  connect(ui->actionVP,       SIGNAL(triggered()),     SLOT(viewProfile()));
-  connect(ui->actionEAR,      SIGNAL(triggered(bool)), SLOT(toggleAnimeRecognition(bool)));
+  connect(ui->actionExit,     &QAction::triggered,                           []() {exit(0);});
+  connect(ui->actionAbout,    &QAction::triggered,                           []() {return;});
+  connect(ui->actionHelp,     &QAction::triggered,                           []() {return;});
+  connect(ui->actionRL,       &QAction::triggered,                           [&]() {loadUserList();});
+  connect(ui->actionVAL,      SIGNAL(triggered()),                           SLOT(viewAnimeList()));
+  connect(ui->actionVD,       SIGNAL(triggered()),                           SLOT(viewDashboard()));
+  connect(ui->actionVP,       SIGNAL(triggered()),                           SLOT(viewProfile()));
+  connect(ui->actionEAR,      SIGNAL(triggered(bool)),                       SLOT(toggleAnimeRecognition(bool)));
+  connect(ui->actionUpdate, SIGNAL(triggered()), FvUpdater::sharedUpdater(), SLOT(CheckForUpdatesNotSilent()));
 
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
   connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
