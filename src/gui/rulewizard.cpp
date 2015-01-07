@@ -5,7 +5,7 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
   ui->setupUi(this);
 
   ui->animeTitleLineEdit->setText(title);
-  ui->subGroupLabel->setText(sub);
+  ui->subGroupLineEdit->setText(sub);
   ui->animeResolutionComboBox->setCurrentText(res);
   ui->fileRegexLineEdit->setText(file);
 
