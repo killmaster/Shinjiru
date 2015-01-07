@@ -6,7 +6,7 @@ Shinjiru is anime list management tool built with Qt designed to automatically u
 
 ## Installation ##
 
-<strike>Shinjiru's [official site](http://app.shinjiru.me/) currently offers an installation package for Windows x86 (Qt 5.3 MinGW 32bit). For other build needs feel free to [build](#Building) Shinjiru for yourself.</strike>
+<strike>Shinjiru's [official site](http://app.shinjiru.me/) currently offers an installation package for Windows x86 (Qt 5.4 MinGW 32bit). For other build needs feel free to [build](#Building) Shinjiru for yourself.</strike>
 
 Just kidding, if you want a build, build it yourself or contact me.
 
@@ -20,6 +20,7 @@ Shinjiru requires a few dependencies to compile and work properly, fortunately t
 - **QtAwesome** - [https://github.com/matt4682/QtAwesome](https://github.com/matt4682/QtAwesome)
 - **AniListAPI** - [https://github.com/matt4682/AniListAPI](https://github.com/matt4682/AniListAPI)
 - **Anitomy** - [https://github.com/erengy/anitomy](https://github.com/erengy/anitomy)
+- **OpenSSL** - [http://www.openssl.org/](http://www.openssl.org/)
 
 **app.h**
 
@@ -37,7 +38,12 @@ Here are some things I plan to do in no real order.
 + <s>Actually update lists from the AnimePanel</s>
 + Implement the statistics page
 + <s>Implement the airing page</s> *
-+ Implement auto downloading of torrents as rules
+	+ Sometimes airing anime don't have their cover art properly downloaded
+	+ Double-click to open up details pane
+	+ Filter to watching anime? Sort into list categories?
++ <s>Implement auto downloading of torrents as rules</s>
++ Add a rule management pane
++ Add expiry dates to rules to keep things clean
 + <s>Implement anime recognition</s> *
 + Add some actual settings
 + Add help pane
