@@ -48,7 +48,7 @@ Here are some things I plan to do in no real order.
 + Add some actual settings
 + Add help pane
 + Add about pane
-+ Add updater
++ <s>Add updater</s>
 + Better support for custom lists
 + Better support for Japanese and English titles
 + Add an icon
