@@ -203,9 +203,16 @@ void MainWindow::updateEpisode() {
     return;
   }
 
+  if(anime->getMyStatus() != "watching") {
+    return;
+  }
+
   QMap<QString, QString> data;
   data.insert("id",               anime->getID());
   data.insert("episodes_watched", cw_episode);
+
+  anime->setMyProgress(cw_episode.toInt());
+  userListLoaded();
 
   api->put(api->API_EDIT_LIST, data);
 }
