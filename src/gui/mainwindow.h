@@ -8,6 +8,10 @@
 #include <QTableWidget>
 #include <QSignalMapper>
 #include <QRegExp>
+#include <QSystemTrayIcon>
+#include <QMenu>
+#include <QApplication>
+#include <QMessageBox>
 
 #include <QtAwesome.h>
 #include <anilistapi.h>
@@ -66,6 +70,14 @@ private:
   QList<QRegExp> adv_rules;
   QList<QMap<QString, QString>> basic_rules;
 
+  QSystemTrayIcon *trayIcon;
+  QMenu *trayIconMenu;
+
+  QAction *quitAction;
+  QAction *minimizeAction;
+  QAction *maximizeAction;
+  QAction *restoreAction;
+
 private slots:
   void loadUser();
   void userLoaded();
@@ -107,6 +119,9 @@ private slots:
   void reloadRules();
   void checkForMatches();
   void verifyAndDownload(int);
+
+  void initTray();
+  void createActions();
 };
 
 #endif // MAINWINDOW_H

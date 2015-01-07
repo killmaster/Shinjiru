@@ -36,7 +36,9 @@ SOURCES   += \
     src/gui/userlisthelper.cpp \
     src/gui/userhelper.cpp \
     src/lib/windowwatcher.cpp \
-    src/gui/rulewizard.cpp
+    src/gui/rulewizard.cpp \
+    src/gui/trayhelper.cpp \
+    src/gui/torrentshelper.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
