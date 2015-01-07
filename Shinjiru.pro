@@ -35,7 +35,8 @@ SOURCES   += \
     src/settings.cpp \
     src/gui/userlisthelper.cpp \
     src/gui/userhelper.cpp \
-    src/lib/windowwatcher.cpp
+    src/lib/windowwatcher.cpp \
+    src/gui/rulewizard.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -59,11 +60,13 @@ HEADERS   += \
     src/api/user.h \
     src/api/api.h \
     src/settings.h \
-    src/lib/windowwatcher.h
+    src/lib/windowwatcher.h \
+    src/gui/rulewizard.h
 
 FORMS     += \
     src/gui/airinganime.ui \
     src/gui/animepanel.ui \
-    src/gui/mainwindow.ui
+    src/gui/mainwindow.ui \
+    src/gui/rulewizard.ui
 
 RESOURCES += res/res.qrc

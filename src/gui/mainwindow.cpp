@@ -8,6 +8,7 @@
 #include "../api/api.h"
 #include "animepanel.h"
 #include "../lib/torrentrss.h"
+#include "rulewizard.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -323,8 +324,8 @@ void MainWindow::createRule(int row) {
   QString res   = ui->torrentTable->item(row, 3)->text();
   QString file  = ui->torrentTable->item(row, 4)->text();
 
-  //RuleWizard *rw = new RuleWizard(this, title, sub, res, file);
-  //rw->show();
+  RuleWizard *rw = new RuleWizard(this, title, sub, res, file);
+  rw->show();
 }
 
 
