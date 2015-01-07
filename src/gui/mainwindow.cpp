@@ -3,6 +3,10 @@
 
 #include <QDesktopServices>
 #include <regex>
+#include <QFile>
+#include <QDir>
+#include <QJsonDocument>
+#include <QJsonObject>
 
 #include "../app.h"
 #include "../api/api.h"
@@ -99,6 +103,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
       progress_bar->setValue(10);
       progress_bar->setFormat("Access granted");
       loadUser();
+      reloadRules();
       event_timer->start(1000);
     });
   }
@@ -281,6 +286,7 @@ void MainWindow::refreshTorrentListing() {
   }
 
   filterTorrents(ui->torrentFilter->text(), ui->chkHideUnknown->isChecked());
+  checkForMatches();
 }
 
 void MainWindow::torrentContextMenu(QPoint pos) {
@@ -315,7 +321,7 @@ void MainWindow::torrentContextMenu(QPoint pos) {
 }
 
 void MainWindow::download(int row) {
-  QDesktopServices::openUrl(ui->torrentTable->item(row, 4)->text());
+  QDesktopServices::openUrl(ui->torrentTable->item(row, 5)->text());
 }
 
 void MainWindow::createRule(int row) {
@@ -326,6 +332,8 @@ void MainWindow::createRule(int row) {
 
   RuleWizard *rw = new RuleWizard(this, title, sub, res, file);
   rw->show();
+
+  connect(rw, SIGNAL(accepted()), SLOT(reloadRules()));
 }
 
 
@@ -355,4 +363,63 @@ void MainWindow::filterTorrents(bool checked) {
 
 void MainWindow::filterTorrents(QString text) {
   filterTorrents(text, ui->chkHideUnknown->isChecked());
+}
+
+void MainWindow::reloadRules() {
+  basic_rules.clear();
+  adv_rules.clear();
+
+  QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
+  rule_dir.mkdir(".");
+  rule_dir.setFilter(QDir::Files);
+  for(int i = 0; i < rule_dir.entryList().count(); i++) {
+    QString file_name = rule_dir.entryList().at(i);
+    QFile file(rule_dir.absoluteFilePath(file_name));
+    file.open(QFile::ReadOnly);
+    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+
+    if(json["rule_type"] == "advanced") {
+      adv_rules.append(QRegExp(json["file_regex"].toString()));
+    } else {
+      QMap<QString, QString> values;
+      values.insert("anime", json["anime_name"].toString());
+      values.insert("subgroup", json["sub_group"].toString());
+      values.insert("resolution", json["resolution"].toString());
+
+      basic_rules.append(values);
+    }
+  }
+}
+
+void MainWindow::checkForMatches() {
+  for(int j = 0; j < ui->torrentTable->rowCount(); j++) {
+    QString title = ui->torrentTable->item(j, 0)->text();
+    QString sub   = ui->torrentTable->item(j, 2)->text();
+    QString res   = ui->torrentTable->item(j, 3)->text();
+    QString file  = ui->torrentTable->item(j, 4)->text();
+
+    for(int i = 0; i < basic_rules.length(); i++) {
+      if(title == basic_rules.at(i).value("anime") && sub == basic_rules.at(i).value("subgroup") && res == basic_rules.at(i).value("resolution")) {
+        verifyAndDownload(j);
+      }
+    }
+
+    for(int i = 0; i < adv_rules.length(); i++) {
+      if(adv_rules.at(i).exactMatch(file)) {
+        verifyAndDownload(j);
+      }
+    }
+  }
+}
+
+void MainWindow::verifyAndDownload(int row) {
+  QString file = ui->torrentTable->item(row, 4)->text() + ".dl";
+  QDir history_dir(QCoreApplication::applicationDirPath() + "/history/");
+  history_dir.mkdir(".");
+  QFile f(history_dir.absoluteFilePath(file));
+  if(!f.exists()) {
+    download(row);
+    f.open(QFile::WriteOnly);
+    f.write("0");
+  }
 }

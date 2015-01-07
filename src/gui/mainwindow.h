@@ -7,6 +7,7 @@
 #include <QProgressBar>
 #include <QTableWidget>
 #include <QSignalMapper>
+#include <QRegExp>
 
 #include <QtAwesome.h>
 #include <anilistapi.h>
@@ -62,6 +63,9 @@ private:
 
   int torrent_refresh_time;
 
+  QList<QRegExp> adv_rules;
+  QList<QMap<QString, QString>> basic_rules;
+
 private slots:
   void loadUser();
   void userLoaded();
@@ -100,6 +104,9 @@ private slots:
   void torrentContextMenu(QPoint);
   void download(int);
   void createRule(int);
+  void reloadRules();
+  void checkForMatches();
+  void verifyAndDownload(int);
 };
 
 #endif // MAINWINDOW_H
