@@ -36,9 +36,9 @@ Here are some things I plan to do in no real order.
 
 + <s>Actually update lists from the AnimePanel</s>
 + Implement the statistics page
-+ Implement the airing page
++ <s>Implement the airing page</s> *
 + Implement auto downloading of torrents as rules
-+ Implement anime recognition
++ <s>Implement anime recognition</s> *
 + Add some actual settings
 + Add help pane
 + Add about pane
@@ -47,8 +47,10 @@ Here are some things I plan to do in no real order.
 + Better support for Japanese and English titles
 + Add an icon
 + Minimize to tray / Close to tray
-+ Fix the weird menubar bug
++ <s>Fix the weird menubar bug</s>
 + Probably some other stuff I'm forgetting.
+
+Starred items require improvement but basic functionality should exist.
 
 ## Contact ##
 
