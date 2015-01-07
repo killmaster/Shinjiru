@@ -78,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
   connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
 
+  this->show();
+
   API *instance = new API(this);
   int result = instance->verify(api);
   delete instance;
