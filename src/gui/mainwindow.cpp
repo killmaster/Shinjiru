@@ -314,11 +314,17 @@ void MainWindow::torrentContextMenu(QPoint pos) {
 }
 
 void MainWindow::download(int row) {
-    QDesktopServices::openUrl(ui->torrentTable->item(row, 4)->text());
+  QDesktopServices::openUrl(ui->torrentTable->item(row, 4)->text());
 }
 
 void MainWindow::createRule(int row) {
-    qDebug() << "Creating rule " << row;
+  QString title = ui->torrentTable->item(row, 0)->text();
+  QString sub   = ui->torrentTable->item(row, 2)->text();
+  QString res   = ui->torrentTable->item(row, 3)->text();
+  QString file  = ui->torrentTable->item(row, 4)->text();
+
+  //RuleWizard *rw = new RuleWizard(this, title, sub, res, file);
+  //rw->show();
 }
 
 
