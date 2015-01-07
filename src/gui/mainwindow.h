@@ -6,6 +6,7 @@
 #include <QFutureWatcher>
 #include <QProgressBar>
 #include <QTableWidget>
+#include <QSignalMapper>
 
 #include <QtAwesome.h>
 #include <anilistapi.h>
@@ -59,6 +60,8 @@ private:
   QString cw_title;
   QString cw_episode;
 
+  int torrent_refresh_time;
+
 private slots:
   void loadUser();
   void userLoaded();
@@ -69,6 +72,10 @@ private slots:
   void viewDashboard();
   void viewProfile();
   void viewAnimeList();
+
+  void eventTick();
+
+  void refreshTorrentListing();
 
   void toggleAnimeRecognition(bool);
 
@@ -86,6 +93,13 @@ private slots:
 
   void watch(QString);
   void updateEpisode();
+
+  void filterTorrents(QString, bool);
+  void filterTorrents(bool);
+  void filterTorrents(QString);
+  void torrentContextMenu(QPoint);
+  void download(int);
+  void createRule(int);
 };
 
 #endif // MAINWINDOW_H

@@ -2,10 +2,12 @@
 #include "ui_mainwindow.h"
 
 #include <QDesktopServices>
+#include <regex>
 
 #include "../app.h"
 #include "../api/api.h"
 #include "animepanel.h"
+#include "../lib/torrentrss.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -15,18 +17,19 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   QString styleSheet = QLatin1String(styleFile.readAll());
   qApp->setStyleSheet(styleSheet);
 
-  user                = nullptr;
-  awesome             = new QtAwesome(qApp);
-  api                 = new AniListAPI(this, api_id, api_secret);
-  settings            = new Settings(this);
-  window_watcher      = new WindowWatcher(this);
-  anitomy             = new AnitomyWrapper();
+  user                 = nullptr;
+  awesome              = new QtAwesome(qApp);
+  api                  = new AniListAPI(this, api_id, api_secret);
+  settings             = new Settings(this);
+  window_watcher       = new WindowWatcher(this);
+  anitomy              = new AnitomyWrapper();
+  event_timer          = new QTimer(this);
+  watch_timer          = new QTimer(this);
+  progress_bar         = new QProgressBar(ui->statusBar);
+  torrent_refresh_time = 0;
 
   awesome->initFontAwesome();
 
-  event_timer         = new QTimer(this);
-  watch_timer         = new QTimer(this);
-  progress_bar        = new QProgressBar(ui->statusBar);
 
   QFont font = ui->listTabs->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
@@ -77,6 +80,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
   connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
+  connect(event_timer,    SIGNAL(timeout()),            SLOT(eventTick()));
+
+  connect(ui->torrentTable,    SIGNAL(customContextMenuRequested(QPoint)), SLOT(torrentContextMenu(QPoint)));
+  connect(ui->torrentFilter,   SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
+  connect(ui->chkHideUnknown,  SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));
 
   this->show();
 
@@ -90,6 +98,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
       progress_bar->setValue(10);
       progress_bar->setFormat("Access granted");
       loadUser();
+      event_timer->start(1000);
     });
   }
 }
@@ -193,4 +202,150 @@ void MainWindow::updateEpisode() {
   data.insert("episodes_watched", cw_episode);
 
   api->put(api->API_EDIT_LIST, data);
+}
+
+void MainWindow::eventTick() {
+  if(torrent_refresh_time == 0) {
+    torrent_refresh_time = 60;
+    refreshTorrentListing();
+  }
+
+  torrent_refresh_time--;
+  ui->refreshButton->setText("Refresh (" + QString::number(torrent_refresh_time) + ")");
+
+  event_timer->start(1000);
+}
+
+void MainWindow::refreshTorrentListing() {
+  TorrentRSS *torrents = new TorrentRSS(this);
+  QEventLoop rssLoop;
+  connect(torrents, SIGNAL(done()), &rssLoop, SLOT(quit()));
+  torrents->fetch();
+  rssLoop.exec();
+
+  QStringList titles = QStringList(*(torrents->getTitles()));
+  QStringList links = QStringList(*(torrents->getLinks()));
+  int offset = 0;
+
+  for(int i = 0; i < titles.length(); i++) {
+    if(ui->torrentTable->rowCount() <= i)
+      ui->torrentTable->insertRow(i);
+
+    QMap<QString, QString> result;
+
+    try {
+      result = anitomy->parse(titles.at(i));
+    } catch(std::regex_error& e) {
+      qDebug() << "Error parsing: " << titles.at(i);
+      offset++;
+      continue;
+    }
+
+
+    QString parsedTitle   = result.value("title");
+    QString episodeNumber = result.value("episode");
+    QString subGroup      = result.value("subs");
+    QString videoType     = result.value("res");
+
+    QTableWidgetItem *titleItem = new QTableWidgetItem(parsedTitle);
+    QTableWidgetItem *epItem = new QTableWidgetItem(episodeNumber);
+    QTableWidgetItem *subItem = new QTableWidgetItem(subGroup);
+    QTableWidgetItem *videoItem = new QTableWidgetItem(videoType);
+    QTableWidgetItem *fileNameItem = new QTableWidgetItem(titles.at(i));
+    QTableWidgetItem *linkItem = new QTableWidgetItem(links.at(i));
+
+    if(episodeNumber == "") {
+      qDebug() << "Unknown episode for: " << parsedTitle << ", skipping";
+      offset++;
+      continue;
+    }
+
+    if(links.at(i) == "") {
+      qDebug() << "Unknown link for: " << parsedTitle << ", skipping";
+      offset++;
+      continue;
+    }
+
+    ui->torrentTable->setItem(i - offset, 0, titleItem);
+    ui->torrentTable->setItem(i - offset, 1, epItem);
+    ui->torrentTable->setItem(i - offset, 2, subItem);
+    ui->torrentTable->setItem(i - offset, 3, videoItem);
+    ui->torrentTable->setItem(i - offset, 4, fileNameItem);
+    ui->torrentTable->setItem(i - offset, 5, linkItem);
+  }
+
+  while(offset > 0) {
+    ui->torrentTable->removeRow(ui->torrentTable->rowCount() - 1);
+    offset--;
+  }
+
+  filterTorrents(ui->torrentFilter->text(), ui->chkHideUnknown->isChecked());
+}
+
+void MainWindow::torrentContextMenu(QPoint pos) {
+  QTableWidgetItem *item = ui->torrentTable->itemAt(pos);
+  int row = item->row();
+  pos.setY(pos.y() + 120);
+  QAction *pDownloadAction = new QAction("Download",ui->torrentTable);
+  QAction *pRuleAction = new QAction("Create rule",ui->torrentTable);
+
+  QSignalMapper *signalMapper1 = new QSignalMapper(this);
+  QSignalMapper *signalMapper2 = new QSignalMapper(this);
+
+  signalMapper1->setMapping(pDownloadAction, row);
+  signalMapper2->setMapping(pRuleAction, row);
+
+  connect(pDownloadAction, SIGNAL(triggered()), signalMapper1, SLOT (map()));
+  connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(download(int)));
+
+  connect(pRuleAction, SIGNAL(triggered()), signalMapper2, SLOT (map()));
+  connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(createRule(int)));
+
+  QMenu *pContextMenu = new QMenu( this);
+  pContextMenu->addAction(pDownloadAction);
+  pContextMenu->addAction(pRuleAction);
+  pContextMenu->exec(mapToGlobal(pos));
+  delete pContextMenu;
+  delete signalMapper1;
+  delete signalMapper2;
+  signalMapper1 = NULL;
+  signalMapper2 = NULL;
+  pContextMenu = NULL;
+}
+
+void MainWindow::download(int row) {
+    QDesktopServices::openUrl(ui->torrentTable->item(row, 4)->text());
+}
+
+void MainWindow::createRule(int row) {
+    qDebug() << "Creating rule " << row;
+}
+
+
+void MainWindow::filterTorrents(QString text, bool checked) {
+  for(int i = 0; i < ui->torrentTable->rowCount(); i++)
+    ui->torrentTable->hideRow(i);
+
+  QList<QTableWidgetItem *> items = ui->torrentTable->findItems(text, Qt::MatchContains);
+
+  for(int i = 0; i < items.count(); i++) {
+    if(items.at(i)->column() != 0 ) continue;
+    bool show = true;
+
+    if(checked) {
+      QString f_title = items.at(i)->text();
+      if(user->getAnimeByTitle(f_title)->getAiringStatus() != "currently airing") show = false;
+    }
+
+    if(show)
+      ui->torrentTable->showRow(items.at(i)->row());
+  }
+}
+
+void MainWindow::filterTorrents(bool checked) {
+  filterTorrents(ui->torrentFilter->text(), checked);
+}
+
+void MainWindow::filterTorrents(QString text) {
+  filterTorrents(text, ui->chkHideUnknown->isChecked());
 }
