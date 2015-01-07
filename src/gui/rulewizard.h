@@ -21,6 +21,7 @@ private:
 private slots:
   void groupToggle(bool);
   void group2Toggle(bool);
+  void accept();
 };
 
 #endif // RULEWIZARD_H
