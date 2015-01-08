@@ -43,7 +43,8 @@ SOURCES   += \
     src/gui/trayhelper.cpp \
     src/gui/torrentshelper.cpp \
     src/lib/skinmanager.cpp \
-    src/gui/about.cpp
+    src/gui/about.cpp \
+    src/gui/settingshelper.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \

@@ -7,10 +7,18 @@
 #include <QFile>
 #include <QDir>
 
-RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file) : QDialog(parent), ui(new Ui::RuleWizard) {
+RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file, QString default_rule) : QDialog(parent), ui(new Ui::RuleWizard) {
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+  if(default_rule == "Basic") {
+      ui->groupBox->setChecked(false);
+      ui->groupBox_2->setChecked(true);
+  } else {
+      ui->groupBox->setChecked(true);
+      ui->groupBox_2->setChecked(false);
+  }
 
   ui->animeTitleLineEdit->setText(title);
   ui->subGroupLineEdit->setText(sub);

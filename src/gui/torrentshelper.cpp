@@ -118,7 +118,7 @@ void MainWindow::createRule(int row) {
   QString res   = ui->torrentTable->item(row, 3)->text();
   QString file  = ui->torrentTable->item(row, 4)->text();
 
-  RuleWizard *rw = new RuleWizard(this, title, sub, res, file);
+  RuleWizard *rw = new RuleWizard(this, title, sub, res, file, default_rule);
   rw->show();
 
   connect(rw, SIGNAL(accepted()), SLOT(reloadRules()));

@@ -65,7 +65,11 @@ private:
   QString cw_title;
   QString cw_episode;
 
+  QString default_rule;
+  QString title_style;
+
   int torrent_refresh_time;
+  int torrent_interval;
 
   QList<QRegExp> adv_rules;
   QList<QMap<QString, QString>> basic_rules;
@@ -124,6 +128,8 @@ private slots:
 
   void initTray();
   void createActions();
+
+  void loadSettings();
 };
 
 #endif // MAINWINDOW_H

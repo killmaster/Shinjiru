@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   styleFile.open(QFile::ReadOnly);
   QString styleSheet = QLatin1String(styleFile.readAll());
   qApp->setStyleSheet(styleSheet);
+
   QPixmap window_icon;
   QFile iconFile(":/icon.png");
   iconFile.open(QFile::ReadOnly);
@@ -36,6 +37,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   torrent_refresh_time = 0;
 
   awesome->initFontAwesome();
+  loadSettings();
 
   QFont font = ui->listTabs->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
@@ -122,9 +124,6 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  settings->write_settings();
-  event->accept();
-
   if (trayIcon->isVisible()) {
     QMessageBox::information(this, tr("Systray"), tr("The program will keep running in the "
                                                      "system tray. To terminate the program, "
@@ -190,6 +189,9 @@ void MainWindow::toggleAnimeRecognition(bool checked) {
   } else {
     window_watcher->disable();
   }
+
+  ui->actionEAR->setChecked(checked);
+  ui->autoRecognitionCheckBox->setChecked(checked);
 }
 
 void MainWindow::watch(QString title) {
@@ -233,7 +235,7 @@ void MainWindow::updateEpisode() {
 
 void MainWindow::eventTick() {
   if(torrent_refresh_time == 0) {
-    torrent_refresh_time = 60;
+    torrent_refresh_time = torrent_interval;
     refreshTorrentListing();
   }
 
