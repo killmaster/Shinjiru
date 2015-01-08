@@ -57,7 +57,10 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI
   ui->txtScore->setText(anime->getAverageScore());
   ui->txtAiring->setText(airing_status);
 
-  ui->spinEps->setMaximum(anime->getEpisodeCount());
+  int max_ep = anime->getEpisodeCount();
+  if(max_ep == 0) max_ep = 255;
+
+  ui->spinEps->setMaximum(max_ep);
   ui->spinEps->setValue(anime->getMyProgress());
   ui->txtNotes->setText(anime->getMyNotes());
   ui->spinRewatch->setValue(anime->getMyRewatch());
