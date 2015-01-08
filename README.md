@@ -6,9 +6,9 @@ Shinjiru is anime list management tool built with Qt designed to automatically u
 
 ## Installation ##
 
-<strike>Shinjiru's [official site](http://app.shinjiru.me/) currently offers an installation package for Windows x86 (Qt 5.4 MinGW 32bit). For other build needs feel free to [build](#Building) Shinjiru for yourself.</strike>
+Shinjiru's website currently hosts win32 alpha builds [here](http://app.shinjiru.me/latest.php).  
+For other build needs feel free to [build](#Building) Shinjiru for yourself.
 
-Just kidding, if you want a build, build it yourself or contact me.
 
 ## Building ##
 
@@ -16,12 +16,15 @@ Just kidding, if you want a build, build it yourself or contact me.
 
 Shinjiru requires a few dependencies to compile and work properly, fortunately they are relatively easy to setup.
 
-- **Qt** - [http://www.qt.io/download-open-source/](http://www.qt.io/download-open-source/)
-- **QtAwesome** - [https://github.com/matt4682/QtAwesome](https://github.com/matt4682/QtAwesome)
+- **Qt**         - [http://www.qt.io/download-open-source/](http://www.qt.io/download-open-source/)
+- **OpenSSL**    - [http://www.openssl.org/](http://www.openssl.org/)
+
+The following dependencies should be cloned and place into the lib folder.
+
+- **QtAwesome**  - [https://github.com/matt4682/QtAwesome](https://github.com/matt4682/QtAwesome)
 - **AniListAPI** - [https://github.com/matt4682/AniListAPI](https://github.com/matt4682/AniListAPI)
-- **Anitomy** - [https://github.com/erengy/anitomy](https://github.com/erengy/anitomy)
-- **OpenSSL** - [http://www.openssl.org/](http://www.openssl.org/)
-- **Fervor** - [https://github.com/pypt/fervor](https://github.com/pypt/fervor)
+- **Anitomy**    - [https://github.com/erengy/anitomy](https://github.com/erengy/anitomy)
+- **Fervor**     - [https://github.com/pypt/fervor](https://github.com/pypt/fervor)
 
 **app.h**
 
@@ -32,7 +35,10 @@ If you are using your own api information you should also change the update URL 
 
 ## Contribute ##
 
-We'll talk about this later.
+If you want to contribute to Shinjiru feel free to create a pull request or an issue with suggestions/issues/features etc.
+
+Make sure your code compiles if you're contributing.  
+I don't have insanely high standards for code style but try to keep the code organized.
 
 ## Upcoming ##
 
@@ -48,7 +54,7 @@ Here are some things I plan to do in no real order.
 + Add a rule management pane
 + Add expiry dates to rules to keep things clean
 + <s>Implement anime recognition</s> *
-+ Add some actual settings
++ <s>Add some actual settings</s> *
 + Add help pane
 + <s>Add about pane</s>
 + <s>Add updater</s>
