@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 
 #include <QDebug>
+#include <limits>
 
 AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI *api) : QDialog(parent), ui(new Ui::AnimePanel) {
   ui->setupUi(this);
@@ -58,7 +59,7 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI
   ui->txtAiring->setText(airing_status);
 
   int max_ep = anime->getEpisodeCount();
-  if(max_ep == 0) max_ep = 255;
+  if(max_ep == 0) max_ep = std::numeric_limits<int>::max();
 
   ui->spinEps->setMaximum(max_ep);
   ui->spinEps->setValue(anime->getMyProgress());
