@@ -3,6 +3,7 @@
 
 void MainWindow::loadSettings() {
   torrent_interval = settings->getValue(Settings::TorrentRefreshTime, 3600).toInt();
+  ui->torrentRefreshIntervalLineEdit->setText(QString::number(torrent_interval));
 
   bool ear = settings->getValue(Settings::AnimeRecognitionEnabled, false).toBool();
   toggleAnimeRecognition(ear);

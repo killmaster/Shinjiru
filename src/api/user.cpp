@@ -104,6 +104,12 @@ Anime *User::getAnimeByTitle(QString title) {
     if(anime->getEnglishTitle() == title || anime->getJapaneseTitle() == title ||  anime->getRomajiTitle() == title) {
       return anime;
     }
+
+    for(QString synonym : anime->getSynonyms()) {
+      if(title== synonym) {
+        return anime;
+      }
+    }
   }
 
   return new Anime();

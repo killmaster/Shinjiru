@@ -138,6 +138,8 @@ void MainWindow::filterTorrents(QString text, bool checked) {
     if(checked) {
       QString f_title = items.at(i)->text();
       if(user->getAnimeByTitle(f_title)->getAiringStatus() != "currently airing") show = false;
+
+      qDebug() <<  user->getAnimeByTitle(f_title)->getRomajiTitle() << user->getAnimeByTitle(f_title)->getAiringStatus();
     }
 
     if(show)

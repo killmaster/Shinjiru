@@ -6,6 +6,7 @@ FileDownloader::FileDownloader(QUrl imageUrl, QObject *parent) : QObject(parent)
   connect(&m_WebCtrl, SIGNAL(finished(QNetworkReply*)), this, SLOT(fileDownloaded(QNetworkReply*)));
   QNetworkRequest request(imageUrl);
 
+  qDebug() << "Downloading: " << imageUrl.toDisplayString();
   m_WebCtrl.get(request);
 }
 

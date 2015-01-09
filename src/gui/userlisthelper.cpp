@@ -123,9 +123,7 @@ QTableWidget *MainWindow::getListTable() {
 
 AiringAnime *MainWindow::addAiring(Anime *anime) {
   if(anime->needsLoad()) {
-    QtConcurrent::run([&, anime]() {
-      user->loadAnimeData(anime);
-    });
+    user->loadAnimeData(anime);
   }
 
   AiringAnime *newPanel = new AiringAnime(this);
