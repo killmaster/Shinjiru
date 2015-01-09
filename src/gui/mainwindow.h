@@ -39,6 +39,7 @@ protected:
   void closeEvent(QCloseEvent *);
   void paintEvent(QPaintEvent *);
   void resizeEvent(QResizeEvent *);
+  void changeEvent(QEvent *);
 
 private:
   Ui::MainWindow *ui;
@@ -115,6 +116,8 @@ private slots:
 
   void watch(QString);
   void updateEpisode();
+
+  void updateStatistics();
 
   void filterTorrents(QString, bool);
   void filterTorrents(bool);

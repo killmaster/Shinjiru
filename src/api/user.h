@@ -23,14 +23,16 @@ public slots:
   QPixmap userImage()                                const { return user_image; }
   QMap<QString, QMap<QString, Anime*>> getUserList() const { return user_lists; }
   Anime *getAnimeByTitle(QString title);
+  QList<Anime *> getAnimeList() const { return anime_list; }
 
   void setDisplayName(const QString &display_name) { this->display_name = display_name; }
   void setScoreType(const int &score_type);
   void setProfileImageURL(const QString &url)      { this->profile_image_url = url; }
   void setUserImage(const QPixmap &user_image)     { this->user_image = user_image; }
   void setUserImage(const QByteArray &data)        { this->user_image.loadFromData(data); emit new_image();}
+  void setTitleLanguage(const QString lang)        { this->title_language = "title_" + lang; }
   void loadUserList();
-  void loadAnimeData(Anime *);
+  void loadAnimeData(Anime *, bool);
 
 signals:
   void new_image();
@@ -44,6 +46,7 @@ private:
   QString max_score;
   QMap<QString, QMap<QString, Anime*>> user_lists;
   QList<Anime*> anime_list;
+  QString title_language;
 
   FileDownloader *user_image_control;
 

@@ -47,7 +47,7 @@ void MainWindow::userListLoaded() {
     QMap<QString, Anime*> list = lists.value(key);
 
     for(Anime *anime : list.values()) {
-      QTableWidgetItem        *titleData    = new QTableWidgetItem(anime->getRomajiTitle());
+      QTableWidgetItem        *titleData    = new QTableWidgetItem(anime->getTitle());
       ProgressTableWidgetItem *progressData = new ProgressTableWidgetItem;
       QTableWidgetItem        *scoreData    = new QTableWidgetItem();
       QTableWidgetItem        *typeData     = new QTableWidgetItem(anime->getType());
@@ -99,6 +99,8 @@ void MainWindow::userListLoaded() {
 
   progress_bar->setValue(0);
   progress_bar->setFormat("");
+
+  updateStatistics();
 }
 
 QTableWidget *MainWindow::getListTable() {
@@ -122,8 +124,8 @@ QTableWidget *MainWindow::getListTable() {
 }
 
 AiringAnime *MainWindow::addAiring(Anime *anime) {
-  if(anime->needsLoad()) {
-    user->loadAnimeData(anime);
+  if(anime->needsLoad() || anime->needsCover()) {
+    user->loadAnimeData(anime, true);
   }
 
   AiringAnime *newPanel = new AiringAnime(this);

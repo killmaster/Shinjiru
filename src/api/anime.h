@@ -16,6 +16,7 @@ public:
 
   void finishReload();
   bool needsLoad();
+  bool needsCover();
 
   QString getID();
   void setID(QString id);
@@ -31,6 +32,9 @@ public:
 
   QString getEnglishTitle();
   void setEnglishTitle(QString title);
+
+  QString getTitle();
+  void setTitle(QString title);
 
   QString getType();
   void setType(QString type);
@@ -68,6 +72,9 @@ public:
   QString getMyStatus();
   void setMyStatus(QString status);
 
+  int getDuration();
+  void setDuration(int duration);
+
   void downloadCover();
 
 signals:
@@ -80,11 +87,14 @@ private:
   QString romaji_title;
   QString japanese_title;
   QString english_title;
+  QString title;
   QString type;
   QString airing_status;
   int episode_count;
   QString average_score;
   bool needLoad = true;
+  bool needCover = true;
+  int duration;
   QString synopsis;
   QUrl cover_url;
   QPixmap cover_image;

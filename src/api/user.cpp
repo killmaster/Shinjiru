@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QEventLoop>
+#include <QtConcurrent>
 
 User::User(AniListAPI *api, QObject *parent) : QObject(parent) {
   this->api = api;
@@ -12,9 +13,10 @@ User::User(AniListAPI *api, QObject *parent) : QObject(parent) {
 
   user_image_control = nullptr;
 
-  this->setDisplayName    (result.value("display_name").toString());
-  this->setScoreType      (result.value("score_type").toInt());
-  this->setProfileImageURL(result.value("image_url_med").toString());
+  this->setDisplayName    (result.value("display_name")  .toString());
+  this->setScoreType      (result.value("score_type")    .toInt());
+  this->setProfileImageURL(result.value("image_url_med") .toString());
+  this->setTitleLanguage  (result.value("title_language").toString());
 
   this->loadProfileImage();
 }
@@ -79,6 +81,7 @@ void User::loadUserList() {
       anime_data->setEpisodeCount(           inner_anime.value("total_episodes")  .toInt());
       anime_data->setAverageScore(           inner_anime.value("average_score")   .toString());
       anime_data->setCoverURL(          QUrl(inner_anime.value("image_url_lge")   .toString()));
+      anime_data->setTitle(                  inner_anime.value(title_language)    .toString());
 
       anime_data->setMyProgress(             anime      .value("episodes_watched").toInt(0));
       anime_data->setMyNotes(                anime      .value("notes")           .toString());
@@ -115,16 +118,20 @@ Anime *User::getAnimeByTitle(QString title) {
   return new Anime();
 }
 
-void User::loadAnimeData(Anime *anime) {
+void User::loadAnimeData(Anime *anime, bool download_cover) {
   QString ID = anime->getID();
   QUrl ID_URL = api->API_ANIME(ID);
 
   QJsonObject result = api->get(ID_URL);
 
-  anime->downloadCover();
+  if(download_cover) {
+    anime->downloadCover();
+  }
 
   QJsonArray synonyms = result.value("synonyms").toArray();
   QString description = result.value("description").toString();
+
+  anime->setDuration(result.value("duration").toInt());
 
   for(int i = 0; i < synonyms.count(); i++) {
     anime->addSynonym(synonyms.at(i).toString());

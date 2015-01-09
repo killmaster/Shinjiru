@@ -11,6 +11,7 @@
 #include "rulewizard.h"
 
 void MainWindow::refreshTorrentListing() {
+  ui->refreshButton->setText("Refresh (0)");
   TorrentRSS *torrents = new TorrentRSS(this);
   QEventLoop rssLoop;
   connect(torrents, SIGNAL(done()), &rssLoop, SLOT(quit()));
@@ -138,8 +139,6 @@ void MainWindow::filterTorrents(QString text, bool checked) {
     if(checked) {
       QString f_title = items.at(i)->text();
       if(user->getAnimeByTitle(f_title)->getAiringStatus() != "currently airing") show = false;
-
-      qDebug() <<  user->getAnimeByTitle(f_title)->getRomajiTitle() << user->getAnimeByTitle(f_title)->getAiringStatus();
     }
 
     if(show)
@@ -203,7 +202,8 @@ void MainWindow::checkForMatches() {
 }
 
 void MainWindow::verifyAndDownload(int row) {
-  QString file = ui->torrentTable->item(row, 4)->text() + ".dl";
+  QString title = ui->torrentTable->item(row, 4)->text();
+  QString file = title + ".dl";
   QDir history_dir(QCoreApplication::applicationDirPath() + "/history/");
   history_dir.mkdir(".");
   QFile f(history_dir.absoluteFilePath(file));
@@ -212,4 +212,6 @@ void MainWindow::verifyAndDownload(int row) {
     f.open(QFile::WriteOnly);
     f.write("0");
   }
+
+  trayIcon->showMessage("Shinjiru", title + " has started downloading.");
 }

@@ -45,7 +45,10 @@ I don't have insanely high standards for code style but try to keep the code org
 Here are some things I plan to do in no real order.
 
 + <s>Actually update lists from the AnimePanel</s>
-+ Implement the statistics page
++ <s>Implement the statistics page</s> *
+	+ Duration is in large anime models only
+	+ Mean / Median / Mode / Deviation
+	+ Shinjiru stats (uptime, torrents dl'd since launch, minutes watched during session etc)
 + <s>Implement the airing page</s> *
 	+ Sometimes airing anime don't have their cover art properly downloaded
 	+ Double-click to open up details pane

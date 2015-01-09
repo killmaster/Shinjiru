@@ -5,7 +5,8 @@ Anime::Anime(QObject *parent) : QObject(parent) {
 }
 
 void Anime::finishReload() { emit finishedReloading(); needLoad = false;}
-bool Anime::needsLoad() { return needLoad; }
+bool Anime::needsLoad()    { return needLoad; }
+bool Anime::needsCover()   { return needCover; }
 
 
 QString     Anime::getID()                                { return id; }
@@ -22,6 +23,9 @@ void        Anime::setJapaneseTitle(QString title)        { this ->japanese_titl
 
 QString     Anime::getEnglishTitle()                      { return english_title; }
 void        Anime::setEnglishTitle(QString title)         { this ->english_title = title; }
+
+QString     Anime::getTitle()                             { return title; }
+void        Anime::setTitle(QString title)                { this ->title = title; }
 
 QString     Anime::getType()                              { return type; }
 void        Anime::setType(QString type)                  { this ->type = type; }
@@ -43,7 +47,8 @@ void        Anime::setCoverURL(QUrl cover_url)            { this ->cover_url = c
 
 QPixmap     Anime::getCoverImage()                        { return cover_image; }
 void        Anime::setCoverImageData(QByteArray data)     { this->cover_image.loadFromData(data);
-                                                            emit new_image();}
+                                                            emit new_image();
+                                                            needCover = false; }
 
 int         Anime::getMyProgress()                        { return my_progress; }
 void        Anime::setMyProgress(int progress)            { this ->my_progress = progress; }
@@ -59,6 +64,9 @@ void        Anime::setMyRewatch(int rewatch)              { this ->rewatch_count
 
 QString     Anime::getMyStatus()                          { return my_status; }
 void        Anime::setMyStatus(QString status)            { this ->my_status = status; }
+
+int         Anime::getDuration()                          { return duration; }
+void        Anime::setDuration(int duration)              { this ->duration = duration; }
 
 void Anime::downloadCover() {
   anime_image_control = new FileDownloader(getCoverURL());

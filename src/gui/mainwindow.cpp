@@ -94,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->torrentTable,    SIGNAL(customContextMenuRequested(QPoint)), SLOT(torrentContextMenu(QPoint)));
   connect(ui->torrentFilter,   SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
   connect(ui->chkHideUnknown,  SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));
+  connect(ui->refreshButton,   SIGNAL(clicked()),                          SLOT(refreshTorrentListing()));
 
   this->show();
   createActions();
@@ -124,15 +125,20 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  if (trayIcon->isVisible()) {
-    QMessageBox::information(this, tr("Systray"), tr("The program will keep running in the "
-                                                     "system tray. To terminate the program, "
-                                                     "choose <b>Quit</b> in the context menu "
-                                                     "of the system tray entry."));
+  if(trayIcon->isVisible()) {
     hide();
     event->ignore();
   }
 }
+
+void MainWindow::changeEvent(QEvent *event) {
+    if(event->type() == QEvent::WindowStateChange) {
+        if(isMinimized())
+            this->hide();
+            event->ignore();
+    }
+}
+
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
   event->accept();
@@ -172,8 +178,8 @@ void MainWindow::showAnimePanel(int row, int column) {
 
   AnimePanel *ap = new AnimePanel(this, anime, user->scoreType(), api);
 
-  if(anime->needsLoad()) {
-    user->loadAnimeData(anime);
+  if(anime->needsLoad() || anime->needsCover()) {
+    user->loadAnimeData(anime, true);
   }
 
   ap->show();
@@ -229,6 +235,8 @@ void MainWindow::updateEpisode() {
 
   anime->setMyProgress(cw_episode.toInt());
   userListLoaded();
+
+  trayIcon->showMessage("Shinjiru", anime->getRomajiTitle() + " updated to episode " + cw_episode);
 
   api->put(api->API_EDIT_LIST, data);
 }

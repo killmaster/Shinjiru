@@ -1,4 +1,4 @@
-QT       += core gui widgets network concurrent
+QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
 VERSION = 0.0.2
@@ -44,7 +44,8 @@ SOURCES   += \
     src/gui/torrentshelper.cpp \
     src/lib/skinmanager.cpp \
     src/gui/about.cpp \
-    src/gui/settingshelper.cpp
+    src/gui/settingshelper.cpp \
+    src/gui/statshelper.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
