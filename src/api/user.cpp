@@ -9,7 +9,7 @@
 
 User::User(AniListAPI *api, QObject *parent) : QObject(parent) {
   this->api = api;
-  QJsonObject result = api->get(api->API_USER);
+  QJsonObject result = api->get(api->API_USER).object();
 
   user_image_control = nullptr;
 
@@ -60,7 +60,7 @@ void User::setScoreType(const int &score_type) {
 }
 
 void User::loadUserList() {
-  QJsonObject user_list_data = api->get(api->API_USER_LIST(this->displayName()));
+  QJsonObject user_list_data = api->get(api->API_USER_LIST(this->displayName())).object();
   user_list_data = user_list_data.value("lists").toObject();
 
   QStringList list_names = user_list_data.keys();
@@ -149,7 +149,7 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
   QString ID = anime->getID();
   QUrl ID_URL = api->API_ANIME(ID);
 
-  QJsonObject result = api->get(ID_URL);
+  QJsonObject result = api->get(ID_URL).object();
 
   if(download_cover) {
     anime->downloadCover();

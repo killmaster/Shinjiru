@@ -9,6 +9,8 @@
 #include <QSignalMapper>
 #include <QRegExp>
 #include <QSystemTrayIcon>
+#include <QJsonDocument>
+#include <QJsonArray>
 #include <QMenu>
 #include <QApplication>
 #include <QMessageBox>
@@ -65,6 +67,7 @@ private:
   QString currently_watching;
   QString cw_title;
   QString cw_episode;
+  Anime *cw_anime;
 
   QString default_rule;
   QString title_style;

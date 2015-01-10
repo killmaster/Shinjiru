@@ -3,6 +3,7 @@
 #include "mainwindow.h"
 
 #include <QDebug>
+#include <QJsonDocument>
 #include <limits>
 
 AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI *api) : QDialog(parent), ui(new Ui::AnimePanel) {

@@ -213,33 +213,40 @@ void MainWindow::watch(QString title) {
     this->cw_title   = results.value("title");
     this->cw_episode = results.value("episode");
 
-    if(cw_title.isEmpty() || cw_episode.isEmpty()) {
+    if(cw_episode.isEmpty() || cw_title.isEmpty()) {
         return;
     }
 
+    cw_anime = this->user->getAnimeByTitle(cw_title);
+
+    if(cw_anime->getTitle().isEmpty()) {
+      QJsonObject results = api->get(api->API_ANIME_SEARCH(cw_title)).array().at(0).toObject();
+      user->getAnimeByTitle(results.value("title_romaji").toString());
+    }
+
+    if(cw_anime->getMyProgress() > cw_episode.toInt()) {
+      return;
+    }
+
+    if(cw_anime->getMyStatus() != "watching" || cw_anime->getMyStatus() != "plan to watch") {
+      return;
+    }
+
     this->watch_timer->start(1000 * 60 * 2); // Start timer to expire after 2 minutes
+    this->trayIcon->showMessage("Shinjiru", "Updating " + cw_anime->getTitle() + " to episode " + cw_episode + " in 2 minutes");
   }
 }
 
 void MainWindow::updateEpisode() {
-  Anime *anime = this->user->getAnimeByTitle(cw_title);
-
-  if(anime->getMyProgress() > cw_episode.toInt()) {
-    return;
-  }
-
-  if(anime->getMyStatus() != "watching") {
-    return;
-  }
-
   QMap<QString, QString> data;
-  data.insert("id",               anime->getID());
+  data.insert("id",               cw_anime->getID());
   data.insert("episodes_watched", cw_episode);
+  data.insert("list_status",      "watching");
 
-  anime->setMyProgress(cw_episode.toInt());
+  cw_anime->setMyProgress(cw_episode.toInt());
   userListLoaded();
 
-  trayIcon->showMessage("Shinjiru", anime->getRomajiTitle() + " updated to episode " + cw_episode);
+  trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + " updated to episode " + cw_episode);
 
   api->put(api->API_EDIT_LIST, data);
 }
