@@ -174,7 +174,10 @@ void MainWindow::showAnimePanel(int row, int column) {
 
   QTableWidget *source = static_cast<QTableWidget *>(sender());
   QString title = source->item(row, 0)->text();
-  Anime *anime = user->getAnimeByTitle(title);
+  QString episodes = source->item(row, 1)->text();
+  QString score = source->item(row, 2)->text();
+  QString type = source->item(row, 3)->text();
+  Anime *anime = user->getAnimeByData(title, episodes, score, type);
 
   AnimePanel *ap = new AnimePanel(this, anime, user->scoreType(), api);
 

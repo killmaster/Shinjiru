@@ -52,7 +52,7 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI
     score_widget = score_container;
   }
 
-  ui->lblTitle->setText(anime->getRomajiTitle());
+  ui->lblTitle->setText(anime->getTitle());
   ui->txtType->setText(anime->getType());
   ui->txtEpisodes->setText(QString::number(anime->getEpisodeCount()));
   ui->txtScore->setText(anime->getAverageScore());
@@ -94,9 +94,24 @@ void AnimePanel::paintEvent(QPaintEvent *event) {
 }
 
 void AnimePanel::refreshDisplay() {
-  QString synonyms = anime->getSynonyms().join(", ");
-  if(synonyms == "") synonyms = "None";
-  ui->lblSynonyms->setText(synonyms);
+  QStringList synonyms = anime->getSynonyms();
+
+  if(anime->getTitle() != anime->getEnglishTitle()) {
+    if(!synonyms.contains(anime->getEnglishTitle()))
+      synonyms.append(anime->getEnglishTitle());
+  }
+
+  if(anime->getTitle() != anime->getRomajiTitle()) {
+    if(!synonyms.contains(anime->getRomajiTitle()))
+      synonyms.append(anime->getRomajiTitle());
+  }
+
+  if(anime->getTitle() != anime->getJapaneseTitle()) {
+    if(!synonyms.contains(anime->getJapaneseTitle()))
+      synonyms.append(anime->getJapaneseTitle());
+  }
+
+  ui->lblSynonyms->setText(synonyms.join(", "));
   ui->txtSynopsis->setText(anime->getSynopsis());
 }
 

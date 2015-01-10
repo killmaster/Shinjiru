@@ -87,7 +87,15 @@ void User::loadUserList() {
       anime_data->setMyNotes(                anime      .value("notes")           .toString());
       anime_data->setMyRewatch(              anime      .value("rewatched")       .toInt(0));
       anime_data->setMyStatus(               anime      .value("list_status")     .toString());
-      anime_data->setMyScore(QString::number(anime      .value("score")           .toInt(0)));
+
+      if(scoreType() == 0 || scoreType() == 1) {
+        anime_data->setMyScore(QString::number(anime    .value("score")           .toInt(0)));
+      } else if(scoreType() == 4) {
+        anime_data->setMyScore(QString::number(anime    .value("score")           .toDouble(0.0)));
+      } else {
+        anime_data->setMyScore(                anime    .value("score")           .toString(""));
+      }
+
 
       if(list.contains(anime_data->getID())){
         Anime *old = list.value(anime_data->getID());
@@ -111,6 +119,24 @@ Anime *User::getAnimeByTitle(QString title) {
     for(QString synonym : anime->getSynonyms()) {
       if(title== synonym) {
         return anime;
+      }
+    }
+  }
+
+  return new Anime();
+}
+
+Anime *User::getAnimeByData(QString title, QString episodes, QString score, QString type) {
+  qDebug() << title << episodes << score << type;
+  for(Anime *anime : anime_list) {
+    if(anime->getEnglishTitle() == title || anime->getJapaneseTitle() == title ||  anime->getRomajiTitle() == title) {
+      qDebug() << anime->getTitle() << QString(anime->getMyProgress() + " / " + anime->getEpisodeCount()) << anime->getMyScore();
+      if(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()) == episodes) {
+        if(anime->getMyScore() == score) {
+          if(anime->getType() == type) {
+            return anime;
+          }
+        }
       }
     }
   }

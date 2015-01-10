@@ -23,6 +23,7 @@ public slots:
   QPixmap userImage()                                const { return user_image; }
   QMap<QString, QMap<QString, Anime*>> getUserList() const { return user_lists; }
   Anime *getAnimeByTitle(QString title);
+  Anime *getAnimeByData(QString title, QString episodes, QString score, QString type);
   QList<Anime *> getAnimeList() const { return anime_list; }
 
   void setDisplayName(const QString &display_name) { this->display_name = display_name; }

@@ -50,8 +50,8 @@ Here are some things I plan to do in no real order.
 	+ Mean / Median / Mode / Deviation
 	+ Shinjiru stats (uptime, torrents dl'd since launch, minutes watched during session etc)
 + <s>Implement the airing page</s> *
-	+ Sometimes airing anime don't have their cover art properly downloaded
-	+ Double-click to open up details pane
+	+ <s>Sometimes airing anime don't have their cover art properly downloaded</s> Should be fixed
+	+ <s>Double-click to open up details pane</s>
 	+ Filter to watching anime? Sort into list categories?
 + <s>Implement auto downloading of torrents as rules</s>
 + Add a rule management pane
@@ -62,7 +62,7 @@ Here are some things I plan to do in no real order.
 + <s>Add about pane</s>
 + <s>Add updater</s>
 + Better support for custom lists
-+ Better support for Japanese and English titles
++ <s>Better support for Japanese and English titles</s> Should be fixed
 + <s>Add an icon</s>
 + <s>Minimize to tray / Close to tray</s> *
 + <s>Fix the weird menubar bug</s>
