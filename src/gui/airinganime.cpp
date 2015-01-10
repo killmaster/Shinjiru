@@ -3,11 +3,15 @@
 
 #include "../api/anime.h"
 #include "scrolltext.h"
+#include "animepanel.h"
 
 #include <QPainter>
 
-AiringAnime::AiringAnime(QWidget *parent) : QWidget(parent), ui(new Ui::AiringAnime) {
+AiringAnime::AiringAnime(QWidget *parent, int scoreType, AniListAPI *api) : QWidget(parent), ui(new Ui::AiringAnime) {
   ui->setupUi(this);
+
+  this->scoreType = scoreType;
+  this->api = api;
 
   text = new ScrollText(this);
   ui->verticalLayout->addWidget(text);
@@ -24,6 +28,12 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
   p.drawPixmap(0, 0, width(), height(), anime->getCoverImage());
   p.fillRect  (0, 0, width(), 30, QBrush(QColor(0,0,0, 200)));
 
+  event->accept();
+}
+
+void AiringAnime::mouseDoubleClickEvent(QMouseEvent *event) {
+  AnimePanel *ap = new AnimePanel(this, anime, scoreType, api);
+  ap->show();
   event->accept();
 }
 

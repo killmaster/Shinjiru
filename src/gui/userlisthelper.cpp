@@ -128,7 +128,7 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
     user->loadAnimeData(anime, true);
   }
 
-  AiringAnime *newPanel = new AiringAnime(this);
+  AiringAnime *newPanel = new AiringAnime(this, this->user->scoreType(), api);
   newPanel->setAnime(anime);
   return newPanel;
 }
