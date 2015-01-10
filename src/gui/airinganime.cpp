@@ -36,3 +36,7 @@ void AiringAnime::setAnime(Anime *anime) {
     connect(anime, SIGNAL(new_image()), SLOT(repaint()));
   }
 }
+
+Anime* AiringAnime::getAnime() {
+    return this->anime;
+}

@@ -19,6 +19,7 @@ public:
   explicit AiringAnime(QWidget *parent = 0);
   ~AiringAnime();
   void setAnime(Anime *anime);
+  Anime* getAnime();
   Anime *anime;
   ScrollText *text;
 
