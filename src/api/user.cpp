@@ -17,6 +17,7 @@ User::User(AniListAPI *api, QObject *parent) : QObject(parent) {
   this->setScoreType      (result.value("score_type")    .toInt());
   this->setProfileImageURL(result.value("image_url_med") .toString());
   this->setTitleLanguage  (result.value("title_language").toString());
+  this->setAnimeTime      (result.value("anime_time")    .toInt());
 
   this->loadProfileImage();
 }

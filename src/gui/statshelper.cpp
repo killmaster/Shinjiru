@@ -8,7 +8,6 @@ void MainWindow::updateStatistics() {
 
   progress_bar->setMaximum(animes.count());
 
-  float days_watched     = 0.0f;
   int   episodes_watched = 0;
 
   int   watching         = 0;
@@ -21,7 +20,6 @@ void MainWindow::updateStatistics() {
 
   for(Anime *anime: animes) {
     progress_bar->setValue(progress_bar->value() + 1);
-    //days_watched += anime->getMyProgress() * ((anime->getDuration() / 60.0) / 24.0);
     episodes_watched += anime->getMyProgress();
 
     QString status = anime->getMyStatus();
@@ -58,13 +56,24 @@ void MainWindow::updateStatistics() {
 
   int total = watching + completed + on_hold + dropped + plan_to_watch;
 
+  int minutes_watched = user->animeTime();
+  int hours_watched = (minutes_watched / 60) % 24;
+  int days_watched = (minutes_watched / 60.0) / 24;
+  minutes_watched %= 60;
+
+
+  QString time_watched = QString::number(days_watched)    + " days, " +
+                         QString::number(hours_watched)   + " hours, and " +
+                         QString::number(minutes_watched) + " minutes.";
+
+
   ui->lblWatching       ->setText(QString::number(watching));
   ui->lblOnHold         ->setText(QString::number(on_hold));
   ui->lblCompleted      ->setText(QString::number(completed));
   ui->lblDropped        ->setText(QString::number(dropped));
   ui->lblPlanToWatch    ->setText(QString::number(plan_to_watch));
   ui->lblTotalEntries   ->setText(QString::number(total));
-  ui->lblDaysWatched    ->setText(QString::number(days_watched));
+  ui->lblDaysWatched    ->setText(time_watched);
   ui->lblEpisodesWatched->setText(QString::number(episodes_watched));
 
   progress_bar->setFormat("");
