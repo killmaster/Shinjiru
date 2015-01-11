@@ -27,8 +27,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
   user                 = nullptr;
   awesome              = new QtAwesome(qApp);
-  settings             = new Settings(this);
-  window_watcher       = new WindowWatcher(this);
+  settings             = new Settings(0);
+  window_watcher       = new WindowWatcher(0);
   anitomy              = new AnitomyWrapper();
   event_timer          = new QTimer(this);
   watch_timer          = new QTimer(this);
@@ -124,6 +124,8 @@ MainWindow::~MainWindow() {
   delete ui;
   delete awesome;
   delete anitomy;
+  delete settings;
+  delete window_watcher;
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

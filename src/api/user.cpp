@@ -22,6 +22,9 @@ User::User(QObject *parent) : QObject(parent) {
 
 User::~User() {
   if(user_image_control != nullptr) delete user_image_control;
+  for(Anime *a : anime_list){
+    delete a;
+  }
 }
 
 bool User::loadProfileImage() {
@@ -128,7 +131,7 @@ Anime *User::getAnimeByTitle(QString title) {
     }
   }
 
-  return new Anime();
+  return new Anime(this);
 }
 
 Anime *User::getAnimeByData(QString title, QString episodes, QString score, QString type) {
