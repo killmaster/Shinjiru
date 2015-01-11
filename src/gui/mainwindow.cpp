@@ -32,9 +32,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   anitomy              = new AnitomyWrapper();
   event_timer          = new QTimer(this);
   watch_timer          = new QTimer(this);
+  uptime_timer         = new QElapsedTimer;
   progress_bar         = new QProgressBar(ui->statusBar);
   torrent_refresh_time = 0;
 
+  uptime_timer->start();
   watch_timer->setSingleShot(true);
 
   awesome->initFontAwesome();
@@ -266,6 +268,43 @@ void MainWindow::eventTick() {
 
   torrent_refresh_time--;
   ui->refreshButton->setText("Refresh (" + QString::number(torrent_refresh_time) + ")");
+
+  int seconds = uptime_timer->elapsed() / 1000;
+  int minutes = seconds / 60;
+  int hours = seconds / 60.0 / 60;
+  int days = seconds / 60.0 / 60.0 / 24;
+  seconds %= 60;
+
+  QString format = "";
+  if(days > 1) {
+    format += QString::number(days) + " days, ";
+  } else if (days > 0) {
+    format += QString::number(days) + " day, ";
+  }
+
+  if(hours > 1) {
+    format += QString::number(hours) + " hours, ";
+  } else if (hours > 0) {
+    format += QString::number(hours) + " hour, ";
+  }
+
+  if(days == 0) {
+    if(minutes > 1) {
+      format += QString::number(minutes) + " minutes, ";
+    } else if (minutes > 0) {
+      format += QString::number(minutes) + " minute, ";
+    }
+  }
+
+  if(hours == 0) {
+    if(seconds == 1) {
+      format +=  QString::number(seconds) + " second";
+    } else {
+      format +=  QString::number(seconds) + " seconds";
+    }
+  }
+
+  ui->lblUptime->setText(format);
 }
 
 void MainWindow::showAbout() {

@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -531,241 +531,311 @@
        <attribute name="title">
         <string>Statistics</string>
        </attribute>
-       <widget class="QLabel" name="label_4">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>10</y>
-          <width>141</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>AniList Statistics</string>
-        </property>
-       </widget>
-       <widget class="QWidget" name="formLayoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>30</y>
-          <width>321</width>
-          <height>351</height>
-         </rect>
-        </property>
-        <layout class="QFormLayout" name="formLayout_2">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-         </property>
-         <item row="0" column="0">
-          <widget class="QLabel" name="lbl_8">
-           <property name="text">
-            <string>Days Watched: </string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="lblDaysWatched">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QLabel" name="lbl">
-           <property name="text">
-            <string>Episodes Watched:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="1">
-          <widget class="QLabel" name="lblEpisodesWatched">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="Line" name="line">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0">
-          <widget class="QLabel" name="lbl_3">
-           <property name="text">
-            <string>Watching:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="1">
-          <widget class="QLabel" name="lblWatching">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="lbl_2">
-           <property name="text">
-            <string>Completed:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="1">
-          <widget class="QLabel" name="lblCompleted">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="0">
-          <widget class="QLabel" name="lbl_4">
-           <property name="text">
-            <string>On Hold:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="5" column="1">
-          <widget class="QLabel" name="lblOnHold">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="0">
-          <widget class="QLabel" name="lbl_5">
-           <property name="text">
-            <string>Dropped:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="6" column="1">
-          <widget class="QLabel" name="lblDropped">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="lbl_6">
-           <property name="text">
-            <string>Plan to Watch: </string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QLabel" name="lblPlanToWatch">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="0">
-          <widget class="QLabel" name="lbl_7">
-           <property name="text">
-            <string>Total Entries:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="8" column="1">
-          <widget class="QLabel" name="lblTotalEntries">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="0">
-          <widget class="QLabel" name="lbl_9">
-           <property name="text">
-            <string>Mean Score:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="10" column="1">
-          <widget class="QLabel" name="lblMean">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="0">
-          <widget class="QLabel" name="lbl_10">
-           <property name="text">
-            <string>Median Score:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="11" column="1">
-          <widget class="QLabel" name="lblMedian">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="0">
-          <widget class="QLabel" name="lbl_11">
-           <property name="text">
-            <string>Mode Score:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="12" column="1">
-          <widget class="QLabel" name="lblMode">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="13" column="0">
-          <widget class="QLabel" name="lbl_12">
-           <property name="text">
-            <string>Score Deviation:</string>
-           </property>
-          </widget>
-         </item>
-         <item row="13" column="1">
-          <widget class="QLabel" name="lblScoreDeviation">
-           <property name="text">
-            <string>0</string>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="0">
-          <widget class="Line" name="line_2">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QLabel" name="label_2">
-        <property name="geometry">
-         <rect>
-          <x>420</x>
-          <y>10</y>
-          <width>231</width>
-          <height>16</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Shinjiru Statistics</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_4">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>AniList Statistics</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_2">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+              </property>
+              <property name="formAlignment">
+               <set>Qt::AlignRight|Qt::AlignTop|Qt::AlignTrailing</set>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="lbl_8">
+                <property name="text">
+                 <string>Days Watched: </string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="lblDaysWatched">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="lblEpisodesWatched">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="Line" name="line">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="lbl_3">
+                <property name="text">
+                 <string>Watching:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="lblWatching">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="lbl_2">
+                <property name="text">
+                 <string>Completed:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLabel" name="lblCompleted">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="0">
+               <widget class="QLabel" name="lbl_4">
+                <property name="text">
+                 <string>On Hold:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="5" column="1">
+               <widget class="QLabel" name="lblOnHold">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="0">
+               <widget class="QLabel" name="lbl_5">
+                <property name="text">
+                 <string>Dropped:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="6" column="1">
+               <widget class="QLabel" name="lblDropped">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="0">
+               <widget class="QLabel" name="lbl_6">
+                <property name="text">
+                 <string>Plan to Watch: </string>
+                </property>
+               </widget>
+              </item>
+              <item row="7" column="1">
+               <widget class="QLabel" name="lblPlanToWatch">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="0">
+               <widget class="QLabel" name="lbl_7">
+                <property name="text">
+                 <string>Total Entries:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="8" column="1">
+               <widget class="QLabel" name="lblTotalEntries">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="9" column="0">
+               <widget class="Line" name="line_2">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="0">
+               <widget class="QLabel" name="lbl_9">
+                <property name="text">
+                 <string>Mean Score:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="10" column="1">
+               <widget class="QLabel" name="lblMean">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="0">
+               <widget class="QLabel" name="lbl_10">
+                <property name="text">
+                 <string>Median Score:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="11" column="1">
+               <widget class="QLabel" name="lblMedian">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="0">
+               <widget class="QLabel" name="lbl_11">
+                <property name="text">
+                 <string>Mode Score:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="12" column="1">
+               <widget class="QLabel" name="lblMode">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="0">
+               <widget class="QLabel" name="lbl_12">
+                <property name="text">
+                 <string>Score Deviation:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="13" column="1">
+               <widget class="QLabel" name="lblScoreDeviation">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="lbl">
+                <property name="text">
+                 <string>Episodes Watched:</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_4">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_5">
+            <item>
+             <widget class="QLabel" name="label_2">
+              <property name="font">
+               <font>
+                <weight>75</weight>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Shinjiru Statistics</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QFormLayout" name="formLayout_3">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="lbl_13">
+                <property name="text">
+                 <string>Application Uptime: </string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QLabel" name="lblUptime">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <spacer name="verticalSpacer_3">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_5">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>

@@ -14,6 +14,7 @@
 #include <QMenu>
 #include <QApplication>
 #include <QMessageBox>
+#include <QElapsedTimer>
 
 #include <QtAwesome.h>
 #include <anilistapi.h>
@@ -61,6 +62,7 @@ private:
 
   QTimer *event_timer;
   QProgressBar *progress_bar;
+  QElapsedTimer *uptime_timer;
 
   QTimer *watch_timer;
   QString currently_watching;
