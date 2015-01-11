@@ -27,7 +27,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
   user                 = nullptr;
   awesome              = new QtAwesome(qApp);
-  api                  = new AniListAPI(this, api_id, api_secret);
   settings             = new Settings(this);
   window_watcher       = new WindowWatcher(this);
   anitomy              = new AnitomyWrapper();
@@ -87,6 +86,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionEAR,    SIGNAL(triggered(bool)),                         SLOT(toggleAnimeRecognition(bool)));
   connect(ui->actionUpdate, SIGNAL(triggered()), FvUpdater::sharedUpdater(), SLOT(CheckForUpdatesNotSilent()));
 
+  connect(ui->disconnectButton, SIGNAL(clicked()), SLOT(resetAPI()));
+
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
   connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
   connect(event_timer,    SIGNAL(timeout()),            SLOT(eventTick()));
@@ -101,18 +102,20 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   initTray();
   trayIcon->show();
 
-  API *instance = new API(this);
-  int result = instance->verify(api);
-  delete instance;
-  instance = nullptr;
+  API *instance = API::sharedAPI();
+  int result = instance->verify();
 
   if(result == AniListAPI::OK) {
-    connect(api, &AniListAPI::access_granted, [&]() {
+    connect(API::sharedAPI()->sharedAniListAPI(), &AniListAPI::access_granted, [&]() {
       progress_bar->setValue(10);
       progress_bar->setFormat("Access granted");
       loadUser();
       reloadRules();
       event_timer->start(1000);
+    });
+
+    connect(API::sharedAPI()->sharedAniListAPI(), &AniListAPI::access_denied, [&](QString error) {
+      QMessageBox::critical(this, "Shinjiru", "Error: " + error);
     });
   }
 }
@@ -120,7 +123,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 MainWindow::~MainWindow() {
   delete ui;
   delete awesome;
-  delete api;
   delete anitomy;
 }
 
@@ -179,7 +181,7 @@ void MainWindow::showAnimePanel(int row, int column) {
   QString type = source->item(row, 3)->text();
   Anime *anime = user->getAnimeByData(title, episodes, score, type);
 
-  AnimePanel *ap = new AnimePanel(this, anime, user->scoreType(), api);
+  AnimePanel *ap = new AnimePanel(this, anime, user->scoreType());
 
   if(anime->needsLoad() || anime->needsCover()) {
     user->loadAnimeData(anime, true);
@@ -220,7 +222,7 @@ void MainWindow::watch(QString title) {
     cw_anime = this->user->getAnimeByTitle(cw_title);
 
     if(cw_anime->getTitle().isEmpty()) {
-      QJsonObject results = api->get(api->API_ANIME_SEARCH(cw_title)).array().at(0).toObject();
+      QJsonObject results = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_ANIME_SEARCH(cw_title)).array().at(0).toObject();
       user->getAnimeByTitle(results.value("title_romaji").toString());
     }
 
@@ -248,7 +250,7 @@ void MainWindow::updateEpisode() {
 
   trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + " updated to episode " + cw_episode);
 
-  api->put(api->API_EDIT_LIST, data);
+  API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
 }
 
 void MainWindow::eventTick() {
@@ -259,11 +261,21 @@ void MainWindow::eventTick() {
 
   torrent_refresh_time--;
   ui->refreshButton->setText("Refresh (" + QString::number(torrent_refresh_time) + ")");
-
   event_timer->start(1000);
 }
 
 void MainWindow::showAbout() {
   About *about = new About(this);
   about->show();
+}
+
+void MainWindow::resetAPI() {
+  API::sharedAPI()->sharedAniListAPI()->setAuthorizationCode("");
+
+  settings->setValue(Settings::AniListAccess, "");
+  settings->setValue(Settings::AniListExpires, QDateTime::currentDateTimeUtc());
+  settings->setValue(Settings::AniListRefresh, "");
+
+  QProcess::startDetached(QApplication::applicationFilePath());
+  exit(0);
 }

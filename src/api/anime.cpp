@@ -47,8 +47,7 @@ void        Anime::setCoverURL(QUrl cover_url)            { this ->cover_url = c
 
 QPixmap     Anime::getCoverImage()                        { return cover_image; }
 void        Anime::setCoverImageData(QByteArray data)     { this->cover_image.loadFromData(data);
-                                                            emit new_image();
-                                                            needCover = false; }
+                                                            emit new_image(); }
 
 int         Anime::getMyProgress()                        { return my_progress; }
 void        Anime::setMyProgress(int progress)            { this ->my_progress = progress; }
@@ -69,6 +68,7 @@ int         Anime::getDuration()                          { return duration; }
 void        Anime::setDuration(int duration)              { this ->duration = duration; }
 
 void Anime::downloadCover() {
+  this->needCover = false;
   anime_image_control = new FileDownloader(getCoverURL());
   connect(anime_image_control, &FileDownloader::downloaded, [&]() {
     this->setCoverImageData(anime_image_control->downloadedData());

@@ -8,12 +8,13 @@
 
 #include "anime.h"
 #include "../lib/filedownloader.h"
+#include "api.h"
 
 class User : public QObject{
   Q_OBJECT
 
 public:
-  User(AniListAPI *api, QObject *parent = 0);
+  User( QObject *parent = 0);
   ~User();
 
 public slots:
@@ -42,7 +43,6 @@ signals:
   void new_image();
 
 private:
-  AniListAPI *api;
   QString display_name;
   int score_type;
   QString profile_image_url;

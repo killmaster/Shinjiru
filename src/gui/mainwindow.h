@@ -46,7 +46,6 @@ protected:
 private:
   Ui::MainWindow *ui;
   QtAwesome *awesome;
-  AniListAPI *api;
   Settings *settings;
   User *user;
   WindowWatcher *window_watcher;
@@ -121,6 +120,8 @@ private slots:
   void updateEpisode();
 
   void updateStatistics();
+
+  void resetAPI();
 
   void filterTorrents(QString, bool);
   void filterTorrents(bool);

@@ -7,7 +7,7 @@ void MainWindow::loadUser() {
   progress_bar->setFormat("Loading User");
   progress_bar->setValue(15);
   user_future = QtConcurrent::run([&]() {
-    user = new User(api);
+    user = new User();
     return user;
   });
 

@@ -5,11 +5,9 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QEventLoop>
-#include <QtConcurrent>
 
-User::User(AniListAPI *api, QObject *parent) : QObject(parent) {
-  this->api = api;
-  QJsonObject result = api->get(api->API_USER).object();
+User::User(QObject *parent) : QObject(parent) {
+  QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER).object();
 
   user_image_control = nullptr;
 
@@ -60,7 +58,7 @@ void User::setScoreType(const int &score_type) {
 }
 
 void User::loadUserList() {
-  QJsonObject user_list_data = api->get(api->API_USER_LIST(this->displayName())).object();
+  QJsonObject user_list_data = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(this->displayName())).object();
   user_list_data = user_list_data.value("lists").toObject();
 
   QStringList list_names = user_list_data.keys();
@@ -88,6 +86,12 @@ void User::loadUserList() {
       anime_data->setMyNotes(                anime      .value("notes")           .toString());
       anime_data->setMyRewatch(              anime      .value("rewatched")       .toInt(0));
       anime_data->setMyStatus(               anime      .value("list_status")     .toString());
+
+      QJsonArray synonyms = inner_anime.value("synonyms").toArray();
+
+      for(int i = 0; i < synonyms.count(); i++) {
+        anime_data->addSynonym(synonyms.at(i).toString());
+      }
 
       if(scoreType() == 0 || scoreType() == 1) {
         anime_data->setMyScore(QString::number(anime    .value("score")           .toInt(0)));
@@ -147,22 +151,19 @@ Anime *User::getAnimeByData(QString title, QString episodes, QString score, QStr
 
 void User::loadAnimeData(Anime *anime, bool download_cover) {
   QString ID = anime->getID();
-  QUrl ID_URL = api->API_ANIME(ID);
+  QUrl ID_URL = API::sharedAPI()->sharedAniListAPI()->API_ANIME(ID);
 
-  QJsonObject result = api->get(ID_URL).object();
+  QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get(ID_URL).object();
 
   if(download_cover) {
-    anime->downloadCover();
+    if(anime->needsCover()) {
+      anime->downloadCover();
+    }
   }
 
-  QJsonArray synonyms = result.value("synonyms").toArray();
   QString description = result.value("description").toString();
 
   anime->setDuration(result.value("duration").toInt());
-
-  for(int i = 0; i < synonyms.count(); i++) {
-    anime->addSynonym(synonyms.at(i).toString());
-  }
 
   anime->setSynopsis(description);
 

@@ -15,6 +15,9 @@ public:
     AnimeRecognitionEnabled,
     TorrentRefreshTime,
     DefaultRuleType,
+    AniListExpires,
+    AniListRefresh,
+    AniListAccess
   };
 
 private:

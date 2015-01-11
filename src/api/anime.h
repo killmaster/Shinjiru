@@ -7,6 +7,7 @@
 #include <QPixmap>
 
 #include "../lib/filedownloader.h"
+#include "api.h"
 
 class Anime : public QObject {
   Q_OBJECT
