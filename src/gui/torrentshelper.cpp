@@ -211,9 +211,8 @@ void MainWindow::verifyAndDownload(int row) {
   QFile f(history_dir.absoluteFilePath(file));
   if(!f.exists()) {
     download(row);
+    trayIcon->showMessage("Shinjiru", title + " has started downloading.");
     f.open(QFile::WriteOnly);
     f.write("0");
   }
-
-  trayIcon->showMessage("Shinjiru", title + " has started downloading.");
 }
