@@ -35,6 +35,7 @@ void WindowWatcher::enable() {
 
 void WindowWatcher::timeOut() {
   windowList.clear();
+  bool title = false;
 
   EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(this));
 
@@ -42,9 +43,11 @@ void WindowWatcher::timeOut() {
     QString window = windowList.at(i);
 
     if(!isMediaPlayer(window)) continue;
-
+    title = true;
     emit title_found(found_title);
   }
+
+  if(!title) emit title_found("");
 }
 
 bool WindowWatcher::isMediaPlayer(QString window_title) {
