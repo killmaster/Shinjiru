@@ -8,9 +8,10 @@ AnitomyWrapper::AnitomyWrapper() {
 }
 
 anitomy_string AnitomyWrapper::toAnitomyFormat(QString text) {
-  const char* s = text.toLocal8Bit().constData();
-  std::wstring w(s, s+strlen(s));
-  return w.c_str();
+  wchar_t *s = new wchar_t[text.length()];
+  text.toWCharArray(s);
+
+  return s;
 }
 
 QMap<QString, QString> AnitomyWrapper::parse(QString file_name) {
