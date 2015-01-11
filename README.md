@@ -6,7 +6,7 @@ Shinjiru is anime list management tool built with Qt designed to automatically u
 
 ## Installation ##
 
-Shinjiru's website currently hosts win32 alpha builds [here](http://app.shinjiru.me/latest.php).  
+Shinjiru's [website](http://app.shinjiru.me/index.php) currently hosts win32 alpha builds [here](http://app.shinjiru.me/latest.php).  
 For other build needs feel free to [build](#Building) Shinjiru for yourself.
 
 
@@ -46,7 +46,6 @@ Here are some things I plan to do in no real order.
 
 + <s>Actually update lists from the AnimePanel</s>
 + <s>Implement the statistics page</s> *
-	+ Duration is in large anime models only
 	+ Mean / Median / Mode / Deviation
 	+ Shinjiru stats (uptime, torrents dl'd since launch, minutes watched during session etc)
 + <s>Implement the airing page</s> *
