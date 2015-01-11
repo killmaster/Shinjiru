@@ -14,7 +14,7 @@ void MainWindow::refreshTorrentListing() {
   ui->refreshButton->setText("Refresh (0)");
   torrent_refresh_time = torrent_interval;
 
-  TorrentRSS *torrents = new TorrentRSS(this);
+  TorrentRSS *torrents = new TorrentRSS(0);
   QEventLoop rssLoop;
   connect(torrents, SIGNAL(done()), &rssLoop, SLOT(quit()));
   torrents->fetch();
@@ -23,6 +23,8 @@ void MainWindow::refreshTorrentListing() {
   QStringList titles = QStringList(*(torrents->getTitles()));
   QStringList links = QStringList(*(torrents->getLinks()));
   int offset = 0;
+
+  delete torrents;
 
   for(int i = 0; i < titles.length(); i++) {
     if(ui->torrentTable->rowCount() <= i)
@@ -140,7 +142,9 @@ void MainWindow::filterTorrents(QString text, bool checked) {
 
     if(checked) {
       QString f_title = items.at(i)->text();
-      if(user->getAnimeByTitle(f_title)->getAiringStatus() != "currently airing") show = false;
+      Anime *filter_anime = user->getAnimeByTitle(f_title);
+      if(filter_anime->getAiringStatus() != "currently airing") show = false;
+      if(filter_anime->getMyStatus() != "watching" && filter_anime->getMyStatus() != "plan to watch") show = false;
     }
 
     if(show)

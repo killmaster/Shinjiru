@@ -133,7 +133,7 @@ Anime *User::getAnimeByTitle(QString title) {
     }
   }
 
-  return new Anime(this);
+  return new Anime(0);
 }
 
 Anime *User::getAnimeByData(QString title, QString episodes, QString score, QString type) {
