@@ -40,34 +40,6 @@ If you want to contribute to Shinjiru feel free to create a pull request or an i
 Make sure your code compiles if you're contributing.  
 I don't have insanely high standards for code style but try to keep the code organized.
 
-## Upcoming ##
-
-Here are some things I plan to do in no real order.
-
-+ <s>Actually update lists from the AnimePanel</s>
-+ <s>Implement the statistics page</s> *
-	+ Mean / Median / Mode / Deviation
-	+ Shinjiru stats (uptime, torrents dl'd since launch, minutes watched during session etc)
-+ <s>Implement the airing page</s> *
-	+ <s>Sometimes airing anime don't have their cover art properly downloaded</s> Should be fixed
-	+ <s>Double-click to open up details pane</s>
-	+ Filter to watching anime? Sort into list categories?
-+ <s>Implement auto downloading of torrents as rules</s>
-+ Add a rule management pane
-+ Add expiry dates to rules to keep things clean
-+ <s>Implement anime recognition</s> *
-+ <s>Add some actual settings</s> *
-+ Add help pane
-+ <s>Add about pane</s>
-+ <s>Add updater</s>
-+ Better support for custom lists
-+ <s>Better support for Japanese and English titles</s> Should be fixed
-+ <s>Add an icon</s>
-+ <s>Minimize to tray / Close to tray</s> *
-+ <s>Fix the weird menubar bug</s>
-+ Probably some other stuff I'm forgetting.
-
-Starred items require improvement but basic functionality should exist.
 
 ## Contact ##
 
