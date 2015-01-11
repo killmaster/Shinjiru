@@ -64,6 +64,8 @@ void User::loadUserList() {
   QJsonObject user_list_data = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(this->displayName())).object();
   user_list_data = user_list_data.value("lists").toObject();
 
+  anime_list.clear();
+
   QStringList list_names = user_list_data.keys();
 
   for(int i = 0; i < list_names.length(); i++) {
