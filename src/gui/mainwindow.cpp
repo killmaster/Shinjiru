@@ -269,7 +269,7 @@ void MainWindow::eventTick() {
   torrent_refresh_time--;
   ui->refreshButton->setText("Refresh (" + QString::number(torrent_refresh_time) + ")");
 
-  int seconds = uptime_timer->elapsed() / 1000;
+  qint64 seconds = uptime_timer->elapsed() / 1000;
   int minutes = seconds / 60;
   int hours = seconds / 60.0 / 60;
   int days = seconds / 60.0 / 60.0 / 24;
