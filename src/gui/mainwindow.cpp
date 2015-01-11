@@ -35,6 +35,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   progress_bar         = new QProgressBar(ui->statusBar);
   torrent_refresh_time = 0;
 
+  watch_timer->setSingleShot(true);
+
   awesome->initFontAwesome();
   loadSettings();
 
@@ -216,6 +218,7 @@ void MainWindow::watch(QString title) {
 
     this->cw_title   = results.value("title");
     this->cw_episode = results.value("episode");
+    cw_episode = cw_episode.remove(QRegExp("^[0]*"));
 
     if(cw_episode.isEmpty() || cw_title.isEmpty()) {
         return;
@@ -225,14 +228,14 @@ void MainWindow::watch(QString title) {
 
     if(cw_anime->getTitle().isEmpty()) {
       QJsonObject results = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_ANIME_SEARCH(cw_title)).array().at(0).toObject();
-      user->getAnimeByTitle(results.value("title_romaji").toString());
+      cw_anime = user->getAnimeByTitle(results.value("title_romaji").toString());
     }
 
-    if(cw_anime->getMyProgress() > cw_episode.toInt()) {
+    if(cw_anime->getMyProgress() >= cw_episode.toInt()) {
       return;
     }
 
-    if(cw_anime->getMyStatus() != "watching" || cw_anime->getMyStatus() != "plan to watch") {
+    if(cw_anime->getMyStatus() != "watching" && cw_anime->getMyStatus() != "plan to watch") {
       return;
     }
 
@@ -263,7 +266,6 @@ void MainWindow::eventTick() {
 
   torrent_refresh_time--;
   ui->refreshButton->setText("Refresh (" + QString::number(torrent_refresh_time) + ")");
-  event_timer->start(1000);
 }
 
 void MainWindow::showAbout() {
