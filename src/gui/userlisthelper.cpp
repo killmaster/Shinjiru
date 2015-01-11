@@ -23,6 +23,10 @@ void MainWindow::userListLoaded() {
   progress_bar->setValue(30);
   progress_bar->setFormat("Parsing User List");
 
+  QLayoutItem *item;
+  while ((item = ui->scrollArea->widget()->layout()->takeAt(0)))
+    delete item;
+
   int starting_value = progress_bar->value();
   int remaining_space = progress_bar->maximum() - starting_value;
   int space_per_list = remaining_space;
