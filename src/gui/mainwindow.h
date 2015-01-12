@@ -26,6 +26,7 @@
 #include "flowlayout.h"
 #include "../anitomy/anitomywrapper.h"
 #include "../lib/windowwatcher.h"
+#include "progresstablewidgetitem.h"
 
 namespace Ui {
   class MainWindow;
@@ -87,6 +88,10 @@ private:
   QAction *maximizeAction;
   QAction *restoreAction;
 
+  int auto_update_delay;
+  bool minimize_to_tray;
+  bool close_to_tray;
+
 private slots:
   void loadUser();
   void userLoaded();
@@ -135,10 +140,14 @@ private slots:
   void checkForMatches();
   void verifyAndDownload(int);
 
+  void settingsChanged();
+  void applySettings();
+  void applyEAR();
+  void loadSettings();
+  void defaultSettings();
+
   void initTray();
   void createActions();
-
-  void loadSettings();
 };
 
 #endif // MAINWINDOW_H

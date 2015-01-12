@@ -27,6 +27,14 @@ QString Settings::parseEnum(int setting) {
       return "anilist/expires";
     case AniListRefresh:
       return "anilist/refresh";
+    case AutoUpdateDelay:
+      return "update_delay";
+    case StartOnBoot:
+      return "start_on_boot";
+    case MinimizeToTray:
+      return "minimize_to_tray";
+    case CloseToTray:
+      return "close_to_tray";
   }
 
   return "unknown";

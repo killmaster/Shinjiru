@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -249,6 +249,26 @@
               </item>
              </widget>
             </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="autoUpdateDelayLabel">
+              <property name="text">
+               <string>Auto Update Delay:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="1">
+             <widget class="QLineEdit" name="autoUpdateDelayLineEdit"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="rSSFeedLabel">
+              <property name="text">
+               <string>RSS Feed:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QLineEdit" name="rSSFeedLineEdit"/>
+            </item>
            </layout>
           </item>
           <item>
@@ -282,6 +302,43 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_11">
           <item>
+           <layout class="QFormLayout" name="formLayout_4">
+            <property name="topMargin">
+             <number>30</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="startOnBootLabel">
+              <property name="text">
+               <string>Start on Boot:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="startOnBootCheckBox"/>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="minimizeToTrayLabel">
+              <property name="text">
+               <string>Minimize to Tray:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="minimizeToTrayCheckBox"/>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="closeToTrayLabel">
+              <property name="text">
+               <string>Close to Tray:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="closeToTrayCheckBox"/>
+            </item>
+           </layout>
+          </item>
+          <item>
            <spacer name="verticalSpacer">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -311,6 +368,13 @@
                </size>
               </property>
              </spacer>
+            </item>
+            <item>
+             <widget class="QPushButton" name="openSkinsFolderButton">
+              <property name="text">
+               <string>Open Skins Folder</string>
+              </property>
+             </widget>
             </item>
             <item>
              <widget class="QPushButton" name="disconnectButton">

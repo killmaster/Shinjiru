@@ -7,7 +7,6 @@
 
 #include "../api/anime.h"
 #include "scrolltext.h"
-#include "anilistapi.h"
 
 namespace Ui {
 class AiringAnime;
@@ -18,7 +17,7 @@ class AiringAnime : public QWidget
   Q_OBJECT
 
 public:
-  explicit AiringAnime(QWidget *parent = 0, int scoreType = 0, AniListAPI *api = 0);
+  explicit AiringAnime(QWidget *parent = 0, int scoreType = 0);
   ~AiringAnime();
   void setAnime(Anime *anime);
   Anime* getAnime();
@@ -32,7 +31,6 @@ private:
   Anime *anime;
   ScrollText *text;
   int scoreType;
-  AniListAPI *api;
 };
 
 #endif // AIRINGANIME_H

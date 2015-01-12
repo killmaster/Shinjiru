@@ -4,8 +4,6 @@
 #include <QHeaderView>
 #include <QtConcurrent>
 
-#include "progresstablewidgetitem.h"
-
 void MainWindow::loadUserList() {
   progress_bar->setValue(25);
   progress_bar->setFormat("Downloading User List");
@@ -40,7 +38,8 @@ void MainWindow::userListLoaded() {
 
   QMap<QString, QMap<QString, Anime*>> lists = user->getUserList();
 
-  space_per_list = remaining_space / lists.count();
+  if(lists.count() > 0)
+    space_per_list = remaining_space / lists.count();
 
   for(QString key: lists.keys()) {
     current_list++;
@@ -101,7 +100,7 @@ void MainWindow::userListLoaded() {
     table->sortByColumn(0, Qt::SortOrder::AscendingOrder);
   }
 
-  progress_bar->setValue(0);
+  progress_bar->reset();
   progress_bar->setFormat("");
 
   updateStatistics();

@@ -3,18 +3,24 @@
 
 void MainWindow::updateStatistics() {
   progress_bar->setFormat("Updating statistics");
-  progress_bar->setValue(0);
+  progress_bar->reset();
   QList<Anime*> animes = this->user->getAnimeList();
 
   progress_bar->setMaximum(animes.count());
 
-  int   episodes_watched = 0;
+  int    episodes_watched = 0;
 
-  int   watching         = 0;
-  int   completed        = 0;
-  int   on_hold          = 0;
-  int   dropped          = 0;
-  int   plan_to_watch    = 0;
+  int    watching         = 0;
+  int    completed        = 0;
+  int    on_hold          = 0;
+  int    dropped          = 0;
+  int    plan_to_watch    = 0;
+
+  int    mean             = 0;
+  int    median           = 0;
+  int    mode             = 0;
+  double stddev           = 0.0;
+  int    sum              = 0;
 
   QList<int> scores;
 
@@ -33,6 +39,7 @@ void MainWindow::updateStatistics() {
 
       if(score > 0) {
         scores.append(score);
+        sum += score;
       }
     }
 
@@ -51,8 +58,32 @@ void MainWindow::updateStatistics() {
   }
 
   if(scores.count() > 0) {
-    //
+    mean = sum / scores.count();
+    int mid = scores.count() / 2;
+    qSort(scores);
+
+    int number = scores.at(0);
+    mode = number;
+    int count = 1;
+    int countMode = 1;
+
+    for(int i = 1; i < scores.count(); i++) {
+      if(mid == i) median = scores.at(i);
+      stddev += scores.at(i) - mean;
+      if (scores.at(i) == number) {
+        count++;
+      } else {
+        if (count > countMode) {
+          countMode = count;
+          mode = number;
+        }
+        count = 1;
+        number = scores.at(i);
+      }
+    }
   }
+
+  stddev = qSqrt(stddev / (scores.count() - 1));
 
   int total = watching + completed + on_hold + dropped + plan_to_watch;
 
@@ -64,7 +95,7 @@ void MainWindow::updateStatistics() {
 
   QString time_watched = QString::number(days_watched)    + " days, " +
                          QString::number(hours_watched)   + " hours, and " +
-                         QString::number(minutes_watched) + " minutes.";
+                         QString::number(minutes_watched) + " minutes";
 
 
   ui->lblWatching       ->setText(QString::number(watching));
@@ -75,7 +106,12 @@ void MainWindow::updateStatistics() {
   ui->lblTotalEntries   ->setText(QString::number(total));
   ui->lblDaysWatched    ->setText(time_watched);
   ui->lblEpisodesWatched->setText(QString::number(episodes_watched));
+  ui->lblMean           ->setText(QString::number(mean));
+  ui->lblMedian         ->setText(QString::number(median));
+  ui->lblMode           ->setText(QString::number(mode));
+  ui->lblScoreDeviation ->setText(QString::number(stddev, 'g', 2));
+
 
   progress_bar->setFormat("");
-  progress_bar->setValue(0);
+  progress_bar->reset();
 }

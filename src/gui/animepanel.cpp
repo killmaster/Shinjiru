@@ -6,20 +6,19 @@
 #include <QJsonDocument>
 #include <limits>
 
-AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI *api) : QDialog(parent), ui(new Ui::AnimePanel) {
+AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(parent), ui(new Ui::AnimePanel) {
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   this->anime = anime;
   this->score_type = score_type;
-  this->api = api;
   QString airing_status = anime->getAiringStatus();
   airing_status = airing_status.at(0).toUpper() + airing_status.right(airing_status.length() - 1);
 
   QString score = anime->getMyScore();
 
-  if(score_type == 0 || score_type == 1 || score_type == 2) {
+  if(score_type == 0 || score_type == 1) {
     QSpinBox *score_container = new QSpinBox(this);
 
     score_container->setMaximum(score_type == 0 ? 10 : score_type == 1 ? 100 : 5);
@@ -29,9 +28,24 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI
     ui->myDetailForm->setWidget(2, QFormLayout::FieldRole, score_container);
     score_widget = score_container;
 
+  } else if (score_type == 2) {
+    QComboBox *score_container = new QComboBox(this);
+
+    score_container->addItem("0 Stars");
+    score_container->addItem("1 Star");
+    score_container->addItem("2 Stars");
+    score_container->addItem("3 Stars");
+    score_container->addItem("4 Stars");
+    score_container->addItem("5 Stars");
+
+    score_container->setCurrentText(score);
+
+    ui->myDetailForm->setWidget(2, QFormLayout::FieldRole, score_container);
+    score_widget = score_container;
   } else if (score_type == 3) {
     QComboBox *score_container = new QComboBox(this);
 
+    score_container->addItem("");
     score_container->addItem(":(");
     score_container->addItem(":|");
     score_container->addItem(":)");
@@ -66,7 +80,13 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type, AniListAPI
   ui->spinEps->setValue(anime->getMyProgress());
   ui->txtNotes->setText(anime->getMyNotes());
   ui->spinRewatch->setValue(anime->getMyRewatch());
-  ui->comboStatus->setCurrentText(anime->getMyStatus());
+
+  QString my_status = anime->getMyStatus();
+
+  my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
+  ui->comboStatus->setCurrentText(my_status);
+
+
 
   if(anime->needsLoad()) {
     connect(anime, SIGNAL(finishedReloading()), SLOT(refreshDisplay()));
@@ -125,30 +145,47 @@ void AnimePanel::accept() {
   QString status = ui->comboStatus->currentText();
   int rewatch = ui->spinRewatch->value();
 
-  if(score_type == 0 || score_type == 1 || score_type == 2) {
+  if(score_type == 0 || score_type == 1) {
     i_score = static_cast<QSpinBox *>(score_widget)->value();
     score = QString::number(i_score);
-
-    if(score_type == 2) score += " Star";
-
-  } else if (score_type == 3) {
+  } else if (score_type == 3 || score_type == 2) {
     score = static_cast<QComboBox *>(score_widget)->currentText();
   } else {
     d_score = static_cast<QDoubleSpinBox *>(score_widget)->value();
     score = QString::number(d_score);
   }
 
-  if(anime->getMyNotes() != notes || anime->getMyProgress() != eps || anime->getMyScore() != score
-     || anime->getMyStatus() != status || anime->getMyRewatch() != rewatch) {
+  if(anime->getMyNotes() != notes || anime->getMyProgress() != eps || anime->getMyScore() != score || anime->getMyStatus() != status || anime->getMyRewatch() != rewatch) {
     QMap<QString, QString> data;
-    data.insert("id",               anime->getID());
-    data.insert("list_status",      status.toLower());
-    data.insert("score",            score);
-    data.insert("episodes_watched", QString::number(eps));
-    data.insert("rewatched",        QString::number(rewatch));
-    data.insert("notes",            notes);
+    data.insert("id",                 anime->getID());
 
-    api->put(api->API_EDIT_LIST, data);
+    if(anime->getMyStatus() != status.toLower()) {
+      data.insert("list_status",      status.toLower());
+      anime->setMyStatus(status.toLower());
+    }
+
+    if(anime->getMyScore() != score) {
+      data.insert("score",            score);
+      anime->setMyScore(score);
+    }
+
+    if(anime->getMyProgress() != eps) {
+      data.insert("episodes_watched", QString::number(eps));
+      anime->setMyProgress(eps);
+    }
+
+    if(anime->getMyRewatch() != rewatch) {
+      data.insert("rewatched",        QString::number(rewatch));
+      anime->setMyRewatch(rewatch);
+    }
+
+    if(anime->getMyNotes() != notes) {
+      data.insert("notes",            notes);
+      anime->setMyNotes(notes);
+    }
+
+
+    API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
   }
 
   done(QDialog::Accepted);

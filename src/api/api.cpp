@@ -40,6 +40,10 @@ API::~API() {
 
 int API::verify() {
   if(!m_API->hasAuthorizationCode()) {
+    /*
+     * TODO: Use a built in webview The cost of extra libraries is irrelevant
+     *       since fervor requires them for displaying release notes
+     */
     bool ok;
     QDesktopServices::openUrl(QUrl(appAuthURL));
     QString message = "Authorization pin:                                                                                    ";

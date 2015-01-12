@@ -17,7 +17,11 @@ public:
     DefaultRuleType,
     AniListExpires,
     AniListRefresh,
-    AniListAccess
+    AniListAccess,
+    AutoUpdateDelay,
+    StartOnBoot,
+    MinimizeToTray,
+    CloseToTray
   };
 
 private:

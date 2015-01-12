@@ -7,11 +7,10 @@
 
 #include <QPainter>
 
-AiringAnime::AiringAnime(QWidget *parent, int scoreType, AniListAPI *api) : QWidget(parent), ui(new Ui::AiringAnime) {
+AiringAnime::AiringAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(new Ui::AiringAnime) {
   ui->setupUi(this);
 
   this->scoreType = scoreType;
-  this->api = api;
 
   text = new ScrollText(this);
   ui->verticalLayout->addWidget(text);
@@ -32,7 +31,7 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
 }
 
 void AiringAnime::mouseDoubleClickEvent(QMouseEvent *event) {
-  AnimePanel *ap = new AnimePanel(this, anime, scoreType, api);
+  AnimePanel *ap = new AnimePanel(this, anime, scoreType);
   ap->show();
   event->accept();
 }

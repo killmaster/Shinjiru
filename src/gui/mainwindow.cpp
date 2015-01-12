@@ -101,6 +101,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->chkHideUnknown,  SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));
   connect(ui->refreshButton,   SIGNAL(clicked()),                          SLOT(refreshTorrentListing()));
 
+  connect(ui->actionEAR, SIGNAL(toggled(bool)), SLOT(applyEAR()));
+  connect(ui->torrentRefreshIntervalLineEdit, SIGNAL(textEdited(QString)), SLOT(settingsChanged()));
+  connect(ui->autoRecognitionCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
+  connect(ui->defaultTorrentRuleModeComboBox, SIGNAL(currentTextChanged(QString)), SLOT(settingsChanged()));
+  connect(ui->startOnBootCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
+  connect(ui->minimizeToTrayCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
+  connect(ui->closeToTrayCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
+  connect(ui->applyButton, SIGNAL(clicked()), SLOT(applySettings()));
+
+  connect(ui->defaultButton, SIGNAL(clicked()), SLOT(defaultSettings()));
+
   this->show();
   createActions();
   initTray();
@@ -133,20 +144,20 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  if(trayIcon->isVisible()) {
+  if(trayIcon->isVisible() && close_to_tray) {
     hide();
     event->ignore();
   }
 }
 
 void MainWindow::changeEvent(QEvent *event) {
-    if(event->type() == QEvent::WindowStateChange) {
-        if(isMinimized())
-            this->hide();
-            event->ignore();
+  if(event->type() == QEvent::WindowStateChange) {
+    if(isMinimized() && minimize_to_tray) {
+      this->hide();
+      event->ignore();
     }
+  }
 }
-
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
   event->accept();
@@ -194,6 +205,19 @@ void MainWindow::showAnimePanel(int row, int column) {
   if(anime->needsLoad() || anime->needsCover()) {
     user->loadAnimeData(anime, true);
   }
+
+  connect(ap, &AnimePanel::destroyed, [&, source, anime, row]() {
+    static_cast<ProgressTableWidgetItem *>(source->item(row, 1))->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
+    QTableWidgetItem *scoreData = source->item(row, 2);
+    if(user->scoreType() == 0 || user->scoreType() == 1) {
+      scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
+    } else if(user->scoreType() == 4) {
+      scoreData->setData(Qt::DisplayRole, anime->getMyScore().toDouble());
+    } else {
+      scoreData->setText(anime->getMyScore());
+    }
+    updateStatistics();
+  });
 
   ap->show();
 }
@@ -243,8 +267,8 @@ void MainWindow::watch(QString title) {
       return;
     }
 
-    this->watch_timer->start(1000 * 60 * 2); // Start timer to expire after 2 minutes
-    this->trayIcon->showMessage("Shinjiru", "Updating " + cw_anime->getTitle() + " to episode " + cw_episode + " in 2 minutes");
+    this->watch_timer->start(1000 * auto_update_delay);
+    this->trayIcon->showMessage("Shinjiru", "Updating " + cw_anime->getTitle() + " to episode " + cw_episode + " in " + auto_update_delay + " seconds");
   }
 }
 

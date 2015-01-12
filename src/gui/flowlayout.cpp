@@ -132,6 +132,7 @@ int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
   if(pm == QStyle::PM_LayoutHorizontalSpacing && itemList.count() > 0 && this->geometry().width() > 0) {
     int ourWidth = this->geometry().width();
     int oneContentWidth = itemList.at(0)->widget()->width();
+    if (oneContentWidth == 0) return 0;
     int numberOfContent = ourWidth / oneContentWidth - 1;
 
     return (ourWidth - (oneContentWidth * numberOfContent)) / numberOfContent;

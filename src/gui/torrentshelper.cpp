@@ -35,6 +35,7 @@ void MainWindow::refreshTorrentListing() {
     try {
       result = anitomy->parse(titles.at(i));
     } catch(std::regex_error& e) {
+      Q_UNUSED(e);
       qDebug() << "Error parsing: " << titles.at(i);
       offset++;
       continue;

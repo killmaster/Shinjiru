@@ -9,6 +9,8 @@ DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 CONFIG += c++11
 CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
+LIBS += -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" -lUser32
+
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
 include(lib/fervor/fervor.pri)
