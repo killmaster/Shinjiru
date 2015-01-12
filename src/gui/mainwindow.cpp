@@ -161,12 +161,14 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   font.setPointSize(14);
   p.setFont(font);
 
+  p.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
   if(user != nullptr) {
-    p.drawText(0, 30, width() - 60, 40, Qt::AlignRight, user->displayName());
-    p.drawPixmap(width() - 55, 25, 48, 48, user->userImage());
+    p.drawText(0, 30, width() - 65, 40, Qt::AlignRight, user->displayName());
+    p.drawPixmap(width() - 60, 24, 50, 50, user->userImage());
   }
 
-  p.drawRect(width() - 55, 25, 48, 48);
+  p.drawRect(width() - 60, 24, 50, 50);
 
   event->accept();
 }
