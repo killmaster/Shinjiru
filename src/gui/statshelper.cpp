@@ -53,8 +53,6 @@ void MainWindow::updateStatistics() {
       dropped++;
     else if(status == "plan to watch")
       plan_to_watch++;
-    else
-        qDebug() << status;
   }
 
   if(scores.count() > 0) {

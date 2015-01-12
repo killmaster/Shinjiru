@@ -137,10 +137,8 @@ Anime *User::getAnimeByTitle(QString title) {
 }
 
 Anime *User::getAnimeByData(QString title, QString episodes, QString score, QString type) {
-  qDebug() << title << episodes << score << type;
   for(Anime *anime : anime_list) {
     if(anime->getEnglishTitle() == title || anime->getJapaneseTitle() == title ||  anime->getRomajiTitle() == title) {
-      qDebug() << anime->getTitle() << QString(anime->getMyProgress() + " / " + anime->getEpisodeCount()) << anime->getMyScore();
       if(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()) == episodes) {
         if(anime->getMyScore() == score) {
           if(anime->getType() == type) {

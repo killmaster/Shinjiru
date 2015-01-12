@@ -1,7 +1,5 @@
 #include "windowwatcher.h"
 
-#include <QDebug>
-
 WindowWatcher::WindowWatcher(QObject *parent) : QObject(parent) {
   timer = new QTimer(this);
 
