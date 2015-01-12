@@ -12,6 +12,7 @@ CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
 include(lib/fervor/fervor.pri)
+include(src/lib/crashhandler/crash_handler.pri)
 
 SOURCES   += \
     lib/anitomy/anitomy/anitomy.cpp \

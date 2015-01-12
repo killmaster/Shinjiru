@@ -1,7 +1,9 @@
 #include "gui/mainwindow.h"
 #include "app.h"
 #include "fvupdater.h"
+#include "lib/crashhandler/crash_handler.h"
 
+#include <QStandardPaths>
 #include <QApplication>
 #include <QCoreApplication>
 
@@ -16,6 +18,7 @@ int main(int argc, char *argv[]) {
   FvUpdater::sharedUpdater()->SetFeedURL(appUpdateFeed);
   FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
 
+  Breakpad::CrashHandler::instance()->Init(qApp->applicationDirPath());
 
   MainWindow w;
   w.show();
