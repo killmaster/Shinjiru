@@ -42,8 +42,8 @@ int API::verify() {
   if(!m_API->hasAuthorizationCode()) {
     bool ok;
     QDesktopServices::openUrl(QUrl(appAuthURL));
-    QString message = "Authorization code:                                                                                    ";
-    QString text = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Authorization Code Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
+    QString message = "Authorization pin:                                                                                    ";
+    QString text = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
 
     if (ok && !text.isEmpty()) {
       m_API->setAuthorizationCode(text);
