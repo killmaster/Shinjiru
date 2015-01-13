@@ -39,7 +39,7 @@ void AiringAnime::mouseDoubleClickEvent(QMouseEvent *event) {
 void AiringAnime::setAnime(Anime *anime) {
   this->anime = anime;
 
-  text->setText(anime->getRomajiTitle());
+  text->setText(anime->getTitle());
 
   if(anime->needsLoad()) {
     connect(anime, SIGNAL(new_image()), SLOT(repaint()));
