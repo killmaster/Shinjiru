@@ -125,6 +125,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
       progress_bar->setFormat("Access granted");
       loadUser();
       reloadRules();
+
       event_timer->start(1000);
     });
 
@@ -160,8 +161,9 @@ void MainWindow::changeEvent(QEvent *event) {
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
   event->accept();
-
-  layout->setContentsMargins(layout->horizontalSpacing()/2, 0, 0, 0);
+  int width = layout->geometry().width();
+  int cwidth = layout->contentsWidth();
+  layout->setContentsMargins((width-cwidth)/2 - 1 < 0 ? 0 : (width-cwidth)/2 - 1, 0, 0, 0);
 }
 
 void MainWindow::paintEvent(QPaintEvent *event) {

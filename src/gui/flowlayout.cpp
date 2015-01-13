@@ -65,6 +65,16 @@ bool FlowLayout::hasHeightForWidth() const {
   return true;
 }
 
+int FlowLayout::contentsWidth() {
+  if(itemList.count() == 0) return 0;
+
+  int cwidth = itemList.at(0)->widget()->width();
+  int spacing = this->smartSpacing(QStyle::PM_LayoutHorizontalSpacing);
+  int count = geometry().width() / cwidth - 1;
+
+  return cwidth * count + spacing * (count - 1);
+}
+
 int FlowLayout::heightForWidth(int width) const {
   int height = doLayout(QRect(0, 0, width, 0), true);
   return height;
@@ -133,7 +143,9 @@ int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
     int ourWidth = this->geometry().width();
     int oneContentWidth = itemList.at(0)->widget()->width();
     if (oneContentWidth == 0) return 0;
-    int numberOfContent = ourWidth / oneContentWidth - 1;
+    int numberOfContent = ourWidth / oneContentWidth;
+
+    if(numberOfContent == 0) numberOfContent = 1;
 
     return (ourWidth - (oneContentWidth * numberOfContent)) / numberOfContent;
   }

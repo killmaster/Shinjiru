@@ -64,7 +64,11 @@ void MainWindow::userListLoaded() {
       }
 
       if(anime->getAiringStatus() == "currently airing") {
-        ui->scrollArea->widget()->layout()->addWidget(addAiring(anime));
+        layout->addWidget(addAiring(anime));
+
+        int width = layout->geometry().width();
+        int cwidth = layout->contentsWidth();
+        layout->setContentsMargins((width-cwidth)/2 - 1 < 0 ? 0 : (width-cwidth)/2 - 1, 0, 0, 0);
       }
 
       progressData->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
@@ -133,5 +137,6 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
 
   AiringAnime *newPanel = new AiringAnime(this, User::sharedUser()->scoreType());
   newPanel->setAnime(anime);
+
   return newPanel;
 }
