@@ -31,12 +31,12 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
   } else if (score_type == 2) {
     QComboBox *score_container = new QComboBox(this);
 
-    score_container->addItem("0 Stars");
-    score_container->addItem("1 Star");
-    score_container->addItem("2 Stars");
-    score_container->addItem("3 Stars");
-    score_container->addItem("4 Stars");
-    score_container->addItem("5 Stars");
+    score_container->addItem("0 ★");
+    score_container->addItem("1 ★");
+    score_container->addItem("2 ★");
+    score_container->addItem("3 ★");
+    score_container->addItem("4 ★");
+    score_container->addItem("5 ★");
 
     score_container->setCurrentText(score);
 
