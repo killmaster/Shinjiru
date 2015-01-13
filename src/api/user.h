@@ -3,6 +3,7 @@
 
 #include <QPixmap>
 #include <QMap>
+#include <QVariantList>
 
 #include <anilistapi.h>
 
@@ -24,6 +25,8 @@ public slots:
   QPixmap userImage()                                const { return user_image; }
   QMap<QString, QMap<QString, Anime*>> getUserList() const { return user_lists; }
   int animeTime()                                    const { return anime_time; }
+  QVariantList customLists()                         const { return custom_lists; }
+
   Anime *getAnimeByTitle(QString title);
   Anime *getAnimeByData(QString title, QString episodes, QString score, QString type);
   QList<Anime *> getAnimeList() const { return anime_list; }
@@ -35,6 +38,7 @@ public slots:
   void setUserImage(const QByteArray &data)        { this->user_image.loadFromData(data); emit new_image();}
   void setTitleLanguage(const QString lang)        { this->title_language = "title_" + lang; }
   void setAnimeTime(const int anime_time)          { this->anime_time = anime_time; }
+  void setCustomLists(const QVariantList list)     { this->custom_lists = list; }
 
   void loadUserList();
   void loadAnimeData(Anime *, bool);
@@ -52,6 +56,7 @@ private:
   QList<Anime*> anime_list;
   QString title_language;
   int anime_time;
+  QVariantList custom_lists;
 
   FileDownloader *user_image_control;
 

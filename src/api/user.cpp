@@ -11,11 +11,12 @@ User::User(QObject *parent) : QObject(parent) {
 
   user_image_control = nullptr;
 
-  this->setDisplayName    (result.value("display_name")  .toString());
-  this->setScoreType      (result.value("score_type")    .toInt());
-  this->setProfileImageURL(result.value("image_url_med") .toString());
-  this->setTitleLanguage  (result.value("title_language").toString());
-  this->setAnimeTime      (result.value("anime_time")    .toInt());
+  this->setDisplayName    (result.value("display_name")     .toString());
+  this->setScoreType      (result.value("score_type")       .toInt());
+  this->setProfileImageURL(result.value("image_url_med")    .toString());
+  this->setTitleLanguage  (result.value("title_language")   .toString());
+  this->setAnimeTime      (result.value("anime_time")       .toInt());
+  this->setCustomLists    (result.value("custom_list_anime").toArray().toVariantList());
 
   this->loadProfileImage();
 }
@@ -62,9 +63,12 @@ void User::setScoreType(const int &score_type) {
 
 void User::loadUserList() {
   QJsonObject user_list_data = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(this->displayName())).object();
+  QJsonObject custom_list_data = user_list_data.value("custom_lists").toObject();
   user_list_data = user_list_data.value("lists").toObject();
 
   anime_list.clear();
+
+  QList<QMap<QString, Anime*>> custom;
 
   QStringList list_names = user_list_data.keys();
 
@@ -94,8 +98,8 @@ void User::loadUserList() {
 
       QJsonArray synonyms = inner_anime.value("synonyms").toArray();
 
-      for(int i = 0; i < synonyms.count(); i++) {
-        anime_data->addSynonym(synonyms.at(i).toString());
+      for(int j = 0; j < synonyms.count(); j++) {
+        anime_data->addSynonym(synonyms.at(j).toString());
       }
 
       if(scoreType() == 0 || scoreType() == 1) {
@@ -113,10 +117,68 @@ void User::loadUserList() {
       }
 
       list.insert(anime_data->getID(), anime_data);
+
       anime_list.append(anime_data);
     }
 
     user_lists.insert(list_names.at(i), list);
+  }
+
+  QStringList custom_keys = custom_list_data.keys();
+
+  for(int i = 0; i < custom_keys.length(); i++) {
+    QMap<QString, Anime *> list;
+    for(QJsonValue ary : custom_list_data.value(custom_keys.at(i)).toArray()) {
+      Anime *anime_data = new Anime();
+      QJsonObject anime = ary.toObject();
+      QJsonObject inner_anime = anime.value("anime").toObject();
+
+      anime_data->setID(     QString::number(inner_anime.value("id")              .toInt()));
+      anime_data->setRomajiTitle(            inner_anime.value("title_romaji")    .toString());
+      anime_data->setJapaneseTitle(          inner_anime.value("title_japanese")  .toString());
+      anime_data->setEnglishTitle(           inner_anime.value("title_english")   .toString());
+      anime_data->setType(                   inner_anime.value("type")            .toString());
+      anime_data->setAiringStatus(           inner_anime.value("airing_status")   .toString());
+      anime_data->setEpisodeCount(           inner_anime.value("total_episodes")  .toInt());
+      anime_data->setAverageScore(           inner_anime.value("average_score")   .toString());
+      anime_data->setCoverURL(          QUrl(inner_anime.value("image_url_lge")   .toString()));
+      anime_data->setTitle(                  inner_anime.value(title_language)    .toString());
+
+      anime_data->setMyProgress(             anime      .value("episodes_watched").toInt(0));
+      anime_data->setMyNotes(                anime      .value("notes")           .toString());
+      anime_data->setMyRewatch(              anime      .value("rewatched")       .toInt(0));
+      anime_data->setMyStatus(               anime      .value("list_status")     .toString());
+
+      QJsonArray synonyms = inner_anime.value("synonyms").toArray();
+
+      for(int j = 0; j < synonyms.count(); j++) {
+        anime_data->addSynonym(synonyms.at(j).toString());
+      }
+
+      if(scoreType() == 0 || scoreType() == 1) {
+        anime_data->setMyScore(QString::number(anime    .value("score")           .toInt(0)));
+      } else if(scoreType() == 4) {
+        anime_data->setMyScore(QString::number(anime    .value("score")           .toDouble(0.0)));
+      } else {
+        anime_data->setMyScore(                anime    .value("score")           .toString(""));
+      }
+
+
+      if(user_lists.value(anime_data->getMyStatus()).contains(anime_data->getID())) {
+        Anime *old = user_lists.value(anime_data->getMyStatus()).value(anime_data->getID());
+        delete anime_data;
+        anime_data = old;
+      }
+
+      list.insert(anime_data->getID(), anime_data);
+      anime_list.append(anime_data);
+    }
+    custom.append(list);
+  }
+
+  for(int k = 0; k < customLists().length(); k++) {
+    if(k >= custom.length()) break;
+    user_lists.insert(this->customLists().at(k).toString(), custom.at(k));
   }
 }
 

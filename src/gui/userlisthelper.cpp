@@ -42,6 +42,7 @@ void MainWindow::userListLoaded() {
     space_per_list = remaining_space / lists.count();
 
   for(QString key: lists.keys()) {
+    if(key == "") continue;
     current_list++;
     QTableWidget *table = getListTable();
 
