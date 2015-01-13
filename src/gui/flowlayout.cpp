@@ -68,9 +68,9 @@ bool FlowLayout::hasHeightForWidth() const {
 int FlowLayout::contentsWidth() {
   if(itemList.count() == 0) return 0;
 
-  int cwidth = itemList.at(0)->widget()->width();
-  int spacing = this->smartSpacing(QStyle::PM_LayoutHorizontalSpacing);
-  int count = geometry().width() / cwidth - 1;
+  int cwidth = itemList.at(0)->widget()->width();                         //170
+  int spacing = this->smartSpacing(QStyle::PM_LayoutHorizontalSpacing);   //25
+  int count = geometry().width() / (cwidth + spacing/2);
 
   return cwidth * count + spacing * (count - 1);
 }
@@ -140,15 +140,19 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const {
 
 int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
   if(pm == QStyle::PM_LayoutHorizontalSpacing && itemList.count() > 0 && this->geometry().width() > 0) {
-    int ourWidth = this->geometry().width();
-    int oneContentWidth = itemList.at(0)->widget()->width();
+    /*int ourWidth = this->geometry().width();
+    int oneContentWidth = itemList.at(0)->widget()->width() + 10;
     if (oneContentWidth == 0) return 0;
     int numberOfContent = ourWidth / oneContentWidth;
 
     if(numberOfContent == 0) numberOfContent = 1;
 
-    return (ourWidth - (oneContentWidth * numberOfContent)) / numberOfContent;
+    return (ourWidth - (oneContentWidth * numberOfContent)) / numberOfContent;*/
+
+
+    return 25;
   }
+
 
   QObject *parent = this->parent();
   if (!parent)

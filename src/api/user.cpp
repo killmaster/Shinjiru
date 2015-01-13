@@ -176,6 +176,10 @@ void User::loadUserList() {
         anime_data->setMyScore(QString::number(anime    .value("score")           .toInt(0)));
       } else if(scoreType() == 4) {
         anime_data->setMyScore(QString::number(anime    .value("score")           .toDouble(0.0)));
+      } else if(scoreType() == 2) {
+        int scr = anime.value("score").toInt(0);
+        QString my_score = scr == 1 ? "1 star" : scr + " stars";
+        anime_data->setMyScore(my_score);
       } else {
         anime_data->setMyScore(                anime    .value("score")           .toString(""));
       }

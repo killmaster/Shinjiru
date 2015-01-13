@@ -8,6 +8,7 @@
 
 
 #include "../lib/filedownloader.h"
+#include "../gui/apiwebview.h"
 
 API* API::m_Instance = 0;
 
@@ -40,20 +41,14 @@ API::~API() {
 
 int API::verify() {
   if(!m_API->hasAuthorizationCode()) {
-    /*
-     * TODO: Use a built in webview The cost of extra libraries is irrelevant
-     *       since fervor requires them for displaying release notes
-     */
-    bool ok;
-    QDesktopServices::openUrl(QUrl(appAuthURL));
-    QString message = "Authorization pin:                                                                                    ";
-    QString text = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
+    APIWebView *wv = new APIWebView;
+    wv->show();
 
-    if (ok && !text.isEmpty()) {
-      m_API->setAuthorizationCode(text);
-    } else {
-      return AniListAPI::NO_AUTHORIZATION;
-    }
+    QEventLoop waiter;
+    connect(wv, SIGNAL(accepted()), &waiter, SLOT(quit()));
+    waiter.exec();
+
+    delete wv;
   }
 
   return m_API->init();

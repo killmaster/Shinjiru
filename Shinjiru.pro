@@ -48,7 +48,8 @@ SOURCES   += \
     src/lib/skinmanager.cpp \
     src/gui/about.cpp \
     src/gui/settingshelper.cpp \
-    src/gui/statshelper.cpp
+    src/gui/statshelper.cpp \
+    src/gui/apiwebview.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -75,13 +76,15 @@ HEADERS   += \
     src/lib/windowwatcher.h \
     src/gui/rulewizard.h \
     src/lib/skinmanager.h \
-    src/gui/about.h
+    src/gui/about.h \
+    src/gui/apiwebview.h
 
 FORMS     += \
     src/gui/airinganime.ui \
     src/gui/animepanel.ui \
     src/gui/mainwindow.ui \
     src/gui/rulewizard.ui \
-    src/gui/about.ui
+    src/gui/about.ui \
+    src/gui/apiwebview.ui
 
 RESOURCES += res/res.qrc

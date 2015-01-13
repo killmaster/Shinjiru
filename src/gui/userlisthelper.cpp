@@ -68,7 +68,7 @@ void MainWindow::userListLoaded() {
 
         int width = layout->geometry().width();
         int cwidth = layout->contentsWidth();
-        layout->setContentsMargins((width-cwidth)/2 - 1 < 0 ? 0 : (width-cwidth)/2 - 1, 0, 0, 0);
+        layout->setContentsMargins((width-cwidth)/2 - 1 < 0 ? (width-cwidth)/2 + 85 : (width-cwidth)/2 - 1, 0, 0, 0);
       }
 
       progressData->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
