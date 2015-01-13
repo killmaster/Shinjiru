@@ -27,6 +27,7 @@
 #include "../anitomy/anitomywrapper.h"
 #include "../lib/windowwatcher.h"
 #include "progresstablewidgetitem.h"
+#include "facetablewidgetitem.h"
 
 namespace Ui {
   class MainWindow;

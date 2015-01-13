@@ -77,7 +77,8 @@ HEADERS   += \
     src/gui/rulewizard.h \
     src/lib/skinmanager.h \
     src/gui/about.h \
-    src/gui/apiwebview.h
+    src/gui/apiwebview.h \
+    src/gui/facetablewidgetitem.h
 
 FORMS     += \
     src/gui/airinganime.ui \

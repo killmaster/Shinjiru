@@ -217,6 +217,7 @@ void MainWindow::showAnimePanel(int row, int column) {
     } else {
       scoreData->setText(anime->getMyScore());
     }
+    source->clearSelection();
     updateStatistics();
   });
 

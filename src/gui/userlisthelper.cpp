@@ -53,13 +53,17 @@ void MainWindow::userListLoaded() {
       QTableWidgetItem        *titleData    = new QTableWidgetItem(anime->getTitle());
       ProgressTableWidgetItem *progressData = new ProgressTableWidgetItem;
       QTableWidgetItem        *scoreData    = new QTableWidgetItem();
+      FaceTableWidgetItem     *faceData     = new FaceTableWidgetItem;
       QTableWidgetItem        *typeData     = new QTableWidgetItem(anime->getType());
 
       if(User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
         scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
       } else if(User::sharedUser()->scoreType() == 4) {
         scoreData->setData(Qt::DisplayRole, anime->getMyScore().toDouble());
-      } else {
+      } else if(User::sharedUser()->scoreType() == 3) {
+        faceData->setText(anime->getMyScore());
+      }
+      else {
         scoreData->setText(anime->getMyScore());
       }
 
@@ -78,7 +82,10 @@ void MainWindow::userListLoaded() {
 
       table->setItem(row, 0, titleData);
       table->setItem(row, 1, progressData);
-      table->setItem(row, 2, scoreData);
+      if(User::sharedUser()->scoreType() == 3)
+        table->setItem(row, 2, faceData);
+      else
+        table->setItem(row, 2, scoreData);
       table->setItem(row, 3, typeData);
 
       double current_progress = (double)row / list.count() * space_per_list;
