@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   window_icon.loadFromData(icon_data);
   qApp->setWindowIcon(QIcon(window_icon));
 
-  user                 = nullptr;
   awesome              = new QtAwesome(qApp);
   settings             = new Settings(0);
   window_watcher       = new WindowWatcher(0);
@@ -35,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   uptime_timer         = new QElapsedTimer;
   progress_bar         = new QProgressBar(ui->statusBar);
   torrent_refresh_time = 0;
+  hasUser              = false;
 
   uptime_timer->start();
   watch_timer->setSingleShot(true);
@@ -117,8 +117,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   initTray();
   trayIcon->show();
 
-  API *instance = API::sharedAPI();
-  int result = instance->verify();
+  int result = API::sharedAPI()->verify();
 
   if(result == AniListAPI::OK) {
     connect(API::sharedAPI()->sharedAniListAPI(), &AniListAPI::access_granted, [&]() {
@@ -174,9 +173,9 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 
   p.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
-  if(user != nullptr) {
-    p.drawText(0, 30, width() - 65, 40, Qt::AlignRight, user->displayName());
-    p.drawPixmap(width() - 60, 24, 50, 50, user->userImage());
+  if(hasUser) {
+    p.drawText(0, 30, width() - 65, 40, Qt::AlignRight, User::sharedUser()->displayName());
+    p.drawPixmap(width() - 60, 24, 50, 50, User::sharedUser()->userImage());
   }
 
   p.drawRect(width() - 60, 24, 50, 50);
@@ -198,20 +197,20 @@ void MainWindow::showAnimePanel(int row, int column) {
   QString episodes = source->item(row, 1)->text();
   QString score = source->item(row, 2)->text();
   QString type = source->item(row, 3)->text();
-  Anime *anime = user->getAnimeByData(title, episodes, score, type);
+  Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
 
-  AnimePanel *ap = new AnimePanel(this, anime, user->scoreType());
+  AnimePanel *ap = new AnimePanel(this, anime, User::sharedUser()->scoreType());
 
   if(anime->needsLoad() || anime->needsCover()) {
-    user->loadAnimeData(anime, true);
+    User::sharedUser()->loadAnimeData(anime, true);
   }
 
   connect(ap, &AnimePanel::destroyed, [&, source, anime, row]() {
     static_cast<ProgressTableWidgetItem *>(source->item(row, 1))->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
     QTableWidgetItem *scoreData = source->item(row, 2);
-    if(user->scoreType() == 0 || user->scoreType() == 1) {
+    if(User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
       scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
-    } else if(user->scoreType() == 4) {
+    } else if(User::sharedUser()->scoreType() == 4) {
       scoreData->setData(Qt::DisplayRole, anime->getMyScore().toDouble());
     } else {
       scoreData->setText(anime->getMyScore());
@@ -223,8 +222,8 @@ void MainWindow::showAnimePanel(int row, int column) {
 }
 
 void MainWindow::viewDashboard() { QDesktopServices::openUrl(QString("http://anilist.co/home")); }
-void MainWindow::viewProfile()   { QDesktopServices::openUrl(QString("http://anilist.co/user/") + user->displayName()); }
-void MainWindow::viewAnimeList() { QDesktopServices::openUrl(QString("http://anilist.co/animelist/") + user->displayName()); }
+void MainWindow::viewProfile()   { QDesktopServices::openUrl(QString("http://anilist.co/user/") + User::sharedUser()->displayName()); }
+void MainWindow::viewAnimeList() { QDesktopServices::openUrl(QString("http://anilist.co/animelist/") + User::sharedUser()->displayName()); }
 
 void MainWindow::toggleAnimeRecognition(bool checked) {
   if(checked) {
@@ -252,11 +251,11 @@ void MainWindow::watch(QString title) {
         return;
     }
 
-    cw_anime = this->user->getAnimeByTitle(cw_title);
+    cw_anime = User::sharedUser()->getAnimeByTitle(cw_title);
 
     if(cw_anime->getTitle().isEmpty()) {
       QJsonObject results = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_ANIME_SEARCH(cw_title)).array().at(0).toObject();
-      cw_anime = user->getAnimeByTitle(results.value("title_romaji").toString());
+      cw_anime = User::sharedUser()->getAnimeByTitle(results.value("title_romaji").toString());
     }
 
     if(cw_anime->getMyProgress() >= cw_episode.toInt()) {

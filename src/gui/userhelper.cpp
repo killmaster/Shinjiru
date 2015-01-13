@@ -7,18 +7,18 @@ void MainWindow::loadUser() {
   progress_bar->setFormat("Loading User");
   progress_bar->setValue(15);
   user_future = QtConcurrent::run([&]() {
-    user = new User();
-    return user;
+    User::sharedUser();
   });
 
   user_future_watcher.setFuture(user_future);
 }
 
 void MainWindow::userLoaded() {
+  hasUser = true;
   progress_bar->setValue(20);
   progress_bar->setFormat("User Loaded");
 
-  connect(user, SIGNAL(new_image()), SLOT(repaint()));
+  connect(User::sharedUser(), SIGNAL(new_image()), SLOT(repaint()));
   repaint();
 
   loadUserList();

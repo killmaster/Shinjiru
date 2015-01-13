@@ -49,17 +49,18 @@ private:
   Ui::MainWindow *ui;
   QtAwesome *awesome;
   Settings *settings;
-  User *user;
   WindowWatcher *window_watcher;
   AnitomyWrapper *anitomy;
 
+  bool hasUser;
+
   FlowLayout *layout;
 
-  QFuture<User *> user_future;
-  QFutureWatcher<User *> user_future_watcher;
+  QFuture<void> user_future;
+  QFutureWatcher<void> user_future_watcher;
 
-  QFuture<User *> user_list_future;
-  QFutureWatcher<User *> user_list_future_watcher;
+  QFuture<void> user_list_future;
+  QFutureWatcher<void> user_list_future_watcher;
 
   QTimer *event_timer;
   QProgressBar *progress_bar;

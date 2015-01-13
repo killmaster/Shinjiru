@@ -4,7 +4,7 @@
 void MainWindow::updateStatistics() {
   progress_bar->setFormat("Updating statistics");
   progress_bar->reset();
-  QList<Anime*> animes = this->user->getAnimeList();
+  QList<Anime*> animes = User::sharedUser()->getAnimeList();
 
   progress_bar->setMaximum(animes.count());
 
@@ -31,7 +31,7 @@ void MainWindow::updateStatistics() {
     QString status = anime->getMyStatus();
     QString s_score = anime->getMyScore();
 
-    if(user->scoreType() != 3) {
+    if(User::sharedUser()->scoreType() != 3) {
       int score = 0;
       s_score = s_score.replace(" Star", "");
       s_score = s_score.replace("-", "0");
@@ -85,7 +85,7 @@ void MainWindow::updateStatistics() {
 
   int total = watching + completed + on_hold + dropped + plan_to_watch;
 
-  int minutes_watched = user->animeTime();
+  int minutes_watched = User::sharedUser()->animeTime();
   int hours_watched = (minutes_watched / 60) % 24;
   int days_watched = (minutes_watched / 60.0) / 24;
   minutes_watched %= 60;

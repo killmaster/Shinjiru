@@ -6,7 +6,24 @@
 #include <QJsonArray>
 #include <QEventLoop>
 
-User::User(QObject *parent) : QObject(parent) {
+User* User::m_Instance = 0;
+
+User* User::sharedUser() {
+  static QMutex mutex;
+  if(! m_Instance) {
+    mutex.lock();
+
+    if(!m_Instance) {
+      m_Instance = new User;
+    }
+
+    mutex.unlock();
+  }
+
+  return m_Instance;
+}
+
+User::User() : QObject(0) {
   QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER).object();
 
   user_image_control = nullptr;

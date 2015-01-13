@@ -15,8 +15,7 @@ class User : public QObject{
   Q_OBJECT
 
 public:
-  User( QObject *parent = 0);
-  ~User();
+  static User *sharedUser();
 
 public slots:
   QString displayName()                              const { return display_name; }
@@ -47,6 +46,13 @@ signals:
   void new_image();
 
 private:
+  User();
+  ~User();
+  User(const User&);
+  User& operator=(const User&);
+
+  static User* m_Instance;
+
   QString display_name;
   int score_type;
   QString profile_image_url;

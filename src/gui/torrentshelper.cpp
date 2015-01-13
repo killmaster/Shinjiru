@@ -143,7 +143,7 @@ void MainWindow::filterTorrents(QString text, bool checked) {
 
     if(checked) {
       QString f_title = items.at(i)->text();
-      Anime *filter_anime = user->getAnimeByTitle(f_title);
+      Anime *filter_anime = User::sharedUser()->getAnimeByTitle(f_title);
       if(filter_anime->getAiringStatus() != "currently airing") show = false;
       if(filter_anime->getMyStatus() != "watching" && filter_anime->getMyStatus() != "plan to watch") show = false;
     }

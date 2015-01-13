@@ -9,8 +9,7 @@ void MainWindow::loadUserList() {
   progress_bar->setFormat("Downloading User List");
 
   user_list_future = QtConcurrent::run([&]() {
-    user->loadUserList();
-    return user;
+    User::sharedUser()->loadUserList();
   });
 
   user_list_future_watcher.setFuture(user_list_future);
@@ -36,7 +35,7 @@ void MainWindow::userListLoaded() {
 
   ui->listTabs->clear();
 
-  QMap<QString, QMap<QString, Anime*>> lists = user->getUserList();
+  QMap<QString, QMap<QString, Anime*>> lists = User::sharedUser()->getUserList();
 
   if(lists.count() > 0)
     space_per_list = remaining_space / lists.count();
@@ -56,9 +55,9 @@ void MainWindow::userListLoaded() {
       QTableWidgetItem        *scoreData    = new QTableWidgetItem();
       QTableWidgetItem        *typeData     = new QTableWidgetItem(anime->getType());
 
-      if(user->scoreType() == 0 || user->scoreType() == 1) {
+      if(User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
         scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
-      } else if(user->scoreType() == 4) {
+      } else if(User::sharedUser()->scoreType() == 4) {
         scoreData->setData(Qt::DisplayRole, anime->getMyScore().toDouble());
       } else {
         scoreData->setText(anime->getMyScore());
@@ -129,10 +128,10 @@ QTableWidget *MainWindow::getListTable() {
 
 AiringAnime *MainWindow::addAiring(Anime *anime) {
   if(anime->needsLoad() || anime->needsCover()) {
-    user->loadAnimeData(anime, true);
+    User::sharedUser()->loadAnimeData(anime, true);
   }
 
-  AiringAnime *newPanel = new AiringAnime(this, this->user->scoreType());
+  AiringAnime *newPanel = new AiringAnime(this, User::sharedUser()->scoreType());
   newPanel->setAnime(anime);
   return newPanel;
 }
