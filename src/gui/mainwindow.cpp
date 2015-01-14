@@ -274,7 +274,7 @@ void MainWindow::watch(QString title) {
     }
 
     this->watch_timer->start(1000 * auto_update_delay);
-    this->trayIcon->showMessage("Shinjiru", "Updating " + cw_anime->getTitle() + " to episode " + cw_episode + " in " + auto_update_delay + " seconds");
+    this->trayIcon->showMessage("Shinjiru", "Updating " + cw_anime->getTitle() + " to episode " + cw_episode + " in " + QString::number(auto_update_delay) + " seconds");
   }
 }
 
