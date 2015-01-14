@@ -1,13 +1,12 @@
 QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 0.2.0
+VERSION = 0.3.0
 TEMPLATE = app
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 CONFIG += c++11
-CONFIG(release, debug|release):DEFINES += QT_NO_DEBUG_OUTPUT
 
 LIBS += -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" -lUser32
 
@@ -89,3 +88,5 @@ FORMS     += \
     src/gui/apiwebview.ui
 
 RESOURCES += res/res.qrc
+
+RC_FILE = Shinjiru.rc
