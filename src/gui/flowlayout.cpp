@@ -68,11 +68,26 @@ bool FlowLayout::hasHeightForWidth() const {
 int FlowLayout::contentsWidth() {
   if(itemList.count() == 0) return 0;
 
-  int cwidth = itemList.at(0)->widget()->width();                         //170
-  int spacing = this->smartSpacing(QStyle::PM_LayoutHorizontalSpacing);   //25
-  int count = geometry().width() / (cwidth + spacing/2);
+  int cwidth = itemList.at(0)->widget()->width();
+  int spacing = this->smartSpacing(QStyle::PM_LayoutHorizontalSpacing);
 
-  return cwidth * count + spacing * (count - 1);
+  int temp = 0;
+
+  while(true) {
+    if(temp + cwidth >= this->geometry().width()) {
+      temp -= spacing;
+      break;
+    }
+
+    temp += cwidth + spacing;
+
+    if(temp > this->geometry().width()) {
+      temp -= spacing;
+      break;
+    }
+  }
+
+  return temp;
 }
 
 int FlowLayout::heightForWidth(int width) const {

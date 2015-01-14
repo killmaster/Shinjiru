@@ -136,6 +136,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 }
 
 MainWindow::~MainWindow() {
+  trayIcon->hide();
+
+  delete trayIcon;
   delete ui;
   delete awesome;
   delete anitomy;
@@ -163,7 +166,8 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
   event->accept();
   int width = layout->geometry().width();
   int cwidth = layout->contentsWidth();
-  layout->setContentsMargins((width-cwidth)/2 - 1 < 0 ? (width-cwidth)/2 + 85 : (width-cwidth)/2 - 1, 0, 0, 0);
+
+  layout->setContentsMargins((width-cwidth)/2, 0, 0, 0);
 }
 
 void MainWindow::paintEvent(QPaintEvent *event) {
