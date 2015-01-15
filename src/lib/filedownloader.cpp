@@ -15,7 +15,7 @@ FileDownloader::~FileDownloader() {
 
 void FileDownloader::fileDownloaded(QNetworkReply* pReply) {
   if(pReply->error() != QNetworkReply::NoError)
-    QMessageBox::critical(0, "Shinjiru", "Error: " + pReply->errorString());
+    QMessageBox::critical(0, "Shinjiru", tr("Error: ") + pReply->errorString());
 
   m_DownloadedData = pReply->readAll();
   pReply->deleteLater();

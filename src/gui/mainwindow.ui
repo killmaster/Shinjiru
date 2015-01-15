@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -915,6 +915,62 @@
               </item>
               <item row="0" column="1">
                <widget class="QLabel" name="lblUptime">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="torrentsDownloadedLabel">
+                <property name="text">
+                 <string>Torrents Downloaded From Rules:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QLabel" name="torrentDownloadedLabel">
+                <property name="text">
+                 <string>Torrents Downloaded:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="0">
+               <widget class="QLabel" name="torrentsDownloadedSinceLaunchLabel">
+                <property name="text">
+                 <string>Torrents Downloaded Since Launch:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="0">
+               <widget class="QLabel" name="torrendsDownloadedFromRulesSinceLaunchLabel">
+                <property name="text">
+                 <string>Torrends Downloaded From Rules Since Launch:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLabel" name="labelRulesTotal">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="1">
+               <widget class="QLabel" name="labelDownloadedTotal">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="3" column="1">
+               <widget class="QLabel" name="labelDownloadedLaunch">
+                <property name="text">
+                 <string>0</string>
+                </property>
+               </widget>
+              </item>
+              <item row="4" column="1">
+               <widget class="QLabel" name="labelRulesLaunch">
                 <property name="text">
                  <string>0</string>
                 </property>

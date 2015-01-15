@@ -26,14 +26,19 @@ void MainWindow::updateStatistics() {
 
   for(Anime *anime: animes) {
     progress_bar->setValue(progress_bar->value() + 1);
+    if(anime->getMyRewatch() > 0){
+      episodes_watched += anime->getMyProgress() * anime->getMyRewatch();
+    }
     episodes_watched += anime->getMyProgress();
+
+    qDebug() << anime->getEnglishTitle() << anime->getMyProgress() << anime->getMyRewatch();
 
     QString status = anime->getMyStatus();
     QString s_score = anime->getMyScore();
 
     if(User::sharedUser()->scoreType() != 3) {
       int score = 0;
-      s_score = s_score.replace(" Star", "");
+      s_score = s_score.replace(tr(" Star"), "");
       s_score = s_score.replace("-", "0");
       score = s_score.toInt();
 

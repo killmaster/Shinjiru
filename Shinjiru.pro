@@ -1,14 +1,14 @@
 QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 0.3.0
+VERSION = 0.3.2
 TEMPLATE = app
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
 CONFIG += c++11
 
-win32:LIBS += -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" -lUser32
+win32:LIBS += -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" -lUser32 -lKernel32
 
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)

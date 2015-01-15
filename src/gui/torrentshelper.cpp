@@ -116,6 +116,9 @@ void MainWindow::torrentContextMenu(QPoint pos) {
 
 void MainWindow::download(int row) {
   QDesktopServices::openUrl(ui->torrentTable->item(row, 5)->text());
+  download_count++;
+  count_total++;
+  ui->labelDownloadedLaunch->setText(QString::number(download_count));
 }
 
 void MainWindow::createRule(int row) {
@@ -144,6 +147,7 @@ void MainWindow::filterTorrents(QString text, bool checked) {
     if(checked) {
       QString f_title = items.at(i)->text();
       Anime *filter_anime = User::sharedUser()->getAnimeByTitle(f_title);
+      if(filter_anime == 0) continue;
       if(filter_anime->getAiringStatus() != "currently airing") show = false;
       if(filter_anime->getMyStatus() != "watching" && filter_anime->getMyStatus() != "plan to watch") show = false;
     }
@@ -216,7 +220,10 @@ void MainWindow::verifyAndDownload(int row) {
   QFile f(history_dir.absoluteFilePath(file));
   if(!f.exists()) {
     download(row);
-    trayIcon->showMessage("Shinjiru", title + " has started downloading.");
+    download_rule++;
+    rule_total++;
+    ui->labelRulesLaunch->setText(QString::number(download_rule));
+    trayIcon->showMessage("Shinjiru", title + tr(" has started downloading."));
     f.open(QFile::WriteOnly);
     f.write("0");
   }

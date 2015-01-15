@@ -122,6 +122,8 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const {
   int y = effectiveRect.y();
   int lineHeight = 0;
 
+  delete left;
+
   QLayoutItem *item;
   foreach (item, itemList) {
     QWidget *wid = item->widget();

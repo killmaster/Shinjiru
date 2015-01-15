@@ -72,5 +72,6 @@ void Anime::downloadCover() {
   anime_image_control = new FileDownloader(getCoverURL());
   connect(anime_image_control, &FileDownloader::downloaded, [&]() {
     this->setCoverImageData(anime_image_control->downloadedData());
+    anime_image_control->deleteLater();
   });
 }

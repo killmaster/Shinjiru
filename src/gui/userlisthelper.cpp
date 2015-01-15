@@ -20,6 +20,8 @@ void MainWindow::userListLoaded() {
   progress_bar->setValue(30);
   progress_bar->setFormat("Parsing User List");
 
+  airing.clear();
+
   QLayoutItem *item;
   while ((item = ui->scrollArea->widget()->layout()->takeAt(0)))
     delete item;
@@ -68,7 +70,10 @@ void MainWindow::userListLoaded() {
       }
 
       if(anime->getAiringStatus() == "currently airing") {
-        layout->addWidget(addAiring(anime));
+        if(!airing.contains(anime->getTitle())) {
+          airing << anime->getTitle();
+          layout->addWidget(addAiring(anime));
+        }
       }
 
       progressData->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
@@ -99,13 +104,39 @@ void MainWindow::userListLoaded() {
     layout->addWidget(table);
     page->setLayout(layout);
 
-    ui->listTabs->addTab(page, tab_title + " (" + tab_total + ")");
-    ui->orderListWidget->addItem(tab_title);
+    bool found = false;
+    int index = -1;
+
+    for(int i = 0; i < ui->orderListWidget->count(); i++) {
+      if(ui->orderListWidget->item(i)->text() == tab_title) {
+        found = true;
+        index = i;
+      }
+    }
+
+    if(!found) ui->orderListWidget->addItem(tab_title);
+
+    if(index == -1)
+      ui->listTabs->addTab(page, tab_title + " (" + tab_total + ")");
+    else
+      ui->listTabs->insertTab(index, page, tab_title + " (" + tab_total + ")");
 
     table->resizeColumnToContents(0);
     table->resizeColumnToContents(1);
     table->resizeColumnToContents(2);
     table->sortByColumn(0, Qt::SortOrder::AscendingOrder);
+  }
+
+  QTabBar *tb = ui->listTabs->tabBar();
+
+  for(int i = 0; i < ui->orderListWidget->count(); i++) {
+    QString current = ui->orderListWidget->item(i)->text().toLower();
+    QStringList tab_texts;
+    for(int j = 0; j < ui->listTabs->count(); j++) {
+      tab_texts << ui->listTabs->tabText(j).toLower();
+    }
+    int from = tab_texts.indexOf(QRegExp(current + " \\([0-9]+\\)"));
+    tb->moveTab(from, i);
   }
 
   progress_bar->reset();
@@ -118,7 +149,7 @@ QTableWidget *MainWindow::getListTable() {
   QTableWidget *table = new QTableWidget(this);
 
   QStringList default_list_labels;
-  default_list_labels << "Title" << "Episodes" << "Score" << "Type";
+  default_list_labels << tr("Title") << tr("Episodes") << tr("Score") << tr("Type");
 
   table->setColumnCount(4);
   table->setHorizontalHeaderLabels(default_list_labels);

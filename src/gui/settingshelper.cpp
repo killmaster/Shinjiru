@@ -9,11 +9,16 @@ void MainWindow::loadSettings() {
   minimize_to_tray = settings->getValue(Settings::MinimizeToTray, false).toBool();
   close_to_tray = settings->getValue(Settings::CloseToTray, true).toBool();
   bool sob = settings->getValue(Settings::StartOnBoot, false).toBool();
+  QStringList list_order = settings->getValue(Settings::ListOrder, QStringList()).toStringList();
+  count_total = settings->getValue(Settings::DownloadCount, 0).toInt();
+  rule_total = settings->getValue(Settings::RuleCount, 0).toInt();
 
   if(sob) {
-    /*
-     * TODO: Check if it still starts up on boot
-     */
+    #ifdef Q_OS_WIN
+      QSettings reg("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+      QString path = reg.value("Shinjiru", QString("")).toString();
+      if(path.isEmpty()) sob = false;
+    #endif
   }
 
   ui->startOnBootCheckBox->setChecked(sob);
@@ -24,6 +29,10 @@ void MainWindow::loadSettings() {
   ui->closeToTrayCheckBox->setChecked(close_to_tray);
   ui->startOnBootCheckBox->setChecked(sob);
   toggleAnimeRecognition(ear);
+
+  for(QString key : list_order) {
+    ui->orderListWidget->addItem(key);
+  }
 }
 
 void MainWindow::settingsChanged() {
@@ -43,10 +52,17 @@ void MainWindow::applySettings() {
 
   bool sob = ui->startOnBootCheckBox->isChecked();
 
+  QStringList list_order;
+
+  for(int i = 0; i < ui->orderListWidget->count(); i++) {
+    list_order << ui->orderListWidget->item(i)->text();
+  }
+
   if(sob) {
-    /*
-     * TODO: Make software start on boot
-     */
+    #ifdef Q_OS_WIN
+      QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+      reg.setValue("Shinjiru", qApp->applicationFilePath());
+    #endif
   }
 
   minimize_to_tray = ui->minimizeToTrayCheckBox->isChecked();
@@ -59,6 +75,9 @@ void MainWindow::applySettings() {
   settings->setValue(Settings::StartOnBoot, sob);
   settings->setValue(Settings::MinimizeToTray, minimize_to_tray);
   settings->setValue(Settings::CloseToTray, close_to_tray);
+  settings->setValue(Settings::ListOrder, list_order);
+  settings->setValue(Settings::DownloadCount, count_total);
+  settings->setValue(Settings::RuleCount, count_total);
 
   ui->applyButton->setEnabled(false);
 }
@@ -75,6 +94,7 @@ void MainWindow::defaultSettings() {
   settings->setValue(Settings::StartOnBoot,             false);
   settings->setValue(Settings::MinimizeToTray,          false);
   settings->setValue(Settings::CloseToTray,             true);
+  settings->setValue(Settings::ListOrder,               QStringList());
 
   QProcess::startDetached(QApplication::applicationFilePath());
   exit(0);

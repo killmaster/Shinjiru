@@ -34,6 +34,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   uptime_timer         = new QElapsedTimer;
   progress_bar         = new QProgressBar(ui->statusBar);
   torrent_refresh_time = 0;
+  download_rule        = 0;
+  download_count       = 0;
   hasUser              = false;
 
   uptime_timer->start();
@@ -138,7 +140,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     });
 
     connect(API::sharedAPI()->sharedAniListAPI(), &AniListAPI::access_denied, [&](QString error) {
-      QMessageBox::critical(this, "Shinjiru", "Error: " + error);
+      QMessageBox::critical(this, "Shinjiru", tr("Error: ") + error);
     });
   }
 }
@@ -213,6 +215,11 @@ void MainWindow::showAnimePanel(int row, int column) {
   QString type = source->item(row, 3)->text();
   Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
 
+  if(anime == 0) {
+    //QMessageBox("Shinjiru", "Unknown anime.");
+    return;
+  }
+
   AnimePanel *ap = new AnimePanel(this, anime, User::sharedUser()->scoreType());
 
   if(anime->needsLoad() || anime->needsCover()) {
@@ -268,9 +275,10 @@ void MainWindow::watch(QString title) {
 
     cw_anime = User::sharedUser()->getAnimeByTitle(cw_title);
 
-    if(cw_anime->getTitle().isEmpty()) {
+    if(cw_anime == 0 || cw_anime->getTitle().isEmpty()) {
       QJsonObject results = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_ANIME_SEARCH(cw_title)).array().at(0).toObject();
       cw_anime = User::sharedUser()->getAnimeByTitle(results.value("title_romaji").toString());
+      if(cw_anime == 0) return;
     }
 
     if(cw_anime->getMyProgress() >= cw_episode.toInt()) {
@@ -282,7 +290,7 @@ void MainWindow::watch(QString title) {
     }
 
     this->watch_timer->start(1000 * auto_update_delay);
-    this->trayIcon->showMessage("Shinjiru", "Updating " + cw_anime->getTitle() + " to episode " + cw_episode + " in " + QString::number(auto_update_delay) + " seconds");
+    this->trayIcon->showMessage("Shinjiru", tr("Updating %1 to episode %2 in %3 seconds").arg(cw_anime->getTitle()).arg(cw_episode).arg(QString::number(auto_update_delay)));
   }
 }
 
@@ -295,7 +303,7 @@ void MainWindow::updateEpisode() {
   cw_anime->setMyProgress(cw_episode.toInt());
   userListLoaded();
 
-  trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + " updated to episode " + cw_episode);
+  trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + (" updated to episode ") + cw_episode);
 
   API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
 }
@@ -307,7 +315,7 @@ void MainWindow::eventTick() {
   }
 
   torrent_refresh_time--;
-  ui->refreshButton->setText("Refresh (" + QString::number(torrent_refresh_time) + ")");
+  ui->refreshButton->setText(tr("Refresh (%1)").arg(QString::number(torrent_refresh_time)));
 
   qint64 seconds = uptime_timer->elapsed() / 1000;
   int minutes = seconds / 60;
@@ -317,30 +325,30 @@ void MainWindow::eventTick() {
 
   QString format = "";
   if(days > 1) {
-    format += QString::number(days) + " days, ";
+    format += QString::number(days) + tr(" days, ");
   } else if (days > 0) {
-    format += QString::number(days) + " day, ";
+    format += QString::number(days) +tr( " day, ");
   }
 
   if(hours > 1) {
-    format += QString::number(hours) + " hours, ";
+    format += QString::number(hours) + tr(" hours, ");
   } else if (hours > 0) {
-    format += QString::number(hours) + " hour, ";
+    format += QString::number(hours) + tr(" hour, ");
   }
 
   if(days == 0) {
     if(minutes > 1) {
-      format += QString::number(minutes) + " minutes, ";
+      format += QString::number(minutes) + tr(" minutes, ");
     } else if (minutes > 0) {
-      format += QString::number(minutes) + " minute, ";
+      format += QString::number(minutes) + tr(" minute, ");
     }
   }
 
   if(hours == 0) {
     if(seconds == 1) {
-      format +=  QString::number(seconds) + " second";
+      format +=  QString::number(seconds) + tr(" second");
     } else {
-      format +=  QString::number(seconds) + " seconds";
+      format +=  QString::number(seconds) + tr(" seconds");
     }
   }
 

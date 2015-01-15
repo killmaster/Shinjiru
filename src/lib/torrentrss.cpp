@@ -7,6 +7,11 @@ TorrentRSS::TorrentRSS(QWidget *parent) : QWidget(parent), currentReply(0) {
   titles = new QList<QString>;
 }
 
+TorrentRSS::~TorrentRSS() {
+  delete links;
+  delete titles;
+}
+
 void TorrentRSS::get(const QUrl &url) {
   QNetworkRequest request(url);
   if (currentReply) {
@@ -16,8 +21,7 @@ void TorrentRSS::get(const QUrl &url) {
   currentReply = manager.get(request);
   connect(currentReply, SIGNAL(readyRead()), SLOT(readyRead()));
   connect(currentReply, SIGNAL(metaDataChanged()), SLOT(metaDataChanged()));
-  connect(currentReply, SIGNAL(error(QNetworkReply::NetworkError)),
-          SLOT(error(QNetworkReply::NetworkError)));
+  connect(currentReply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(error(QNetworkReply::NetworkError)));
 }
 
 void TorrentRSS::fetch() {

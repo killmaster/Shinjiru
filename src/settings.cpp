@@ -35,6 +35,12 @@ QString Settings::parseEnum(int setting) {
       return "minimize_to_tray";
     case CloseToTray:
       return "close_to_tray";
+    case ListOrder:
+      return "list_order";
+    case DownloadCount:
+      return "download_total";
+    case RuleCount:
+      return "rule_total";
   }
 
   return "unknown";

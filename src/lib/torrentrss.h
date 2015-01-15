@@ -15,6 +15,7 @@ class TorrentRSS : public QWidget
 
 public:
   TorrentRSS(QWidget *widget = 0);
+  ~TorrentRSS();
 
   QList<QString> *getLinks();
   QList<QString> *getTitles();

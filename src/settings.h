@@ -21,7 +21,10 @@ public:
     AutoUpdateDelay,
     StartOnBoot,
     MinimizeToTray,
-    CloseToTray
+    CloseToTray,
+    ListOrder,
+    DownloadCount,
+    RuleCount
   };
 
 private:

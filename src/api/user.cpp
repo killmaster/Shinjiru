@@ -58,6 +58,8 @@ bool User::loadProfileImage() {
 
   this->setUserImage(user_image_control->downloadedData());
 
+  user_image_control->deleteLater();
+
   return true;
 }
 
@@ -188,15 +190,25 @@ void User::loadUserList() {
         anime_data->setMyScore(                anime    .value("score")           .toString(""));
       }
 
+      bool skip = false;
 
-      if(user_lists.value(anime_data->getMyStatus()).contains(anime_data->getID())) {
+      for(Anime *a : anime_list) {
+        if(a->getTitle() == anime_data->getTitle()) {
+          delete anime_data;
+          anime_data = a;
+          skip = true;
+        }
+      }
+
+      if(user_lists.value(anime_data->getMyStatus()).contains(anime_data->getID()) && !skip) {
         Anime *old = user_lists.value(anime_data->getMyStatus()).value(anime_data->getID());
         delete anime_data;
         anime_data = old;
+      } else if(!skip){
+        anime_list.append(anime_data);
       }
 
       list.insert(anime_data->getID(), anime_data);
-      anime_list.append(anime_data);
     }
     custom.append(list);
   }
@@ -220,7 +232,7 @@ Anime *User::getAnimeByTitle(QString title) {
     }
   }
 
-  return new Anime(0);
+  return 0;
 }
 
 Anime *User::getAnimeByData(QString title, QString episodes, QString score, QString type) {
@@ -236,7 +248,7 @@ Anime *User::getAnimeByData(QString title, QString episodes, QString score, QStr
     }
   }
 
-  return new Anime();
+  return 0;
 }
 
 void User::loadAnimeData(Anime *anime, bool download_cover) {

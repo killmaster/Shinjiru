@@ -79,8 +79,15 @@ private:
   int torrent_refresh_time;
   int torrent_interval;
 
+  int download_count;
+  int download_rule;
+  int count_total;
+  int rule_total;
+
   QList<QRegExp> adv_rules;
   QList<QMap<QString, QString>> basic_rules;
+
+  QStringList airing;
 
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;
