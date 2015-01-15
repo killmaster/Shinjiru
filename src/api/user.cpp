@@ -87,7 +87,7 @@ void User::loadUserList() {
 
   anime_list.clear();
 
-  QList<QMap<QString, Anime*>> custom;
+  QMap<QString, QMap<QString, Anime*>> custom;
 
   QStringList list_names = user_list_data.keys();
 
@@ -210,12 +210,13 @@ void User::loadUserList() {
 
       list.insert(anime_data->getID(), anime_data);
     }
-    custom.append(list);
+
+    custom.insert(this->customLists().at(custom_keys.at(i).toInt()).toString(), list);
   }
 
   for(int k = 0; k < customLists().length(); k++) {
-    if(k >= custom.length()) break;
-    user_lists.insert(this->customLists().at(k).toString(), custom.at(k));
+    QString key = this->customLists().at(k).toString();
+    user_lists.insert(key , custom.value(key));
   }
 }
 
