@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   QFont font = ui->listTabs->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
   ui->listTabs->tabBar()->setFont(font);
+  ui->orderListWidget->setFont(font);
+
 
   QWidget *container = new QWidget(ui->scrollArea);
   layout = new FlowLayout(container);
@@ -57,10 +59,15 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   black.insert("color-disabled", QColor(0, 0, 0));
   black.insert("color-selected", QColor(0, 0, 0));
 
-  ui->airingButton    ->setIcon(awesome->icon(fa::clocko,   black));
-  ui->torrentsButton  ->setIcon(awesome->icon(fa::rss,      black));
-  ui->animeButton     ->setIcon(awesome->icon(fa::bars,     black));
-  ui->statisticsButton->setIcon(awesome->icon(fa::piechart, black));
+  ui->airingButton    ->setIcon(awesome->icon(fa::clocko,    black));
+  ui->torrentsButton  ->setIcon(awesome->icon(fa::rss,       black));
+  ui->animeButton     ->setIcon(awesome->icon(fa::bars,      black));
+  ui->statisticsButton->setIcon(awesome->icon(fa::piechart,  black));
+  ui->moveDownButton  ->setIcon(awesome->icon(fa::arrowdown, black));
+  ui->moveUpButton    ->setIcon(awesome->icon(fa::arrowup,   black));
+
+  ui->moveUpButton->setText("");
+  ui->moveDownButton->setText("");
 
   ui->tabWidget->tabBar()->hide();
   ui->tabWidget->setCurrentIndex(0);
@@ -101,16 +108,17 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->chkHideUnknown,  SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));
   connect(ui->refreshButton,   SIGNAL(clicked()),                          SLOT(refreshTorrentListing()));
 
-  connect(ui->actionEAR, SIGNAL(toggled(bool)), SLOT(applyEAR()));
-  connect(ui->torrentRefreshIntervalLineEdit, SIGNAL(textEdited(QString)), SLOT(settingsChanged()));
-  connect(ui->autoRecognitionCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
+  connect(ui->actionEAR,                      SIGNAL(toggled(bool)),               SLOT(applyEAR()));
+  connect(ui->torrentRefreshIntervalLineEdit, SIGNAL(textEdited(QString)),         SLOT(settingsChanged()));
+  connect(ui->autoRecognitionCheckBox,        SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
   connect(ui->defaultTorrentRuleModeComboBox, SIGNAL(currentTextChanged(QString)), SLOT(settingsChanged()));
-  connect(ui->startOnBootCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
-  connect(ui->minimizeToTrayCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
-  connect(ui->closeToTrayCheckBox, SIGNAL(toggled(bool)), SLOT(settingsChanged()));
-  connect(ui->applyButton, SIGNAL(clicked()), SLOT(applySettings()));
-
-  connect(ui->defaultButton, SIGNAL(clicked()), SLOT(defaultSettings()));
+  connect(ui->startOnBootCheckBox,            SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
+  connect(ui->minimizeToTrayCheckBox,         SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
+  connect(ui->closeToTrayCheckBox,            SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
+  connect(ui->applyButton,                    SIGNAL(clicked()),                   SLOT(applySettings()));
+  connect(ui->defaultButton,                  SIGNAL(clicked()),                   SLOT(defaultSettings()));
+  connect(ui->moveUpButton,                   SIGNAL(clicked()),                   SLOT(moveUp()));
+  connect(ui->moveDownButton,                 SIGNAL(clicked()),                   SLOT(moveDown()));
 
   this->show();
   createActions();
@@ -353,4 +361,26 @@ void MainWindow::resetAPI() {
 
   QProcess::startDetached(QApplication::applicationFilePath());
   exit(0);
+}
+
+void MainWindow::moveUp() {
+ if(ui->orderListWidget->selectedItems().count() == 1) {
+   int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
+   if(row != 0) {
+     ui->orderListWidget->insertItem(row - 1, ui->orderListWidget->takeItem(row)->text());
+     ui->orderListWidget->setCurrentRow(row - 1);
+     this->settingsChanged();
+   }
+ }
+}
+
+void MainWindow::moveDown() {
+  if(ui->orderListWidget->selectedItems().count() == 1) {
+    int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
+    if(row != ui->orderListWidget->count()) {
+      ui->orderListWidget->insertItem(row + 1, ui->orderListWidget->takeItem(row)->text());
+      ui->orderListWidget->setCurrentRow(row + 1);
+      this->settingsChanged();
+    }
+  }
 }

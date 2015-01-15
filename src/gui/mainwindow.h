@@ -150,6 +150,9 @@ private slots:
 
   void initTray();
   void createActions();
+
+  void moveUp();
+  void moveDown();
 };
 
 #endif // MAINWINDOW_H

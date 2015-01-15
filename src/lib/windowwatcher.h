@@ -12,7 +12,9 @@ class WindowWatcher : public QObject
   Q_OBJECT
 public:
   explicit WindowWatcher(QObject *parent = 0);
-  BOOL CALLBACK parseWindow(HWND hwnd);
+  #ifdef Q_OS_WIN
+    BOOL CALLBACK parseWindow(HWND hwnd);
+  #endif
 
 signals:
   void title_found(QString);

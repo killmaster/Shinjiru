@@ -100,6 +100,7 @@ void MainWindow::userListLoaded() {
     page->setLayout(layout);
 
     ui->listTabs->addTab(page, tab_title + " (" + tab_total + ")");
+    ui->orderListWidget->addItem(tab_title);
 
     table->resizeColumnToContents(0);
     table->resizeColumnToContents(1);

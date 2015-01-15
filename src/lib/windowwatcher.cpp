@@ -8,20 +8,22 @@ WindowWatcher::WindowWatcher(QObject *parent) : QObject(parent) {
   timer->setInterval(5000);
 }
 
-BOOL CALLBACK EnumWindowsProc(HWND wnd, LPARAM lParam) {
+#ifdef Q_OS_WIN
+  BOOL CALLBACK EnumWindowsProc(HWND wnd, LPARAM lParam) {
     return reinterpret_cast<WindowWatcher*>(lParam)->parseWindow(wnd);
-}
-
-BOOL CALLBACK WindowWatcher::parseWindow(HWND hwnd) {
-  int size = GetWindowTextLength(hwnd);
-  if (size > 0 && IsWindowVisible(hwnd)) {
-    wchar_t title[256];
-    GetWindowText(hwnd, title, sizeof(title));
-    windowList << QString::fromWCharArray(title);
   }
 
-  return TRUE;
-}
+  BOOL CALLBACK WindowWatcher::parseWindow(HWND hwnd) {
+    int size = GetWindowTextLength(hwnd);
+    if (size > 0 && IsWindowVisible(hwnd)) {
+      wchar_t title[256];
+      GetWindowText(hwnd, title, sizeof(title));
+      windowList << QString::fromWCharArray(title);
+    }
+
+    return TRUE;
+  }
+#endif
 
 void WindowWatcher::disable() {
   timer->stop();
@@ -35,7 +37,9 @@ void WindowWatcher::timeOut() {
   windowList.clear();
   bool title = false;
 
-  EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(this));
+  #ifdef Q_OS_WIN
+    EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(this));
+  #endif
 
   for(int i = 0; i < windowList.length(); i++) {
     QString window = windowList.at(i);
