@@ -638,8 +638,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>892</width>
-             <height>376</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
           </widget>
@@ -1025,13 +1025,13 @@
    </property>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>&amp;File</string>
     </property>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuAniList">
     <property name="title">
-     <string>AniList</string>
+     <string>&amp;AniList</string>
     </property>
     <addaction name="actionRL"/>
     <addaction name="actionVP"/>
@@ -1040,7 +1040,7 @@
    </widget>
    <widget class="QMenu" name="menuTools">
     <property name="title">
-     <string>Tools</string>
+     <string>&amp;Tools</string>
     </property>
     <addaction name="actionEAR"/>
     <addaction name="separator"/>
@@ -1048,7 +1048,7 @@
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionAbout"/>
     <addaction name="actionHelp"/>
@@ -1067,27 +1067,27 @@
   </widget>
   <action name="actionExit">
    <property name="text">
-    <string>Exit</string>
+    <string>E&amp;xit</string>
    </property>
   </action>
   <action name="actionRL">
    <property name="text">
-    <string>Refresh List</string>
+    <string>&amp;Refresh List</string>
    </property>
   </action>
   <action name="actionVP">
    <property name="text">
-    <string>View Profile</string>
+    <string>View &amp;Profile</string>
    </property>
   </action>
   <action name="actionVD">
    <property name="text">
-    <string>View Dashboard</string>
+    <string>View &amp;Dashboard</string>
    </property>
   </action>
   <action name="actionVAL">
    <property name="text">
-    <string>View Anime List</string>
+    <string>View Anime &amp;List</string>
    </property>
   </action>
   <action name="actionEAR">
@@ -1095,27 +1095,27 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Enable Anime Recognition</string>
+    <string>Enable Anime &amp;Recognition</string>
    </property>
   </action>
   <action name="actionSettings">
    <property name="text">
-    <string>Settings</string>
+    <string>&amp;Settings</string>
    </property>
   </action>
   <action name="actionAbout">
    <property name="text">
-    <string>About</string>
+    <string>&amp;About</string>
    </property>
   </action>
   <action name="actionHelp">
    <property name="text">
-    <string>Help</string>
+    <string>&amp;Help</string>
    </property>
   </action>
   <action name="actionUpdate">
    <property name="text">
-    <string>Update</string>
+    <string>&amp;Update</string>
    </property>
   </action>
  </widget>
