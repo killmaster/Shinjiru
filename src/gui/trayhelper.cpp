@@ -11,6 +11,15 @@ void MainWindow::initTray() {
   trayIcon = new QSystemTrayIcon(this);
   trayIcon->setContextMenu(trayIconMenu);
   trayIcon->setIcon(windowIcon());
+  trayIcon->setToolTip("Shinjiru " + qApp->applicationVersion());
+
+  connect(trayIcon, &QSystemTrayIcon::activated, [&] (QSystemTrayIcon::ActivationReason reason) {
+    if(reason == QSystemTrayIcon::DoubleClick) {
+      if(showFunc.isEmpty()) showNormal();
+      else QMetaObject::invokeMethod(this, showFunc.toLocal8Bit().data(),Qt::DirectConnection);
+      qApp->setActiveWindow(this);
+    }
+  });
 }
 
 

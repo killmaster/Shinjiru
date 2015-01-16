@@ -165,9 +165,13 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
 void MainWindow::changeEvent(QEvent *event) {
   if(event->type() == QEvent::WindowStateChange) {
-    if(isMinimized() && minimize_to_tray) {
+    if(isMaximized()) {
+      showFunc = "showMaximized";
+    } else  if(isMinimized() && minimize_to_tray) {
       this->hide();
       event->ignore();
+    } else {
+      showFunc = "showNormal";
     }
   }
 }

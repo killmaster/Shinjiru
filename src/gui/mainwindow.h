@@ -101,6 +101,8 @@ private:
   bool minimize_to_tray;
   bool close_to_tray;
 
+  QString showFunc;
+
 private slots:
   void loadUser();
   void userLoaded();
