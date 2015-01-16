@@ -31,8 +31,6 @@ void MainWindow::updateStatistics() {
     }
     episodes_watched += anime->getMyProgress();
 
-    qDebug() << anime->getEnglishTitle() << anime->getMyProgress() << anime->getMyRewatch();
-
     QString status = anime->getMyStatus();
     QString s_score = anime->getMyScore();
 
