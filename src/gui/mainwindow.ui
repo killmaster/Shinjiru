@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>4</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -495,6 +495,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QPushButton" name="ruleManagerButton">
+            <property name="text">
+             <string>Rule Manager</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -638,8 +645,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>98</width>
-             <height>28</height>
+             <width>892</width>
+             <height>376</height>
             </rect>
            </property>
           </widget>

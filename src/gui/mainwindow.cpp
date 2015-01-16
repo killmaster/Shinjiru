@@ -105,10 +105,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
   connect(event_timer,    SIGNAL(timeout()),            SLOT(eventTick()));
 
-  connect(ui->torrentTable,    SIGNAL(customContextMenuRequested(QPoint)), SLOT(torrentContextMenu(QPoint)));
-  connect(ui->torrentFilter,   SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
-  connect(ui->chkHideUnknown,  SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));
-  connect(ui->refreshButton,   SIGNAL(clicked()),                          SLOT(refreshTorrentListing()));
+  connect(ui->torrentTable,      SIGNAL(customContextMenuRequested(QPoint)), SLOT(torrentContextMenu(QPoint)));
+  connect(ui->torrentFilter,     SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
+  connect(ui->chkHideUnknown,    SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));
+  connect(ui->refreshButton,     SIGNAL(clicked()),                          SLOT(refreshTorrentListing()));
+  connect(ui->ruleManagerButton, SIGNAL(clicked()),                          SLOT(showRuleManager()));
 
   connect(ui->actionEAR,                      SIGNAL(toggled(bool)),               SLOT(applyEAR()));
   connect(ui->torrentRefreshIntervalLineEdit, SIGNAL(textEdited(QString)),         SLOT(settingsChanged()));

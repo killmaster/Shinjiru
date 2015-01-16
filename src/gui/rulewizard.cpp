@@ -6,13 +6,14 @@
 #include <QJsonDocument>
 #include <QFile>
 #include <QDir>
+#include <QDebug>
 
 RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file, QString default_rule) : QDialog(parent), ui(new Ui::RuleWizard) {
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-  if(default_rule == "Basic") {
+  if(default_rule == "basic") {
       ui->groupBox->setChecked(false);
       ui->groupBox_2->setChecked(true);
   } else {
@@ -29,6 +30,65 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
   connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
 }
 
+RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new Ui::RuleWizard) {
+  if(file == "basic" || file == "advanced") {
+    ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    if(file == "basic") {
+        ui->groupBox->setChecked(false);
+        ui->groupBox_2->setChecked(true);
+    } else {
+        ui->groupBox->setChecked(true);
+        ui->groupBox_2->setChecked(false);
+    }
+
+    connect(ui->groupBox,   SIGNAL(toggled(bool)), SLOT(groupToggle(bool)));
+    connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
+
+    return;
+  }
+
+  QFile f(qApp->applicationDirPath() + "/rules/" + file);
+  f.open(QFile::ReadOnly);
+
+  QJsonObject o = QJsonDocument::fromJson(f.readAll()).object();
+
+  QString type = o["rule_type"].toString();
+
+  edit_mode = true;
+  file_name = file.split("/").last().split(".").first();
+
+  if(type == "basic") {
+    ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    ui->groupBox->setChecked(false);
+    ui->groupBox_2->setChecked(true);
+
+    ui->animeTitleLineEdit->setText(o["anime_name"].toString());
+    ui->subGroupLineEdit->setText(o["sub_group"].toString());
+    ui->animeResolutionComboBox->setCurrentText(o["resolution"].toString());
+
+    connect(ui->groupBox,   SIGNAL(toggled(bool)), SLOT(groupToggle(bool)));
+    connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
+  } else {
+    ui->setupUi(this);
+    setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    ui->groupBox->setChecked(true);
+    ui->groupBox_2->setChecked(false);
+
+    ui->fileRegexLineEdit->setText(o["file_regex"].toString());
+
+    connect(ui->groupBox,   SIGNAL(toggled(bool)), SLOT(groupToggle(bool)));
+    connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
+  }
+}
+
 RuleWizard::~RuleWizard() {
   delete ui;
 }
@@ -42,11 +102,14 @@ void RuleWizard::group2Toggle(bool status) {
 }
 
 void RuleWizard::accept() {
-  bool ok;
-  QString name = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Rule Name"), tr("Enter a name for the new rule:"), QLineEdit::Normal, "", &ok);
+  if(!edit_mode){
+    bool ok;
+    file_name = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Rule Name"), tr("Enter a name for the new rule:"), QLineEdit::Normal, "", &ok);
+  }
+
   QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
   if(!rule_dir.exists()) rule_dir.mkdir(".");
-  QFile file(rule_dir.absolutePath() + "/" + name + ".str");
+  QFile file(rule_dir.absolutePath() + file_name + ".str");
   QJsonObject rule_json;
 
   if(ui->groupBox->isChecked()) {

@@ -12,11 +12,14 @@ class RuleWizard : public QDialog
   Q_OBJECT
 
 public:
-  explicit RuleWizard(QWidget *parent = 0, QString title = "", QString sub = "", QString res = "", QString file = "", QString default_rule = "Basic");
+  explicit RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file, QString default_rule);
+  RuleWizard(QWidget *parent, QString file);
   ~RuleWizard();
 
 private:
   Ui::RuleWizard *ui;
+  bool edit_mode;
+  QString file_name;
 
 private slots:
   void groupToggle(bool);

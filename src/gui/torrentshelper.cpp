@@ -7,8 +7,10 @@
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
+
 #include "../lib/torrentrss.h"
 #include "rulewizard.h"
+#include "rulemanager.h"
 
 void MainWindow::refreshTorrentListing() {
   ui->refreshButton->setText("Refresh (0)");
@@ -227,4 +229,11 @@ void MainWindow::verifyAndDownload(int row) {
     f.open(QFile::WriteOnly);
     f.write("0");
   }
+}
+
+void MainWindow::showRuleManager() {
+  RuleManager *rm = new RuleManager(this, default_rule);
+  rm->show();
+
+  connect(rm, SIGNAL(accepted()), SLOT(reloadRules()));
 }

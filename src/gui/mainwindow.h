@@ -151,6 +151,7 @@ private slots:
   void reloadRules();
   void checkForMatches();
   void verifyAndDownload(int);
+  void showRuleManager();
 
   void settingsChanged();
   void applySettings();

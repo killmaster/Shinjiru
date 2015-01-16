@@ -3,7 +3,7 @@
 
 void MainWindow::loadSettings() {
   torrent_interval = settings->getValue(Settings::TorrentRefreshTime, 900).toInt();
-  default_rule = settings->getValue(Settings::DefaultRuleType, "Basic").toString();
+  default_rule = settings->getValue(Settings::DefaultRuleType, "basic").toString().toLower();
   bool ear = settings->getValue(Settings::AnimeRecognitionEnabled, false).toBool();
   auto_update_delay = settings->getValue(Settings::AutoUpdateDelay, 120).toInt();
   minimize_to_tray = settings->getValue(Settings::MinimizeToTray, false).toBool();
@@ -70,7 +70,7 @@ void MainWindow::applySettings() {
 
   settings->setValue(Settings::TorrentRefreshTime, ti.toInt());
   settings->setValue(Settings::AnimeRecognitionEnabled, ui->autoRecognitionCheckBox->isChecked());
-  settings->setValue(Settings::DefaultRuleType, ui->defaultTorrentRuleModeComboBox->currentText());
+  settings->setValue(Settings::DefaultRuleType, ui->defaultTorrentRuleModeComboBox->currentText().toLower());
   settings->setValue(Settings::AutoUpdateDelay, aud.toInt());
   settings->setValue(Settings::StartOnBoot, sob);
   settings->setValue(Settings::MinimizeToTray, minimize_to_tray);
@@ -89,7 +89,7 @@ void MainWindow::defaultSettings() {
 
   settings->setValue(Settings::TorrentRefreshTime,      900);
   settings->setValue(Settings::AnimeRecognitionEnabled, false);
-  settings->setValue(Settings::DefaultRuleType,         "Basic");
+  settings->setValue(Settings::DefaultRuleType,         "basic");
   settings->setValue(Settings::AutoUpdateDelay,         120);
   settings->setValue(Settings::StartOnBoot,             false);
   settings->setValue(Settings::MinimizeToTray,          false);

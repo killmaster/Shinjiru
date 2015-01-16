@@ -53,7 +53,8 @@ SOURCES   += \
     src/gui/about.cpp \
     src/gui/settingshelper.cpp \
     src/gui/statshelper.cpp \
-    src/gui/apiwebview.cpp
+    src/gui/apiwebview.cpp \
+    src/gui/rulemanager.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -82,7 +83,8 @@ HEADERS   += \
     src/lib/skinmanager.h \
     src/gui/about.h \
     src/gui/apiwebview.h \
-    src/gui/facetablewidgetitem.h
+    src/gui/facetablewidgetitem.h \
+    src/gui/rulemanager.h
 
 FORMS     += \
     src/gui/airinganime.ui \
@@ -90,7 +92,8 @@ FORMS     += \
     src/gui/mainwindow.ui \
     src/gui/rulewizard.ui \
     src/gui/about.ui \
-    src/gui/apiwebview.ui
+    src/gui/apiwebview.ui \
+    src/gui/rulemanager.ui
 
 RESOURCES += res/res.qrc
 
