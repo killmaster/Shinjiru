@@ -10,6 +10,9 @@ CONFIG += c++11
 
 win32:LIBS += -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" -lUser32 -lKernel32
 
+QMAKE_CFLAGS_RELEASE = -O2 -MD -zi
+QMAKE_LFLAGS_RELEASE = /INCREMENTAL:NO /DEBUG
+
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
 include(lib/fervor/fervor.pri)
