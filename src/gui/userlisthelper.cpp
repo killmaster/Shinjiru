@@ -168,15 +168,56 @@ QTableWidget *MainWindow::getListTable() {
     int row = item->row();
     pos.setY(pos.y() + 120);
 
-    QAction *pAnimePanel = new QAction("Open Anime Panel", table);
+    QAction *pAnimePanel       = new QAction("Open Anime Panel", table);
+    QAction *pEpisodeIncrement = new QAction("Increment Progress by 1", table);
+    QMenu   *pStatusUpdate     = new QMenu("Status", table);
+    QAction *pDeleteEntry      = new QAction("Delete Entry", table);
+
+    QAction *pWatching         = new QAction("Watching", pStatusUpdate);
+    QAction *pOnHold           = new QAction("On Hold", pStatusUpdate);
+    QAction *pPlanToWatch      = new QAction("Plan to Watch", pStatusUpdate);
+    QAction *pCompleted        = new QAction("Completed", pStatusUpdate);
+    QAction *pDropped          = new QAction("Dropped", pStatusUpdate);
+
+    pStatusUpdate->setEnabled(false);
+    pStatusUpdate->addAction(pWatching);
+    pStatusUpdate->addAction(pOnHold);
+    pStatusUpdate->addAction(pPlanToWatch);
+    pStatusUpdate->addAction(pCompleted);
+    pStatusUpdate->addAction(pDropped);
+
+    pDeleteEntry->setEnabled(false);
+
 
     connect(pAnimePanel, &QAction::triggered, [&, row, table]() {
       this->showAnimePanel(row, 0, table);
     });
 
+    connect(pEpisodeIncrement, &QAction::triggered, [&, row, table]() {
+      QString title = table->item(row, 0)->text();
+      QString episodes = table->item(row, 1)->text();
+      QString score = table->item(row, 2)->text();
+      QString type = table->item(row, 3)->text();
+
+      Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
+      anime->setMyProgress(anime->getMyProgress() + 1);
+
+
+      table->item(row, 1)->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
+
+      QMap<QString, QString> data;
+      data.insert("id", anime->getID());
+      data.insert("episodes_watched", QString::number(anime->getMyProgress()));
+
+      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+    });
+
     QMenu *pContextMenu = new QMenu(this);
 
     pContextMenu->addAction(pAnimePanel);
+    pContextMenu->addAction(pEpisodeIncrement);
+    pContextMenu->addMenu(pStatusUpdate);
+    pContextMenu->addAction(pDeleteEntry);
 
     pContextMenu->exec(mapToGlobal(pos));
 
