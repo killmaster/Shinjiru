@@ -127,6 +127,7 @@ private slots:
   void showAbout();
 
   void showAnimePanel(int, int);
+  void showAnimePanel(int, int, QTableWidget *);
 
   QTableWidget *getListTable();
 

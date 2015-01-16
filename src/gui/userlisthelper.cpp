@@ -157,10 +157,32 @@ QTableWidget *MainWindow::getListTable() {
   table->setEditTriggers(QTableWidget::NoEditTriggers);
   table->setAlternatingRowColors(true);
   table->setSelectionMode(QTableWidget::SingleSelection);
+  table->setContextMenuPolicy(Qt::CustomContextMenu);
   table->setSelectionBehavior(QTableWidget::SelectRows);
   table->verticalHeader()->setDefaultSectionSize(19);
   table->horizontalHeader()->setStretchLastSection(true);
   table->setSortingEnabled(true);
+
+  connect(table, &QWidget::customContextMenuRequested, [=](QPoint pos) {
+    QTableWidgetItem *item = table->itemAt(pos);
+    int row = item->row();
+    pos.setY(pos.y() + 120);
+
+    QAction *pAnimePanel = new QAction("Open Anime Panel", table);
+
+    connect(pAnimePanel, &QAction::triggered, [&, row, table]() {
+      this->showAnimePanel(row, 0, table);
+    });
+
+    QMenu *pContextMenu = new QMenu(this);
+
+    pContextMenu->addAction(pAnimePanel);
+
+    pContextMenu->exec(mapToGlobal(pos));
+
+    delete pContextMenu;
+    pContextMenu = nullptr;
+  });
 
   return table;
 }

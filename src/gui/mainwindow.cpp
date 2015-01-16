@@ -205,10 +205,9 @@ void MainWindow::showTorrentsTab()   { ui->tabWidget->setCurrentIndex(2); }
 void MainWindow::showAiringTab()     { ui->tabWidget->setCurrentIndex(3); }
 void MainWindow::showStatisticsTab() { ui->tabWidget->setCurrentIndex(4); }
 
-void MainWindow::showAnimePanel(int row, int column) {
+void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   Q_UNUSED(column);
 
-  QTableWidget *source = static_cast<QTableWidget *>(sender());
   QString title = source->item(row, 0)->text();
   QString episodes = source->item(row, 1)->text();
   QString score = source->item(row, 2)->text();
@@ -241,6 +240,14 @@ void MainWindow::showAnimePanel(int row, int column) {
   });
 
   ap->show();
+}
+
+void MainWindow::showAnimePanel(int row, int column) {
+  Q_UNUSED(column);
+
+  QTableWidget *source = static_cast<QTableWidget *>(sender());
+
+  showAnimePanel(row, column, source);
 }
 
 void MainWindow::viewDashboard() { QDesktopServices::openUrl(QString("http://anilist.co/home")); }
