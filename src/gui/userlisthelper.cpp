@@ -165,6 +165,7 @@ QTableWidget *MainWindow::getListTable() {
 
   connect(table, &QWidget::customContextMenuRequested, [=](QPoint pos) {
     QTableWidgetItem *item = table->itemAt(pos);
+    if(item == 0) return;
     int row = item->row();
     pos.setY(pos.y() + 120);
 
