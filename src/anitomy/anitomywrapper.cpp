@@ -8,14 +8,19 @@ AnitomyWrapper::AnitomyWrapper() {
 }
 
 anitomy_string AnitomyWrapper::toAnitomyFormat(QString text) {
-  wchar_t *s = new wchar_t[text.length()];
+  wchar_t *s = new wchar_t[text.length() + 1];
   text.toWCharArray(s);
+
+  s[text.length()] = '\0';
 
   return s;
 }
 
 QMap<QString, QString> AnitomyWrapper::parse(QString file_name) {
   anitomy_string title = toAnitomyFormat(file_name);
+
+  qDebug() << QString::fromWCharArray(title.c_str()) << file_name;
+
   QMap<QString, QString> data;
 
   try {
