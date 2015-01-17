@@ -81,6 +81,7 @@ void MainWindow::refreshTorrentListing() {
     offset--;
   }
 
+  ui->torrentTable->resizeColumnsToContents();
   filterTorrents(ui->torrentFilter->text(), ui->chkHideUnknown->isChecked());
   checkForMatches();
 }
