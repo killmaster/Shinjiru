@@ -240,7 +240,8 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
   int width = layout->geometry().width();
   int cwidth = layout->contentsWidth();
 
-  layout->setContentsMargins((width-cwidth)/2, 0, 0, 0);
+  if(ui->tabWidget->currentIndex() == 3)
+    layout->setContentsMargins((width-cwidth)/2, 0, 0, 0);
 
   return newPanel;
 }

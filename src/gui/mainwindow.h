@@ -84,8 +84,8 @@ private:
   int count_total;
   int rule_total;
 
-  QList<QRegExp> adv_rules;
-  QList<QMap<QString, QString>> basic_rules;
+  QList<QMap<QString, QVariant>> adv_rules;
+  QList<QMap<QString, QVariant>> basic_rules;
 
   QStringList airing;
 

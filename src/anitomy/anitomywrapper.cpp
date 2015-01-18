@@ -19,8 +19,6 @@ anitomy_string AnitomyWrapper::toAnitomyFormat(QString text) {
 QMap<QString, QString> AnitomyWrapper::parse(QString file_name) {
   anitomy_string title = toAnitomyFormat(file_name);
 
-  qDebug() << QString::fromWCharArray(title.c_str()) << file_name;
-
   QMap<QString, QString> data;
 
   try {

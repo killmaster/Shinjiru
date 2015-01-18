@@ -13,6 +13,8 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
+  ui->lineEdit->setValidator(new QIntValidator(0, 999, this));
+
   if(default_rule == "basic") {
       ui->groupBox->setChecked(false);
       ui->groupBox_2->setChecked(true);
@@ -35,6 +37,8 @@ RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new 
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+
+    ui->lineEdit->setValidator(new QIntValidator(0, 999, this));
 
     if(file == "basic") {
         ui->groupBox->setChecked(false);
@@ -87,6 +91,8 @@ RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new 
     connect(ui->groupBox,   SIGNAL(toggled(bool)), SLOT(groupToggle(bool)));
     connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
   }
+
+  ui->lineEdit->setValidator(new QIntValidator(0, 999, this));
 }
 
 RuleWizard::~RuleWizard() {
@@ -123,6 +129,9 @@ void RuleWizard::accept() {
     rule_json["sub_group"]  = ui->subGroupLineEdit->text();
     rule_json["resolution"] = ui->animeResolutionComboBox->currentText();
   }
+
+  rule_json["expires"]      = ui->lineEdit->text();
+
   file.open(QFile::WriteOnly);
   QByteArray data = QJsonDocument(rule_json).toJson(QJsonDocument::Compact);
   file.write(data);

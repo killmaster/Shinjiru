@@ -181,13 +181,25 @@ void MainWindow::reloadRules() {
     file.open(QFile::ReadOnly);
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
 
+    QDate expires = QDate::currentDate();
+    expires.addDays(7 * json["expires"].toInt());
+
+    if(QDate::currentDate().daysTo(expires) < 0) {
+      file.remove();
+      continue;
+    }
+
     if(json["rule_type"] == "advanced") {
-      adv_rules.append(QRegExp(json["file_regex"].toString()));
+      QMap<QString, QVariant> values;
+      values.insert("regexp", QRegExp(json["file_regex"].toString()));
+      values.insert("expires", expires);
+      adv_rules.append(values);
     } else {
-      QMap<QString, QString> values;
+      QMap<QString, QVariant> values;
       values.insert("anime", json["anime_name"].toString());
       values.insert("subgroup", json["sub_group"].toString());
       values.insert("resolution", json["resolution"].toString());
+      values.insert("expires", expires);
 
       basic_rules.append(values);
     }
@@ -202,13 +214,22 @@ void MainWindow::checkForMatches() {
     QString file  = ui->torrentTable->item(j, 4)->text();
 
     for(int i = 0; i < basic_rules.length(); i++) {
-      if(title == basic_rules.at(i).value("anime") && sub == basic_rules.at(i).value("subgroup") && res == basic_rules.at(i).value("resolution")) {
+      if(QDate::currentDate().daysTo(basic_rules.at(i).value("expires").toDate()) < 0) {
+        basic_rules.removeAt(i);
+        continue;
+      }
+      if(title == basic_rules.at(i).value("anime").toString() && sub == basic_rules.at(i).value("subgroup").toString() && res == basic_rules.at(i).value("resolution").toString()) {
         verifyAndDownload(j);
       }
     }
 
     for(int i = 0; i < adv_rules.length(); i++) {
-      if(adv_rules.at(i).exactMatch(file)) {
+      if(QDate::currentDate().daysTo(adv_rules.at(i).value("expires").toDate()) < 0) {
+        adv_rules.removeAt(i);
+        continue;
+      }
+
+      if(adv_rules.at(i).value("regexp").toRegExp().exactMatch(file)) {
         verifyAndDownload(j);
       }
     }

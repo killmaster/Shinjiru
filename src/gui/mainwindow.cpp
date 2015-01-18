@@ -207,7 +207,11 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 void MainWindow::showAnimeTab()      { ui->tabWidget->setCurrentIndex(0); }
 void MainWindow::showSettingsTab()   { ui->tabWidget->setCurrentIndex(1); }
 void MainWindow::showTorrentsTab()   { ui->tabWidget->setCurrentIndex(2); }
-void MainWindow::showAiringTab()     { ui->tabWidget->setCurrentIndex(3); }
+void MainWindow::showAiringTab()     { ui->tabWidget->setCurrentIndex(3);
+                                       int width = layout->geometry().width();
+                                       int cwidth = layout->contentsWidth();
+
+                                       layout->setContentsMargins((width-cwidth)/2, 0, 0, 0); }
 void MainWindow::showStatisticsTab() { ui->tabWidget->setCurrentIndex(4); }
 
 void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
