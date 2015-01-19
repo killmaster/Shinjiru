@@ -101,6 +101,7 @@ void MainWindow::userListLoaded() {
 
     QWidget *page = new QWidget(ui->listTabs);
     QHBoxLayout *layout = new QHBoxLayout(ui->listTabs);
+    layout->setContentsMargins(0, 0, 0, 0);
     layout->addWidget(table);
     page->setLayout(layout);
 
