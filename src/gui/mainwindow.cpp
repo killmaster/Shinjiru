@@ -123,6 +123,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->moveUpButton,                   SIGNAL(clicked()),                   SLOT(moveUp()));
   connect(ui->moveDownButton,                 SIGNAL(clicked()),                   SLOT(moveDown()));
 
+  connect(ui->listFilterLineEdit, SIGNAL(textChanged(QString)), SLOT(filterList(QString)));
+  connect(ui->listTabs, SIGNAL(currentChanged(int)), SLOT(filterList(int)));
+
   this->show();
   createActions();
   initTray();

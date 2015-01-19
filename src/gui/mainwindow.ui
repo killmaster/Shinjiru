@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -156,16 +156,6 @@
            <item>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <item>
-              <widget class="QLabel" name="label_3">
-               <property name="text">
-                <string> Filter: </string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="listFilterLineEdit"/>
-             </item>
-             <item>
               <spacer name="horizontalSpacer_8">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
@@ -179,7 +169,7 @@
               </spacer>
              </item>
              <item>
-              <spacer name="horizontalSpacer_6">
+              <spacer name="horizontalSpacer_9">
                <property name="orientation">
                 <enum>Qt::Horizontal</enum>
                </property>
@@ -190,6 +180,20 @@
                 </size>
                </property>
               </spacer>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="listFilterLineEdit">
+               <property name="placeholderText">
+                <string>Filter anime...</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <property name="leftMargin">
+                <number>60</number>
+               </property>
+              </layout>
              </item>
             </layout>
            </item>
@@ -507,6 +511,9 @@
         <string>Torrents</string>
        </attribute>
        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="spacing">
+         <number>2</number>
+        </property>
         <property name="leftMargin">
          <number>0</number>
         </property>
@@ -522,10 +529,10 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <property name="leftMargin">
-           <number>6</number>
+           <number>4</number>
           </property>
           <property name="rightMargin">
-           <number>6</number>
+           <number>4</number>
           </property>
           <item>
            <widget class="QPushButton" name="refreshButton">

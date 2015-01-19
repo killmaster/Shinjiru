@@ -246,3 +246,28 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
 
   return newPanel;
 }
+
+void MainWindow::filterList(int) {
+  filterList(ui->listFilterLineEdit->text());
+}
+
+void MainWindow::filterList(QString filter) {
+  if(ui->listTabs->currentWidget() == 0) return;
+  if(ui->listTabs->currentWidget()->layout() == 0) return;
+  if(ui->listTabs->currentWidget()->layout()->count() == 0) return;
+
+  QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
+
+  if(w == 0) return;
+
+  for(int i = 0; i < w->rowCount(); i++)
+    w->hideRow(i);
+
+  QList<QTableWidgetItem *> items = w->findItems(filter, Qt::MatchContains);
+
+  for(int i = 0; i < items.count(); i++) {
+    if(items.at(i)->column() != 0 ) continue;
+
+    w->showRow(items.at(i)->row());
+  }
+}

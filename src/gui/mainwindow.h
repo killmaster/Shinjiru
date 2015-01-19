@@ -164,6 +164,9 @@ private slots:
 
   void moveUp();
   void moveDown();
+
+  void filterList(int);
+  void filterList(QString);
 };
 
 #endif // MAINWINDOW_H
