@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QUrl>
+#include <QNetworkReply>
 
 namespace Ui {
 class APIWebView;
@@ -21,6 +22,7 @@ private:
 
 private slots:
   void webURLChanged();
+  void sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist);
 };
 
 #endif // APIWEBVIEW_H
