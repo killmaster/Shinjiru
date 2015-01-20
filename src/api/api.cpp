@@ -40,16 +40,35 @@ API::~API() {
 }
 
 int API::verify() {
+  bool web_view_enabled = false;
+
   if(!m_API->hasAuthorizationCode()) {
-    APIWebView *wv = new APIWebView;
-    wv->show();
+    if(web_view_enabled) {
+      APIWebView *wv = new APIWebView;
+      wv->show();
 
-    QEventLoop waiter;
-    connect(wv, SIGNAL(accepted()), &waiter, SLOT(quit()));
-    waiter.exec();
+      QEventLoop waiter;
+      connect(wv, SIGNAL(accepted()), &waiter, SLOT(quit()));
+      waiter.exec();
 
-    delete wv;
+      delete wv;
+    } else {
+      bool ok;
+      QDesktopServices::openUrl(QUrl(appAuthPINURL));
+
+      QString message = "Authorization pin:                                                                                    ";
+      QString text = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
+
+      if (ok && !text.isEmpty()) {
+        qDebug() << text;
+        m_API->setAuthorizationPin(text);
+      } else {
+        return AniListAPI::NO_AUTHORIZATION;
+      }
+    }
   }
 
-  return m_API->init();
+  if(web_view_enabled) return m_API->init("code");
+
+  return m_API->init("pin");
 }
