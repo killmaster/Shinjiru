@@ -16,13 +16,13 @@ void MainWindow::updateStatistics() {
   int    dropped          = 0;
   int    plan_to_watch    = 0;
 
-  int    mean             = 0;
-  int    median           = 0;
-  int    mode             = 0;
+  double mean             = 0;
+  double median           = 0;
+  double mode             = 0;
   double stddev           = 0.0;
-  int    sum              = 0;
+  double sum              = 0.0;
 
-  QList<int> scores;
+  QList<double> scores;
 
   for(Anime *anime: animes) {
     progress_bar->setValue(progress_bar->value() + 1);
@@ -34,13 +34,24 @@ void MainWindow::updateStatistics() {
     QString status = anime->getMyStatus();
     QString s_score = anime->getMyScore();
 
-    if(User::sharedUser()->scoreType() != 3) {
+    if(User::sharedUser()->scoreType() != 4) {
       int score = 0;
       s_score = s_score.replace(tr(" Star"), "");
       s_score = s_score.replace("-", "0");
+      s_score = s_score.replace(":(", "33");
+      s_score = s_score.replace(":|", "66");
+      s_score = s_score.replace(":)", "99");
       score = s_score.toInt();
 
       if(score > 0) {
+        scores.append(score);
+        sum += score;
+      }
+    } else {
+      double score = 0.0;
+      score = s_score.toDouble();
+
+      if(score > 0.0) {
         scores.append(score);
         sum += score;
       }
@@ -59,8 +70,8 @@ void MainWindow::updateStatistics() {
   }
 
   if(scores.count() > 0) {
-    mean = sum / scores.count();
-    int mid = scores.count() / 2;
+    mean = sum / (double)scores.count();
+    median = scores.at(scores.count() / 2);
     qSort(scores);
 
     int number = scores.at(0);
@@ -69,7 +80,6 @@ void MainWindow::updateStatistics() {
     int countMode = 1;
 
     for(int i = 1; i < scores.count(); i++) {
-      if(mid == i) median = scores.at(i);
       stddev += scores.at(i) - mean;
       if (scores.at(i) == number) {
         count++;
@@ -107,7 +117,7 @@ void MainWindow::updateStatistics() {
   ui->lblTotalEntries   ->setText(QString::number(total));
   ui->lblDaysWatched    ->setText(time_watched);
   ui->lblEpisodesWatched->setText(QString::number(episodes_watched));
-  ui->lblMean           ->setText(QString::number(mean));
+  ui->lblMean           ->setText(QString::number(mean, 'g', 2));
   ui->lblMedian         ->setText(QString::number(median));
   ui->lblMode           ->setText(QString::number(mode));
   ui->lblScoreDeviation ->setText(QString::number(stddev, 'g', 2));

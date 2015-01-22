@@ -40,10 +40,8 @@ API::~API() {
 }
 
 int API::verify() {
-  bool web_view_enabled = false;
-
   if(!m_API->hasAuthorizationCode()) {
-    if(web_view_enabled) {
+    if(appUseWebView) {
       APIWebView *wv = new APIWebView;
       wv->show();
 
@@ -68,7 +66,7 @@ int API::verify() {
     }
   }
 
-  if(web_view_enabled) return m_API->init("code");
+  if(appUseWebView) return m_API->init("code");
 
   return m_API->init("pin");
 }
