@@ -367,7 +367,10 @@ void MainWindow::eventTick() {
   int minutes = seconds / 60;
   int hours = seconds / 60.0 / 60;
   int days = seconds / 60.0 / 60.0 / 24;
+
   seconds %= 60;
+  minutes %= 60;
+  hours %= 24;
 
   QString format = "";
   if(days > 1) {
