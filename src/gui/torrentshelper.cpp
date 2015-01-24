@@ -121,6 +121,8 @@ void MainWindow::download(int row) {
   QDesktopServices::openUrl(ui->torrentTable->item(row, 5)->text());
   download_count++;
   count_total++;
+
+  ui->labelDownloadedTotal->setText(QString::number(count_total));
   ui->labelDownloadedLaunch->setText(QString::number(download_count));
 }
 
@@ -246,7 +248,10 @@ void MainWindow::verifyAndDownload(int row) {
     download(row);
     download_rule++;
     rule_total++;
+
     ui->labelRulesLaunch->setText(QString::number(download_rule));
+    ui->labelRulesTotal->setText(QString::number(rule_total));
+
     trayIcon->showMessage("Shinjiru", title + tr(" has started downloading."));
     f.open(QFile::WriteOnly);
     f.write("0");

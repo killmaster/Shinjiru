@@ -23,7 +23,13 @@ void MainWindow::userListLoaded() {
   airing.clear();
 
   QLayoutItem *item;
-  while ((item = ui->scrollArea->widget()->layout()->takeAt(0)))
+
+  while(item = layout->takeAt(0)){
+    delete item->widget();
+    delete item;
+  }
+
+  while((item = ui->scrollArea->widget()->layout()->takeAt(0)))
     delete item;
 
   int starting_value = progress_bar->value();
