@@ -144,6 +144,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     });
 
     connect(API::sharedAPI()->sharedAniListAPI(), &AniListAPI::access_denied, [&](QString error) {
+      error = error.replace(api_id, "<API ID>");
+      error = error.replace(api_secret, "<API SECRET>");
+
+      qCritical() << error;
+
       QMessageBox::critical(this, "Shinjiru", tr("Error: ") + error);
     });
   }

@@ -38,7 +38,7 @@ void MainWindow::refreshTorrentListing() {
       result = anitomy->parse(titles.at(i));
     } catch(std::regex_error& e) {
       Q_UNUSED(e);
-      qDebug() << "Error parsing: " << titles.at(i);
+      qWarning() << "Error parsing: " << titles.at(i);
       offset++;
       continue;
     }
@@ -57,13 +57,11 @@ void MainWindow::refreshTorrentListing() {
     QTableWidgetItem *linkItem = new QTableWidgetItem(links.at(i));
 
     if(episodeNumber == "") {
-      qDebug() << "Unknown episode for: " << parsedTitle << ", skipping";
       offset++;
       continue;
     }
 
     if(links.at(i) == "") {
-      qDebug() << "Unknown link for: " << parsedTitle << ", skipping";
       offset++;
       continue;
     }
