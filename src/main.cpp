@@ -34,12 +34,12 @@ void messageHandler(QtMsgType type, const QMessageLogContext &, const QString & 
 }
 
 int main(int argc, char *argv[]) {
-  QFile logFile(qApp->applicationDirPath() + "/" + appName + ".log");
-  if(logFile.exists()) logFile.remove();
-
   qInstallMessageHandler(messageHandler);
 
   QApplication a(argc, argv);
+
+  QFile logFile(qApp->applicationDirPath() + "/" + appName + ".log");
+  if(logFile.exists()) logFile.remove();
 
   QCoreApplication::setApplicationName(appName);
   QCoreApplication::setApplicationVersion(appVersion);
