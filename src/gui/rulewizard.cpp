@@ -115,7 +115,7 @@ void RuleWizard::accept() {
 
   QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
   if(!rule_dir.exists()) rule_dir.mkdir(".");
-  QFile file(rule_dir.absolutePath() + file_name + ".str");
+  QFile file(rule_dir.absolutePath() + "/" + file_name + ".str");
   QJsonObject rule_json;
 
   if(ui->groupBox->isChecked()) {
