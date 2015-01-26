@@ -221,8 +221,9 @@ void User::loadUserList() {
 }
 
 Anime *User::getAnimeByTitle(QString title) {
+  title = title.toLower();
   for(Anime *anime : anime_list) {
-    if(anime->getEnglishTitle() == title || anime->getJapaneseTitle() == title ||  anime->getRomajiTitle() == title) {
+    if(anime->getEnglishTitle().toLower() == title || anime->getJapaneseTitle().toLower() == title ||  anime->getRomajiTitle().toLower() == title) {
       return anime;
     }
 
@@ -237,8 +238,9 @@ Anime *User::getAnimeByTitle(QString title) {
 }
 
 Anime *User::getAnimeByData(QString title, QString episodes, QString score, QString type) {
+  title = title.toLower();
   for(Anime *anime : anime_list) {
-    if(anime->getEnglishTitle() == title || anime->getJapaneseTitle() == title ||  anime->getRomajiTitle() == title) {
+    if(anime->getEnglishTitle().toLower() == title || anime->getJapaneseTitle().toLower() == title ||  anime->getRomajiTitle().toLower() == title) {
       if(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()) == episodes) {
         if(anime->getMyScore() == score) {
           if(anime->getType() == type) {
