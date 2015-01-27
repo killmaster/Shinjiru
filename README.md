@@ -45,5 +45,5 @@ I don't have insanely high standards for code style but try to keep the code org
 
 - **Email**: <admin@shinjiru.me>
 - **Twitter**: [https://twitter.com/Kazakuri](https://twitter.com/Kazakuri)
-- **Website**: [http://shinjiru.me](http://shinjiru.me)
-- **GitHub**: [https://github.com/matt4682/AniListAPI](https://github.com/matt4682/AniListAPI)
+- **Website**: [http://app.shinjiru.me](http://app.shinjiru.me)
+- **GitHub**: [https://github.com/matt4682/Shinjiru](https://github.com/matt4682/Shinjiru)
