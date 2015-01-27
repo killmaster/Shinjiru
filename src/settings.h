@@ -14,6 +14,7 @@ public:
   enum SettingTypes {
     AnimeRecognitionEnabled,
     TorrentRefreshTime,
+    TorrentRSSURL,
     DefaultRuleType,
     AniListExpires,
     AniListRefresh,

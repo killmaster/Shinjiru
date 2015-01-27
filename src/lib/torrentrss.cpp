@@ -1,4 +1,5 @@
 #include "torrentrss.h"
+#include "../settings.h"
 
 TorrentRSS::TorrentRSS(QWidget *parent) : QWidget(parent), currentReply(0) {
   connect(&manager, SIGNAL(finished(QNetworkReply*)),
@@ -26,8 +27,12 @@ void TorrentRSS::get(const QUrl &url) {
 
 void TorrentRSS::fetch() {
   xml.clear();
+  Settings *s = new Settings;
+  //QUrl url(s->getValue(Settings::TorrentRSSURL, "http://tokyotosho.info/rss.php?filter=1&zwnj=0").toString());
   QUrl url("http://tokyotosho.info/rss.php?filter=1&zwnj=0");
   get(url);
+
+  delete s;
 }
 
 void TorrentRSS::metaDataChanged() {

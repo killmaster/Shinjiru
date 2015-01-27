@@ -21,6 +21,8 @@ QString Settings::parseEnum(int setting) {
       return "rule_type";
     case TorrentRefreshTime:
       return "torrent_interval";
+    case TorrentRSSURL:
+      return "rss_url";
     case AniListAccess:
       return "anilist/access";
     case AniListExpires:
