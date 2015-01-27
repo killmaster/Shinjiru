@@ -104,9 +104,9 @@ void AnimePanel::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
   QPixmap cover = anime->getCoverImage();
-  QMargins m = ui->detailForm->contentsMargins();
+  QMargins m = ui->scrollLayout->contentsMargins();
   m.setRight(20 + cover.width());
-  ui->detailForm->setContentsMargins(m);
+  ui->scrollLayout->setContentsMargins(m);
 
   p.drawPixmap(width() - 235, 10, cover.width(), cover.height(), cover);
   p.drawRect  (width() - 235, 10, cover.width(), cover.height());
