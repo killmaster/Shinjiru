@@ -219,6 +219,10 @@ void MainWindow::showAiringTab()     { ui->tabWidget->setCurrentIndex(3);
                                        int width = layout->geometry().width();
                                        int cwidth = layout->contentsWidth();
 
+                                       if(cwidth == -6) {
+                                         width = this->width() - 2;
+                                         cwidth = 747;
+                                       }
                                        layout->setContentsMargins((width-cwidth)/2, 0, 0, 0); }
 void MainWindow::showStatisticsTab() { ui->tabWidget->setCurrentIndex(4); }
 
