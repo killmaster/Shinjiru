@@ -358,9 +358,12 @@ void MainWindow::updateEpisode() {
   cw_anime->setMyProgress(cw_episode.toInt());
   userListLoaded();
 
-  trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + (" updated to episode ") + cw_episode);
+  QJsonObject response = API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data).object();
 
-  API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+  if(response != QJsonObject())
+    trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + (" updated to episode ") + cw_episode);
+  else
+    trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + (" was not successfully updated"));
 }
 
 void MainWindow::eventTick() {
@@ -382,31 +385,39 @@ void MainWindow::eventTick() {
   hours %= 24;
 
   QString format = "";
+  QString comma = "";
+
   if(days > 1) {
-    format += QString::number(days) + tr(" days, ");
+    format += QString::number(days) + tr(" days");
   } else if (days > 0) {
-    format += QString::number(days) +tr( " day, ");
+    format += QString::number(days) +tr( " day");
   }
 
+  if(days > 0) comma = ", ";
+
   if(hours > 1) {
-    format += QString::number(hours) + tr(" hours, ");
+    format += comma + QString::number(hours) + tr(" hours");
   } else if (hours > 0) {
-    format += QString::number(hours) + tr(" hour, ");
+    format += comma + QString::number(hours) + tr(" hour");
   }
+
+  if(hours > 0) comma = ", ";
 
   if(days == 0) {
     if(minutes > 1) {
-      format += QString::number(minutes) + tr(" minutes, ");
+      format += comma + QString::number(minutes) + tr(" minutes");
     } else if (minutes > 0) {
-      format += QString::number(minutes) + tr(" minute, ");
+      format += comma + QString::number(minutes) + tr(" minute");
     }
   }
 
+  if(minutes > 0) comma = ", ";
+
   if(hours == 0) {
     if(seconds == 1) {
-      format +=  QString::number(seconds) + tr(" second");
+      format += comma + QString::number(seconds) + tr(" second");
     } else {
-      format +=  QString::number(seconds) + tr(" seconds");
+      format += comma + QString::number(seconds) + tr(" seconds");
     }
   }
 
