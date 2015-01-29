@@ -283,6 +283,7 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
 User* User::remake() {
   if(this->m_Instance) {
     delete m_Instance;
+    m_Instance = 0;
   }
 
   return User::sharedUser();
