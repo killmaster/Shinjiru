@@ -182,7 +182,7 @@ void MainWindow::reloadRules() {
     QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
 
     QDate expires = QDate::currentDate();
-    expires.addDays(7 * json["expires"].toInt());
+    expires = expires.addDays(7 * json["expires"].toInt());
 
     if(QDate::currentDate().daysTo(expires) < 0) {
       file.remove();

@@ -18,7 +18,9 @@ win32-msvc* {
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
 include(lib/fervor/fervor.pri)
-include(src/lib/crashhandler/crash_handler.pri)
+
+win32:include(src/lib/crashhandler/crash_handler.pri)
+linux:include(src/lib/crashhandler/crash_handler.pri)
 
 SOURCES   += \
     lib/anitomy/anitomy/anitomy.cpp \
@@ -98,3 +100,7 @@ FORMS     += \
 RESOURCES += res/res.qrc
 
 RC_FILE = Shinjiru.rc
+
+macx: LIBS += -lssl
+
+macx: LIBS += -lcrypto

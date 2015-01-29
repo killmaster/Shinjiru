@@ -1,7 +1,10 @@
 #include "gui/mainwindow.h"
 #include "app.h"
 #include "fvupdater.h"
-#include "lib/crashhandler/crash_handler.h"
+
+#ifndef Q_OS_OSX
+  #include "lib/crashhandler/crash_handler.h"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -43,7 +46,15 @@ void messageHandler(QtMsgType type, const QMessageLogContext &, const QString & 
 }
 
 int main(int argc, char *argv[]) {
-  qInstallMessageHandler(messageHandler);
+  #ifndef Q_OS_OSX
+    qInstallMessageHandler(messageHandler);
+  #endif
+
+  #ifdef Q_OS_OSX
+    QSslConfiguration config = QSslConfiguration::defaultConfiguration();
+    config.setProtocol(QSsl::AnyProtocol);
+    QSslConfiguration::setDefaultConfiguration(config);
+  #endif
 
   QApplication a(argc, argv);
 
@@ -58,7 +69,9 @@ int main(int argc, char *argv[]) {
   FvUpdater::sharedUpdater()->SetFeedURL(appUpdateFeed);
   FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
 
-  Breakpad::CrashHandler::instance()->Init(qApp->applicationDirPath());
+  #ifndef Q_OS_OSX
+    Breakpad::CrashHandler::instance()->Init(qApp->applicationDirPath());
+  #endif
 
   MainWindow w;
   w.show();

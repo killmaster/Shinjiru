@@ -5,7 +5,9 @@
 #include <QStringList>
 #include <QTimer>
 
-#include <qt_windows.h>
+#ifdef Q_OS_WIN
+  #include <qt_windows.h>
+#endif
 
 class WindowWatcher : public QObject
 {
