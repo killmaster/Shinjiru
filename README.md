@@ -21,8 +21,8 @@ Shinjiru requires a few dependencies to compile and work properly, fortunately t
 
 The following dependencies should be cloned and place into the lib folder.
 
-- **QtAwesome**  - [https://github.com/matt4682/QtAwesome](https://github.com/matt4682/QtAwesome)
-- **AniListAPI** - [https://github.com/matt4682/AniListAPI](https://github.com/matt4682/AniListAPI)
+- **QtAwesome**  - [https://github.com/Kazakuri/QtAwesome](https://github.com/Kazakuri/QtAwesome)
+- **AniListAPI** - [https://github.com/Kazakuri/AniListAPI](https://github.com/Kazakuri/AniListAPI)
 - **Anitomy**    - [https://github.com/erengy/anitomy](https://github.com/erengy/anitomy)
 - **Fervor**     - [https://github.com/pypt/fervor](https://github.com/pypt/fervor)
 
@@ -46,4 +46,4 @@ I don't have insanely high standards for code style but try to keep the code org
 - **Email**: <admin@shinjiru.me>
 - **Twitter**: [https://twitter.com/Kazakuri](https://twitter.com/Kazakuri)
 - **Website**: [http://app.shinjiru.me](http://app.shinjiru.me)
-- **GitHub**: [https://github.com/matt4682/Shinjiru](https://github.com/matt4682/Shinjiru)
+- **GitHub**: [https://github.com/Kazakuri/Shinjiru](https://github.com/Kazakuri/Shinjiru)
