@@ -25,6 +25,9 @@ public slots:
   QMap<QString, QMap<QString, Anime*>> getUserList() const { return user_lists; }
   int animeTime()                                    const { return anime_time; }
   QVariantList customLists()                         const { return custom_lists; }
+  int notificationCount()                            const { return notifications; }
+
+  User *remake();
 
   Anime *getAnimeByTitle(QString title);
   Anime *getAnimeByData(QString title, QString episodes, QString score, QString type);
@@ -38,6 +41,7 @@ public slots:
   void setTitleLanguage(const QString lang)        { this->title_language = "title_" + lang; }
   void setAnimeTime(const int anime_time)          { this->anime_time = anime_time; }
   void setCustomLists(const QVariantList list)     { this->custom_lists = list; }
+  void setNotificationCount(const int count)       { this->notifications = count; }
 
   void loadUserList();
   void loadAnimeData(Anime *, bool);
@@ -63,6 +67,7 @@ private:
   QString title_language;
   int anime_time;
   QVariantList custom_lists;
+  int notifications;
 
   FileDownloader *user_image_control;
 

@@ -40,6 +40,8 @@ API::~API() {
 }
 
 int API::verify() {
+  appUseWebView = false;
+
   if(!m_API->hasAuthorizationCode()) {
     if(appUseWebView) {
       APIWebView *wv = new APIWebView;

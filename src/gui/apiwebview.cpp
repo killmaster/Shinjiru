@@ -36,7 +36,9 @@ void APIWebView::webURLChanged() {
 }
 
 void APIWebView::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
-  Q_UNUSED(errlist)
+  for(QSslError e: errlist) {
+    qWarning() << e.errorString();
+  }
 
   qnr->ignoreSslErrors();
 }

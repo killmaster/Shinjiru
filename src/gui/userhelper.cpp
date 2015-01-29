@@ -7,6 +7,10 @@ void MainWindow::loadUser() {
   progress_bar->setFormat("Loading User");
   progress_bar->setValue(15);
   user_future = QtConcurrent::run([&]() {
+    if(this->hasUser) {
+      User::sharedUser()->remake();
+    }
+
     User::sharedUser();
   });
 
@@ -21,5 +25,8 @@ void MainWindow::userLoaded() {
   connect(User::sharedUser(), SIGNAL(new_image()), SLOT(repaint()));
   repaint();
 
-  loadUserList();
+  if(needsRefresh) {
+    loadUserList();
+    needsRefresh = false;
+  }
 }

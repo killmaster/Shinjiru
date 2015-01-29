@@ -28,12 +28,16 @@ User::User() : QObject(0) {
 
   user_image_control = nullptr;
 
-  this->setDisplayName    (result.value("display_name")     .toString());
-  this->setScoreType      (result.value("score_type")       .toInt());
-  this->setProfileImageURL(result.value("image_url_med")    .toString());
-  this->setTitleLanguage  (result.value("title_language")   .toString());
-  this->setAnimeTime      (result.value("anime_time")       .toInt());
-  this->setCustomLists    (result.value("custom_list_anime").toArray().toVariantList());
+  qDebug() << result.keys().join(", ");
+  qDebug() << result.value("display_name");
+
+  this->setDisplayName      (result.value("display_name")     .toString());
+  this->setScoreType        (result.value("score_type")       .toInt());
+  this->setProfileImageURL  (result.value("image_url_med")    .toString());
+  this->setTitleLanguage    (result.value("title_language")   .toString());
+  this->setAnimeTime        (result.value("anime_time")       .toInt());
+  this->setCustomLists      (result.value("custom_list_anime").toArray().toVariantList());
+  this->setNotificationCount(result.value("notifications")    .toInt());
 
   this->loadProfileImage();
 }
@@ -274,4 +278,12 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
 
   anime->finishReload();
 
+}
+
+User* User::remake() {
+  if(this->m_Instance) {
+    delete m_Instance;
+  }
+
+  return User::sharedUser();
 }

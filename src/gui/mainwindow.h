@@ -92,6 +92,10 @@ private:
   QSystemTrayIcon *trayIcon;
   QMenu *trayIconMenu;
 
+  bool needsRefresh;
+  int user_refresh_time;
+  int list_refresh_time;
+
   QAction *quitAction;
   QAction *minimizeAction;
   QAction *maximizeAction;
