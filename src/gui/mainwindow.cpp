@@ -128,6 +128,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->moveUpButton,                   SIGNAL(clicked()),                   SLOT(moveUp()));
   connect(ui->moveDownButton,                 SIGNAL(clicked()),                   SLOT(moveDown()));
 
+  connect(ui->tabWidget, &QTabWidget::currentChanged, [&](int tab) {
+    if(tab != 0) {
+      this->over->removeDrawing("blank_table");
+    } else {
+      this->filterList(3);
+    }
+  });
+
   connect(ui->listFilterLineEdit, SIGNAL(textChanged(QString)), SLOT(filterList(QString)));
   connect(ui->listTabs, SIGNAL(currentChanged(int)), SLOT(filterList(int)));
 
