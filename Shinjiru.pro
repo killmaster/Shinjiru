@@ -56,7 +56,8 @@ SOURCES   += \
     src/gui/settingshelper.cpp \
     src/gui/statshelper.cpp \
     src/gui/apiwebview.cpp \
-    src/gui/rulemanager.cpp
+    src/gui/rulemanager.cpp \
+    src/gui/overlay.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -86,7 +87,8 @@ HEADERS   += \
     src/gui/about.h \
     src/gui/apiwebview.h \
     src/gui/facetablewidgetitem.h \
-    src/gui/rulemanager.h
+    src/gui/rulemanager.h \
+    src/gui/overlay.h
 
 FORMS     += \
     src/gui/airinganime.ui \

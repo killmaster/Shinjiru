@@ -9,6 +9,7 @@
 #include "animepanel.h"
 #include "fvupdater.h"
 #include "about.h"
+#include "overlay.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -33,6 +34,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   watch_timer          = new QTimer(this);
   uptime_timer         = new QElapsedTimer;
   progress_bar         = new QProgressBar(ui->statusBar);
+  over                 = new Overlay(this);
   torrent_refresh_time = 0;
   user_refresh_time    = 15 * 60 * 1000;
   list_refresh_time    = 60 * 60 * 1000;
@@ -189,6 +191,11 @@ void MainWindow::changeEvent(QEvent *event) {
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
+  over->resize(event->size());
+
+  if(over->containsDrawing("blank_table"))
+    this->addSearchPrompt();
+
   event->accept();
   int width = layout->geometry().width();
   int cwidth = layout->contentsWidth();

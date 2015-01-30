@@ -28,6 +28,7 @@
 #include "../lib/windowwatcher.h"
 #include "progresstablewidgetitem.h"
 #include "facetablewidgetitem.h"
+#include "overlay.h"
 
 namespace Ui {
   class MainWindow;
@@ -52,6 +53,7 @@ private:
   Settings *settings;
   WindowWatcher *window_watcher;
   AnitomyWrapper *anitomy;
+  Overlay *over;
 
   bool hasUser;
 
@@ -168,6 +170,8 @@ private slots:
 
   void moveUp();
   void moveDown();
+
+  void addSearchPrompt();
 
   void filterList(int);
   void filterList(QString);

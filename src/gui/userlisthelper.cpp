@@ -262,6 +262,8 @@ void MainWindow::filterList(QString filter) {
   if(ui->listTabs->currentWidget()->layout() == 0) return;
   if(ui->listTabs->currentWidget()->layout()->count() == 0) return;
 
+  int visibleRows = 0;
+
   QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
 
   if(w == 0) return;
@@ -275,5 +277,25 @@ void MainWindow::filterList(QString filter) {
     if(items.at(i)->column() != 0 ) continue;
 
     w->showRow(items.at(i)->row());
+    visibleRows++;
   }
+  if(visibleRows == 0) {
+    addSearchPrompt();
+  } else {
+    over->removeDrawing("blank_table");
+  }
+}
+
+void MainWindow::addSearchPrompt() {
+  QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
+
+  QPoint location = w->mapTo(this, QPoint(0,0));
+  QPixmap *pix = new QPixmap(width(), height());
+  pix->fill(Qt::transparent);
+  QPainter p(pix);
+  p.fillRect(location.x()+1, location.y()+24, w->width()-2, w->height()-25, QColor(255,255,255));
+  p.setPen(QColor(0,0,200));
+  p.drawText(location.x()+1, location.y()+24, w->width()-2, w->height()-25, Qt::AlignCenter, "Nothing found, click here to open a search box.");
+
+  over->addDrawing("blank_table", pix);
 }
