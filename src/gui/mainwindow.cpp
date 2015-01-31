@@ -185,6 +185,18 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   }
 }
 
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *event) {
+  if(over->containsDrawing("blank_table")) {
+    QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
+    QPoint location = w->mapTo(this, QPoint(0,0));
+    QRect r(location.x()+1, location.y()+24, w->width()-2, w->height()-25);
+
+    if(r.contains(event->x(), event->y())) {
+      //TODO: Open instance of search panel
+    }
+  }
+}
+
 void MainWindow::changeEvent(QEvent *event) {
   if(event->type() == QEvent::WindowStateChange) {
     if(isMaximized()) {

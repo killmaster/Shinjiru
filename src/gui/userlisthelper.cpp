@@ -283,6 +283,7 @@ void MainWindow::filterList(QString filter) {
     addSearchPrompt();
   } else {
     over->removeDrawing("blank_table");
+    w->setAttribute(Qt::WA_TransparentForMouseEvents, false);
   }
 }
 
@@ -293,9 +294,11 @@ void MainWindow::addSearchPrompt() {
   QPixmap *pix = new QPixmap(width(), height());
   pix->fill(Qt::transparent);
   QPainter p(pix);
-  p.fillRect(location.x()+1, location.y()+24, w->width()-2, w->height()-25, QColor(255,255,255));
+  QRect r(location.x()+1, location.y()+24, w->width()-2, w->height()-25);
+  p.fillRect(r, QColor(255,255,255));
   p.setPen(QColor(0,0,200));
-  p.drawText(location.x()+1, location.y()+24, w->width()-2, w->height()-25, Qt::AlignCenter, "Nothing found, click here to open a search box.");
-
+  p.drawText(r, Qt::AlignCenter, "Nothing found, click here to open a search box.");
   over->addDrawing("blank_table", pix);
+
+  w->setAttribute(Qt::WA_TransparentForMouseEvents);
 }

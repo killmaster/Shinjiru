@@ -46,6 +46,7 @@ protected:
   void paintEvent(QPaintEvent *);
   void resizeEvent(QResizeEvent *);
   void changeEvent(QEvent *);
+  void mouseDoubleClickEvent(QMouseEvent *);
 
 private:
   Ui::MainWindow *ui;
