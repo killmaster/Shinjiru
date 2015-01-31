@@ -2,5 +2,6 @@
     <qresource prefix="/">
         <file>style.css</file>
         <file>icon.png</file>
+        <file>search_results.html</file>
     </qresource>
 </RCC>

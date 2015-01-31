@@ -10,6 +10,7 @@
 #include "fvupdater.h"
 #include "about.h"
 #include "overlay.h"
+#include "searchpanel.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -192,7 +193,8 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event) {
     QRect r(location.x()+1, location.y()+24, w->width()-2, w->height()-25);
 
     if(r.contains(event->x(), event->y())) {
-      //TODO: Open instance of search panel
+      SearchPanel *sp = new SearchPanel(this);
+      sp->show();
     }
   }
 }
