@@ -84,6 +84,7 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
   QString my_status = anime->getMyStatus();
 
   my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
+  if(my_status == "Plan to watch") my_status = "Plan to Watch";
   ui->comboStatus->setCurrentText(my_status);
 
 
