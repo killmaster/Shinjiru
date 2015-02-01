@@ -1117,6 +1117,7 @@
     <property name="title">
      <string>&amp;Tools</string>
     </property>
+    <addaction name="actionAS"/>
     <addaction name="actionEAR"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
@@ -1191,6 +1192,11 @@
   <action name="actionUpdate">
    <property name="text">
     <string>&amp;Update</string>
+   </property>
+  </action>
+  <action name="actionAS">
+   <property name="text">
+    <string>&amp;Anime Search</string>
    </property>
   </action>
  </widget>
