@@ -264,6 +264,8 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
 
   QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get(ID_URL).object();
 
+  anime->setCoverURL(          QUrl(result.value("image_url_lge")   .toString()));
+
   if(download_cover) {
     if(anime->needsCover()) {
       anime->downloadCover();
@@ -272,9 +274,26 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
 
   QString description = result.value("description").toString();
 
-  anime->setDuration(result.value("duration").toInt());
+  anime->setDuration(               result.value("duration").toInt());
+  anime->setSynopsis(               description);
+  anime->setRomajiTitle(            result.value("title_romaji")    .toString());
+  anime->setJapaneseTitle(          result.value("title_japanese")  .toString());
+  anime->setEnglishTitle(           result.value("title_english")   .toString());
+  anime->setType(                   result.value("type")            .toString());
+  anime->setAiringStatus(           result.value("airing_status")   .toString());
+  anime->setEpisodeCount(           result.value("total_episodes")  .toInt());
+  anime->setAverageScore(           result.value("average_score")   .toString());
+  anime->setTitle(                  result.value(title_language)    .toString());
 
-  anime->setSynopsis(description);
+  QJsonArray synonyms = result.value("synonyms").toArray();
+
+  for(int j = 0; j < synonyms.count(); j++) {
+    anime->addSynonym(synonyms.at(j).toString());
+  }
+
+  anime->setMyProgress(0);
+  anime->setMyNotes("");
+  anime->setMyRewatch(0);
 
   anime->finishReload();
 

@@ -88,7 +88,8 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
 
 
 
-  if(anime->needsLoad()) {
+  if(anime->needsLoad() || anime->needsCover()) {
+    User::sharedUser()->loadAnimeData(anime, true);
     connect(anime, SIGNAL(finishedReloading()), SLOT(refreshDisplay()));
     connect(anime, SIGNAL(new_image()), SLOT(repaint()));
   } else {
