@@ -228,18 +228,32 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 void MainWindow::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
+
+  int notification_count = 0;
+
+  if(this->hasUser) {
+    p.drawPixmap(width() - 60, 24, 50, 50, User::sharedUser()->userImage());
+    notification_count = User::sharedUser()->notificationCount();
+  }
+
+  p.drawRect(width() - 60, 24, 50, 50);
+
+  if(notification_count > 0) p.setBrush(QColor(255,120,120));
+  else p.setBrush(QColor(255,255,255));
+
+  p.drawEllipse(width() - 25.0f,60.0f, 20.0f, 20.0f);
+  QString notif = notification_count >= 9 ? "9+" : QString::number(notification_count);
+  p.drawText(width() - 25.0f, 59.0f, 20.0f, 20.0f, Qt::AlignCenter, notif);
+
   QFont font = p.font();
   font.setPointSize(14);
   p.setFont(font);
 
-  p.setRenderHint(QPainter::SmoothPixmapTransform, true);
-
-  if(hasUser) {
+  if(this->hasUser) {
     p.drawText(0, 30, width() - 65, 40, Qt::AlignRight, User::sharedUser()->displayName());
-    p.drawPixmap(width() - 60, 24, 50, 50, User::sharedUser()->userImage());
   }
 
-  p.drawRect(width() - 60, 24, 50, 50);
+  p.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
   event->accept();
 }
