@@ -122,6 +122,8 @@ void MainWindow::download(int row) {
 
   ui->labelDownloadedTotal->setText(QString::number(count_total));
   ui->labelDownloadedLaunch->setText(QString::number(download_count));
+
+  settings->setValue(Settings::DownloadCount, count_total);
 }
 
 void MainWindow::createRule(int row) {
@@ -249,6 +251,8 @@ void MainWindow::verifyAndDownload(int row) {
 
     ui->labelRulesLaunch->setText(QString::number(download_rule));
     ui->labelRulesTotal->setText(QString::number(rule_total));
+
+    settings->setValue(Settings::RuleCount, rule_total);
 
     trayIcon->showMessage("Shinjiru", title + tr(" has started downloading."));
     f.open(QFile::WriteOnly);

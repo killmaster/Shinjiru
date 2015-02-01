@@ -28,6 +28,8 @@ void MainWindow::loadSettings() {
   ui->minimizeToTrayCheckBox->setChecked(minimize_to_tray);
   ui->closeToTrayCheckBox->setChecked(close_to_tray);
   ui->startOnBootCheckBox->setChecked(sob);
+  ui->labelDownloadedTotal->setText(QString::number(count_total));
+  ui->labelRulesTotal->setText(QString::number(rule_total));
   toggleAnimeRecognition(ear);
 
   for(QString key : list_order) {
@@ -76,8 +78,6 @@ void MainWindow::applySettings() {
   settings->setValue(Settings::MinimizeToTray, minimize_to_tray);
   settings->setValue(Settings::CloseToTray, close_to_tray);
   settings->setValue(Settings::ListOrder, list_order);
-  settings->setValue(Settings::DownloadCount, count_total);
-  settings->setValue(Settings::RuleCount, count_total);
 
   ui->applyButton->setEnabled(false);
 }
