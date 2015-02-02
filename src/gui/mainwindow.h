@@ -100,8 +100,6 @@ private:
   int list_refresh_time;
 
   QAction *quitAction;
-  QAction *minimizeAction;
-  QAction *maximizeAction;
   QAction *restoreAction;
 
   int auto_update_delay;
