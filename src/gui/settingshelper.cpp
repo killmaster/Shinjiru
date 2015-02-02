@@ -83,19 +83,17 @@ void MainWindow::applySettings() {
 }
 
 void MainWindow::defaultSettings() {
-  /*
-   * TODO: Show confirmation dialog
-   */
+  if(QMessageBox::Yes == QMessageBox::question(this, "Shinjiru", "Are you sure you want to reset the settings to their default value?", QMessageBox::Yes|QMessageBox::No)) {
+    settings->setValue(Settings::TorrentRefreshTime,      900);
+    settings->setValue(Settings::AnimeRecognitionEnabled, false);
+    settings->setValue(Settings::DefaultRuleType,         "basic");
+    settings->setValue(Settings::AutoUpdateDelay,         120);
+    settings->setValue(Settings::StartOnBoot,             false);
+    settings->setValue(Settings::MinimizeToTray,          false);
+    settings->setValue(Settings::CloseToTray,             true);
+    settings->setValue(Settings::ListOrder,               QStringList());
 
-  settings->setValue(Settings::TorrentRefreshTime,      900);
-  settings->setValue(Settings::AnimeRecognitionEnabled, false);
-  settings->setValue(Settings::DefaultRuleType,         "basic");
-  settings->setValue(Settings::AutoUpdateDelay,         120);
-  settings->setValue(Settings::StartOnBoot,             false);
-  settings->setValue(Settings::MinimizeToTray,          false);
-  settings->setValue(Settings::CloseToTray,             true);
-  settings->setValue(Settings::ListOrder,               QStringList());
-
-  QProcess::startDetached(QApplication::applicationFilePath());
-  exit(0);
+    QProcess::startDetached(QApplication::applicationFilePath());
+    exit(0);
+  }
 }
