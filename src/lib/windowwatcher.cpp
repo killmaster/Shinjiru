@@ -61,6 +61,8 @@ bool WindowWatcher::isMediaPlayer(QString window_title) {
      * Fix for some basic title patterns, VLC etc
      */
 
+    found_title = found_title.replace(" - VLC media player", "");
+
     return true;
   }
   return false;
