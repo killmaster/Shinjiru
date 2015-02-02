@@ -29,20 +29,24 @@ void messageHandler(QtMsgType type, const QMessageLogContext &, const QString & 
   QFile logFile(qApp->applicationDirPath() + "/" + appName + ".log");
   logFile.open(QFile::WriteOnly | QFile::Append);
 
+  logFile.write(QDateTime::currentDateTimeUtc().toString("[yyyy-MM-dd HH:mm:ss.zzz] ").toUtf8());
+
   switch (type) {
     case QtDebugMsg:
-      logFile.write(QString("Debug: ").toUtf8() + parser.toUtf8() + QString("\n").toUtf8());
+      logFile.write(QString("Debug: ").toUtf8());
       break;
     case QtWarningMsg:
-      logFile.write(QString("Warning: ").toUtf8() + parser.toUtf8() + QString("\n").toUtf8());
+      logFile.write(QString("Warning: ").toUtf8());
       break;
     case QtCriticalMsg:
-      logFile.write(QString("Critical: ").toUtf8() + parser.toUtf8() + QString("\n").toUtf8());
+      logFile.write(QString("Critical: ").toUtf8());
       break;
     case QtFatalMsg:
-      logFile.write(QString("Fatal: ").toUtf8() + parser.toUtf8() + QString("\n").toUtf8());
+      logFile.write(QString("Fatal: ").toUtf8());
       abort();
   }
+
+  logFile.write(parser.toUtf8() + QString("\n").toUtf8());
 }
 
 int main(int argc, char *argv[]) {
