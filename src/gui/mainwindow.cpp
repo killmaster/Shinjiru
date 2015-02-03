@@ -98,7 +98,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionExit,   &QAction::triggered,                             []()  {exit(0);});
   connect(ui->actionAbout,  &QAction::triggered,                             [&]() {showAbout();});
   connect(ui->actionHelp,   &QAction::triggered,                             [&]() {QDesktopServices::openUrl(QUrl("http://app.shinjiru.me/support.php"));});
-  connect(ui->actionRL,     &QAction::triggered,                             [&]() {needsRefresh = true; loadUserList();});
+  connect(ui->actionRL,     &QAction::triggered,                             [&]() {needsRefresh = true; loadUser();});
   connect(ui->actionAS,     &QAction::triggered,                             [&]() {SearchPanel *sp = new SearchPanel(this); sp->show();});
   connect(ui->actionVAL,    SIGNAL(triggered()),                             SLOT(viewAnimeList()));
   connect(ui->actionVD,     SIGNAL(triggered()),                             SLOT(viewDashboard()));

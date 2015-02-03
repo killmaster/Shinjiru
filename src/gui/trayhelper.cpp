@@ -2,8 +2,6 @@
 
 void MainWindow::initTray() {
   trayIconMenu = new QMenu(this);
-  trayIconMenu->addAction(minimizeAction);
-  trayIconMenu->addAction(maximizeAction);
   trayIconMenu->addAction(restoreAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(quitAction);

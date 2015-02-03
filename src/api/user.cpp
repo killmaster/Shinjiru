@@ -62,8 +62,6 @@ bool User::loadProfileImage() {
 
   this->setUserImage(user_image_control->downloadedData());
 
-  user_image_control->deleteLater();
-
   return true;
 }
 
@@ -89,7 +87,11 @@ void User::loadUserList() {
   QJsonObject custom_list_data = user_list_data.value("custom_lists").toObject();
   user_list_data = user_list_data.value("lists").toObject();
 
-  anime_list.clear();
+  Anime *item;
+
+  while(anime_list.count() > 0 && (item = anime_list.takeAt(0))) {
+    delete item;
+  }
 
   QMap<QString, QMap<QString, Anime*>> custom;
 
@@ -138,7 +140,7 @@ void User::loadUserList() {
       }
 
 
-      if(list.contains(anime_data->getID())){
+      if(list.contains(anime_data->getID())) {
         Anime *old = list.value(anime_data->getID());
         anime_list.removeAll(old);
       }
