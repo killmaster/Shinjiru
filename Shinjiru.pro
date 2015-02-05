@@ -90,7 +90,8 @@ HEADERS   += \
     src/gui/facetablewidgetitem.h \
     src/gui/rulemanager.h \
     src/gui/overlay.h \
-    src/gui/searchpanel.h
+    src/gui/searchpanel.h \
+    src/version.h
 
 FORMS     += \
     src/gui/airinganime.ui \

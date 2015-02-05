@@ -1,4 +1,5 @@
 #include "api.h"
+#include "../version.h"
 #include "../app.h"
 
 #include <QMutex>
@@ -40,10 +41,9 @@ API::~API() {
 }
 
 int API::verify() {
-  appUseWebView = false;
 
   if(!m_API->hasAuthorizationCode()) {
-    if(appUseWebView) {
+    if(VER_USEWEBVIEW_BOOL == TRUE) {
       APIWebView *wv = new APIWebView;
       wv->show();
 
@@ -54,7 +54,7 @@ int API::verify() {
       delete wv;
     } else {
       bool ok;
-      QDesktopServices::openUrl(QUrl(appAuthPINURL));
+      QDesktopServices::openUrl(QUrl(VER_AUTHPINURL_STR));
 
       QString message = "Authorization pin:                                                                                    ";
       QString text = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
@@ -68,7 +68,7 @@ int API::verify() {
     }
   }
 
-  if(appUseWebView) return m_API->init("code");
+  if(VER_USEWEBVIEW_BOOL == TRUE) return m_API->init("code");
 
   return m_API->init("pin");
 }

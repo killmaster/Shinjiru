@@ -1,4 +1,5 @@
 #include "gui/mainwindow.h"
+#include "version.h"
 #include "app.h"
 #include "fvupdater.h"
 
@@ -26,7 +27,7 @@ void messageHandler(QtMsgType type, const QMessageLogContext &, const QString & 
   parser.replace(QString::fromWCharArray(L"\u2404"), "");
   parser.replace(QString::fromWCharArray(L"\u2405"), "");
 
-  QFile logFile(qApp->applicationDirPath() + "/" + appName + ".log");
+  QFile logFile(qApp->applicationDirPath() + "/" + VER_PRODUCTNAME_STR + ".log");
   logFile.open(QFile::WriteOnly | QFile::Append);
 
   logFile.write(QDateTime::currentDateTimeUtc().toString("[yyyy-MM-dd HH:mm:ss.zzz] ").toUtf8());
@@ -62,15 +63,15 @@ int main(int argc, char *argv[]) {
 
   QApplication a(argc, argv);
 
-  QFile logFile(qApp->applicationDirPath() + "/" + appName + ".log");
+  QFile logFile(qApp->applicationDirPath() + "/" + VER_PRODUCTNAME_STR + ".log");
   if(logFile.exists()) logFile.remove();
 
-  QCoreApplication::setApplicationName(appName);
-  QCoreApplication::setApplicationVersion(appVersion);
-  QCoreApplication::setOrganizationName(appAuthor);
-  QCoreApplication::setOrganizationDomain(appDomain);
+  QCoreApplication::setApplicationName(VER_PRODUCTNAME_STR);
+  QCoreApplication::setApplicationVersion(VER_PRODUCTVERSION_STR);
+  QCoreApplication::setOrganizationName(VER_COMPANYNAME_STR);
+  QCoreApplication::setOrganizationDomain(VER_COMPANYDOMAIN_STR);
 
-  FvUpdater::sharedUpdater()->SetFeedURL(appUpdateFeed);
+  FvUpdater::sharedUpdater()->SetFeedURL(VER_UPDATEFEED_STR);
   FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
 
   #ifndef Q_OS_OSX
