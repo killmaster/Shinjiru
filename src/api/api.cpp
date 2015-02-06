@@ -41,8 +41,10 @@ API::~API() {
 }
 
 int API::verify() {
+  qDebug() << "Verifying API client with AniList...";
 
   if(!m_API->hasAuthorizationCode()) {
+    qDebug() << "No authorization code found, prompting user for access";
     if(VER_USEWEBVIEW_BOOL == TRUE) {
       APIWebView *wv = new APIWebView;
       wv->show();
@@ -60,7 +62,6 @@ int API::verify() {
       QString text = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
 
       if (ok && !text.isEmpty()) {
-        qDebug() << text;
         m_API->setAuthorizationPin(text);
       } else {
         return AniListAPI::NO_AUTHORIZATION;

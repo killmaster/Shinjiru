@@ -13,6 +13,8 @@
 #include "rulemanager.h"
 
 void MainWindow::refreshTorrentListing() {
+  qDebug() << "Refreshing torrent listing..." << "(" + QString::number(torrent_refresh_time) + ")";
+
   ui->refreshButton->setText("Refresh (0)");
   torrent_refresh_time = torrent_interval;
 
@@ -79,6 +81,8 @@ void MainWindow::refreshTorrentListing() {
     offset--;
   }
 
+  qDebug() << ui->torrentTable->rowCount() << "torrents loaded";
+
   ui->torrentTable->resizeColumnsToContents();
   filterTorrents(ui->torrentFilter->text(), ui->chkHideUnknown->isChecked());
   checkForMatches();
@@ -119,6 +123,8 @@ void MainWindow::download(int row) {
   QDesktopServices::openUrl(ui->torrentTable->item(row, 5)->text());
   download_count++;
   count_total++;
+
+  qDebug() << "Downloading" << ui->torrentTable->item(row, 5)->text();
 
   ui->labelDownloadedTotal->setText(QString::number(count_total));
   ui->labelDownloadedLaunch->setText(QString::number(download_count));
@@ -206,6 +212,11 @@ void MainWindow::reloadRules() {
       basic_rules.append(values);
     }
   }
+
+  qDebug() << "Loaded" << adv_rules.count() << "advanced rules";
+  qDebug() << "Loaded" << basic_rules.count() << "basic rules";
+
+  checkForMatches();
 }
 
 void MainWindow::checkForMatches() {
@@ -245,6 +256,7 @@ void MainWindow::verifyAndDownload(int row) {
   history_dir.mkdir(".");
   QFile f(history_dir.absoluteFilePath(file));
   if(!f.exists()) {
+    qDebug() << "Downloading" << title << "from torrent rule";
     download(row);
     download_rule++;
     rule_total++;

@@ -7,6 +7,7 @@
 #include <limits>
 
 AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(parent), ui(new Ui::AnimePanel) {
+  qDebug() << "Loading anime panel for anime" << anime->getTitle();
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);

@@ -7,6 +7,7 @@
 #include <QDirIterator>
 
 RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent), ui(new Ui::RuleManager) {
+  qDebug() << "Launching rule manager";
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -24,11 +25,14 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
     ui->listWidget->addItem(file);
   }
 
+  qDebug() << ui->listWidget->count() << "rule files found";
+
   connect(ui->closeButton, &QPushButton::clicked, [&]() {
     this->accept();
   });
 
   connect(ui->deleteButton, &QPushButton::clicked, [&, rule_dir]() {
+    qDebug() << "Deleted rule" << ui->listWidget->selectedItems().at(0)->text();
     if(ui->listWidget->selectedItems().length() == 0) return;
     QFile file(rule_dir.absolutePath()+ ui->listWidget->selectedItems().at(0)->text());
     file.remove();

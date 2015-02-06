@@ -9,6 +9,7 @@
 #include <QDebug>
 
 RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file, QString default_rule) : QDialog(parent), ui(new Ui::RuleWizard) {
+  qDebug() << "Launching rule wizard";
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -112,6 +113,8 @@ void RuleWizard::accept() {
     bool ok;
     file_name = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Rule Name"), tr("Enter a name for the new rule:"), QLineEdit::Normal, "", &ok);
   }
+
+  qDebug() << "Creating rule" << file_name + ".str";
 
   QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
   if(!rule_dir.exists()) rule_dir.mkdir(".");

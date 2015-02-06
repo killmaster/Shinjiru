@@ -24,12 +24,10 @@ User* User::sharedUser() {
 }
 
 User::User() : QObject(0) {
+  qDebug() << "Requesting current user from AniList...";
   QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER).object();
 
   user_image_control = nullptr;
-
-  qDebug() << result.keys().join(", ");
-  qDebug() << result.value("display_name");
 
   this->setDisplayName      (result.value("display_name")     .toString());
   this->setScoreType        (result.value("score_type")       .toInt());
@@ -53,6 +51,8 @@ bool User::loadProfileImage() {
   if(profileImageURL().isEmpty()) return false;
 
   QUrl url(profileImageURL());
+
+  qDebug() << "Downloading user image" << profileImageURL() << "for" << displayName();
 
   user_image_control = new FileDownloader(url, this);
 
@@ -83,6 +83,8 @@ void User::setScoreType(const int &score_type) {
 }
 
 void User::loadUserList() {
+  qDebug() << "Fetching user list";
+
   QJsonObject user_list_data = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(this->displayName())).object();
   QJsonObject custom_list_data = user_list_data.value("custom_lists").toObject();
   user_list_data = user_list_data.value("lists").toObject();
@@ -224,6 +226,8 @@ void User::loadUserList() {
     QString key = this->customLists().at(k).toString();
     user_lists.insert(key , custom.value(key));
   }
+
+  qDebug() << "Loaded" << anime_list.count() << "anime";
 }
 
 Anime *User::getAnimeByTitle(QString title) {
@@ -299,6 +303,7 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
 
   anime->finishReload();
 
+  qDebug() << "Loaded extra data for anime" << anime->getTitle();
 }
 
 User* User::remake() {

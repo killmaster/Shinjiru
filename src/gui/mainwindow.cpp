@@ -153,7 +153,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
       progress_bar->setValue(10);
       progress_bar->setFormat("Access granted");
       loadUser();
-      reloadRules();
 
       event_timer->start(1000);
     });
@@ -167,6 +166,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
       QMessageBox::critical(this, "Shinjiru", tr("Error: ") + error);
     });
   }
+
+  reloadRules();
 }
 
 MainWindow::~MainWindow() {

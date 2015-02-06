@@ -7,6 +7,7 @@
 #include "../version.h"
 
 APIWebView::APIWebView(QWidget *parent) : QDialog(parent), ui(new Ui::APIWebView) {
+  qDebug() << "Launching web view for authentication";
   ui->setupUi(this);
 
   ui->webView->load(QUrl(VER_AUTHURL_STR));

@@ -3,25 +3,26 @@
 #include "../lib/skinmanager.h"
 
 #include <QFile>
+#include <QDebug>
 #include <QPainter>
 #include <QCoreApplication>
 
 About::About(QWidget *parent) : QDialog(parent), ui(new Ui::About) {
-    ui->setupUi(this);
-    setAttribute(Qt::WA_DeleteOnClose);
-    setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
+  qDebug() << "Launching about panel";
+  ui->setupUi(this);
+  setAttribute(Qt::WA_DeleteOnClose);
+  setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
-    QFile f(SkinManager::sharedManager()->get(SkinManager::AboutMascot));
-    f.open(QFile::ReadOnly);
-    QByteArray data = f.readAll();
-    mascot.loadFromData(data);
+  QFile f(SkinManager::sharedManager()->get(SkinManager::AboutMascot));
+  f.open(QFile::ReadOnly);
+  QByteArray data = f.readAll();
+  mascot.loadFromData(data);
 
-    ui->versionLabel->setText(tr("Version ") + qApp->applicationVersion());
+  ui->versionLabel->setText(tr("Version ") + qApp->applicationVersion());
 }
 
-About::~About()
-{
-    delete ui;
+About::~About() {
+  delete ui;
 }
 
 void About::paintEvent(QPaintEvent *) {

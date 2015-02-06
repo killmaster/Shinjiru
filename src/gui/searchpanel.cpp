@@ -22,6 +22,7 @@ const QString RESULT_TEMPLATE =
 const QString KEYWORD_REPLACE = "<!-- SEARCH RESULTS -->";
 
 SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPanel) {
+  qDebug() << "Launching search panel";
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
   setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
