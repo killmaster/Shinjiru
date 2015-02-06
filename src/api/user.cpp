@@ -297,9 +297,13 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
     anime->addSynonym(synonyms.at(j).toString());
   }
 
-  anime->setMyProgress(0);
-  anime->setMyNotes("");
-  anime->setMyRewatch(0);
+  if(anime->getMyProgress() > anime->getEpisodeCount() && anime->getEpisodeCount() != 0) {
+    // It's probably safe to assume that this was caused creating an anime on the fly
+    // So let's reset everything
+    anime->setMyProgress(0);
+    anime->setMyNotes("");
+    anime->setMyRewatch(0);
+  }
 
   anime->finishReload();
 
