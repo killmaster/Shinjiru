@@ -68,6 +68,9 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
     if(a == 0) {
       a = new Anime(User::sharedUser());
       a->setID(id);
+      a->setMyProgress(0);
+      a->setMyNotes("");
+      a->setMyRewatch(0);
     }
 
     User::sharedUser()->loadAnimeData(a, false);
