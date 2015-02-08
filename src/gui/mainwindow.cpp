@@ -38,11 +38,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   over                 = new Overlay(this);
   torrent_refresh_time = 0;
   user_refresh_time    = 15 * 60 * 1000;
-  list_refresh_time    = 60 * 60 * 1000;
   download_rule        = 0;
   download_count       = 0;
   hasUser              = false;
-  needsRefresh         = true;
 
   uptime_timer->start();
   watch_timer->setSingleShot(true);
@@ -98,7 +96,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionExit,   &QAction::triggered,                             []()  {exit(0);});
   connect(ui->actionAbout,  &QAction::triggered,                             [&]() {showAbout();});
   connect(ui->actionHelp,   &QAction::triggered,                             [&]() {QDesktopServices::openUrl(QUrl("http://app.shinjiru.me/support.php"));});
-  connect(ui->actionRL,     &QAction::triggered,                             [&]() {needsRefresh = true; loadUser();});
+  connect(ui->actionRL,     &QAction::triggered,                             [&]() {loadUser();});
   connect(ui->actionAS,     &QAction::triggered,                             [&]() {SearchPanel *sp = new SearchPanel(this); sp->show();});
   connect(ui->actionVAL,    SIGNAL(triggered()),                             SLOT(viewAnimeList()));
   connect(ui->actionVD,     SIGNAL(triggered()),                             SLOT(viewDashboard()));
@@ -418,11 +416,6 @@ void MainWindow::eventTick() {
   if(torrent_refresh_time == 0) {
     torrent_refresh_time = torrent_interval;
     refreshTorrentListing();
-  }
-
-  if(list_refresh_time == 0) {
-    this->needsRefresh = true;
-    list_refresh_time = 60 * 0 * 1000;
   }
 
   if(user_refresh_time == 0) {

@@ -32,8 +32,5 @@ void MainWindow::userLoaded() {
   connect(User::sharedUser(), SIGNAL(new_image()), SLOT(repaint()));
   repaint();
 
-  if(needsRefresh) {
-    loadUserList();
-    needsRefresh = false;
-  }
+  loadUserList();
 }
