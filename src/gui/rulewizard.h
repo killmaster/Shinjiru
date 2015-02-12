@@ -16,6 +16,10 @@ public:
   RuleWizard(QWidget *parent, QString file);
   ~RuleWizard();
 
+  QString fileName() {
+    return file_name;
+  }
+
 private:
   Ui::RuleWizard *ui;
   bool edit_mode;

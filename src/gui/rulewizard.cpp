@@ -29,6 +29,8 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
   ui->animeResolutionComboBox->setCurrentText(res);
   ui->fileRegexLineEdit->setText(file);
 
+  edit_mode = false;
+
   connect(ui->groupBox,   SIGNAL(toggled(bool)), SLOT(groupToggle(bool)));
   connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
 }
@@ -36,7 +38,6 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
 RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new Ui::RuleWizard) {
   if(file == "basic" || file == "advanced") {
     ui->setupUi(this);
-    setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->lineEdit->setValidator(new QIntValidator(0, 999, this));
@@ -52,6 +53,8 @@ RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new 
     connect(ui->groupBox,   SIGNAL(toggled(bool)), SLOT(groupToggle(bool)));
     connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
 
+    edit_mode = false;
+
     return;
   }
 
@@ -61,6 +64,7 @@ RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new 
   QJsonObject o = QJsonDocument::fromJson(f.readAll()).object();
 
   QString type = o["rule_type"].toString();
+
 
   edit_mode = true;
   file_name = file.split("/").last().split(".").first();

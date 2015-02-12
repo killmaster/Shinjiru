@@ -42,6 +42,11 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
   connect(ui->newButton, &QPushButton::clicked, [&, default_rule]() {
     RuleWizard *rw = new RuleWizard(this, default_rule);
     rw->show();
+
+    connect(rw, &RuleWizard::accepted, [&, rw]() {
+      ui->listWidget->addItem(rw->fileName() + ".str");
+      delete rw;
+    });
   });
 
   connect(ui->editButton, &QPushButton::clicked, [&, rule_dir]() {
