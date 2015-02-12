@@ -7,6 +7,7 @@
 #include <QFile>
 #include <QDir>
 #include <QDebug>
+#include <QDate>
 
 RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file, QString default_rule) : QDialog(parent), ui(new Ui::RuleWizard) {
   qDebug() << "Launching rule wizard";
@@ -113,6 +114,10 @@ void RuleWizard::group2Toggle(bool status) {
 }
 
 void RuleWizard::accept() {
+  if(ui->lineEdit->text().isEmpty()) {
+    ui->lineEdit->setText("-1");
+  }
+
   if(!edit_mode){
     bool ok;
     file_name = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Rule Name"), tr("Enter a name for the new rule:"), QLineEdit::Normal, "", &ok);
@@ -137,7 +142,12 @@ void RuleWizard::accept() {
     rule_json["resolution"] = ui->animeResolutionComboBox->currentText();
   }
 
-  rule_json["expires"]      = ui->lineEdit->text();
+  int expires = ui->lineEdit->text().toInt();
+
+  QDate date = expires < 0 ? QDate::currentDate().addYears(999) : QDate::currentDate().addDays(7 * expires);
+
+
+  rule_json["expires"] = date.toString();
 
   file.open(QFile::WriteOnly);
   QByteArray data = QJsonDocument(rule_json).toJson(QJsonDocument::Compact);

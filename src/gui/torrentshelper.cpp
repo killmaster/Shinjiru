@@ -227,7 +227,7 @@ void MainWindow::checkForMatches() {
     QString file  = ui->torrentTable->item(j, 4)->text();
 
     for(int i = 0; i < basic_rules.length(); i++) {
-      if(QDate::currentDate().daysTo(basic_rules.at(i).value("expires").toDate()) < 0) {
+      if(QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
         basic_rules.removeAt(i);
         continue;
       }
@@ -237,7 +237,7 @@ void MainWindow::checkForMatches() {
     }
 
     for(int i = 0; i < adv_rules.length(); i++) {
-      if(QDate::currentDate().daysTo(adv_rules.at(i).value("expires").toDate()) < 0) {
+      if(QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
         adv_rules.removeAt(i);
         continue;
       }
