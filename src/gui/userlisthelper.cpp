@@ -6,7 +6,7 @@
 
 void MainWindow::loadUserList() {
   progress_bar->setValue(25);
-  progress_bar->setFormat("Downloading User List");
+  progress_bar->setFormat(tr("Downloading User List"));
 
   user_list_future = QtConcurrent::run([&]() {
     User::sharedUser()->loadUserList();
@@ -18,7 +18,7 @@ void MainWindow::loadUserList() {
 
 void MainWindow::userListLoaded() {
   progress_bar->setValue(30);
-  progress_bar->setFormat("Parsing User List");
+  progress_bar->setFormat(tr("Parsing User List"));
 
   airing.clear();
 
@@ -176,16 +176,16 @@ QTableWidget *MainWindow::getListTable() {
     int row = item->row();
     pos.setY(pos.y() + 120);
 
-    QAction *pAnimePanel       = new QAction("Open Anime Panel", table);
-    QAction *pEpisodeIncrement = new QAction("Increment Progress by 1", table);
-    QMenu   *pStatusUpdate     = new QMenu("Status", table);
-    QAction *pDeleteEntry      = new QAction("Delete Entry", table);
+    QAction *pAnimePanel       = new QAction(tr("Open Anime Panel"), table);
+    QAction *pEpisodeIncrement = new QAction(tr("Increment Progress by 1"), table);
+    QMenu   *pStatusUpdate     = new QMenu(tr("Status"), table);
+    QAction *pDeleteEntry      = new QAction(tr("Delete Entry"), table);
 
-    QAction *pWatching         = new QAction("Watching", pStatusUpdate);
-    QAction *pOnHold           = new QAction("On Hold", pStatusUpdate);
-    QAction *pPlanToWatch      = new QAction("Plan to Watch", pStatusUpdate);
-    QAction *pCompleted        = new QAction("Completed", pStatusUpdate);
-    QAction *pDropped          = new QAction("Dropped", pStatusUpdate);
+    QAction *pWatching         = new QAction(tr("Watching"), pStatusUpdate);
+    QAction *pOnHold           = new QAction(tr("On Hold"), pStatusUpdate);
+    QAction *pPlanToWatch      = new QAction(tr("Plan to Watch"), pStatusUpdate);
+    QAction *pCompleted        = new QAction(tr("Completed"), pStatusUpdate);
+    QAction *pDropped          = new QAction(tr("Dropped"), pStatusUpdate);
 
     pStatusUpdate->setEnabled(false);
     pStatusUpdate->addAction(pWatching);
@@ -297,7 +297,7 @@ void MainWindow::addSearchPrompt() {
   QRect r(location.x()+1, location.y()+24, w->width()-2, w->height()-25);
   p.fillRect(r, QColor(255,255,255));
   p.setPen(QColor(0,0,200));
-  p.drawText(r, Qt::AlignCenter, "Nothing found, click here to open a search box.");
+  p.drawText(r, Qt::AlignCenter, tr("Nothing found, click here to open a search box."));
   over->addDrawing("blank_table", pix);
 
   w->setAttribute(Qt::WA_TransparentForMouseEvents);

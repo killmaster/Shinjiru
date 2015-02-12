@@ -14,7 +14,7 @@ void MainWindow::loadSettings() {
   rule_total = settings->getValue(Settings::RuleCount, 0).toInt();
   QString release_stream = settings->getValue(Settings::ReleaseStream, "Release").toString();
 
-  release_stream = release_stream == "Beta" ? "Nightly" : "Stable";
+  release_stream = release_stream == tr("Beta") ? "Nightly" : "Stable";
 
   if(sob) {
     #ifdef Q_OS_WIN
@@ -82,13 +82,13 @@ void MainWindow::applySettings() {
   settings->setValue(Settings::MinimizeToTray, minimize_to_tray);
   settings->setValue(Settings::CloseToTray, close_to_tray);
   settings->setValue(Settings::ListOrder, list_order);
-  settings->setValue(Settings::ReleaseStream, ui->updateStreamComboBox->currentText() == "Beta" ? "Nightly" : "Stable");
+  settings->setValue(Settings::ReleaseStream, ui->updateStreamComboBox->currentText() == "Nightly" ? "Beta" : "Release");
 
   ui->applyButton->setEnabled(false);
 }
 
 void MainWindow::defaultSettings() {
-  if(QMessageBox::Yes == QMessageBox::question(this, "Shinjiru", "Are you sure you want to reset the settings to their default value?", QMessageBox::Yes|QMessageBox::No)) {
+  if(QMessageBox::Yes == QMessageBox::question(this, "Shinjiru", tr("Are you sure you want to reset the settings to their default value?"), QMessageBox::Yes|QMessageBox::No)) {
     settings->setValue(Settings::TorrentRefreshTime,      900);
     settings->setValue(Settings::AnimeRecognitionEnabled, false);
     settings->setValue(Settings::DefaultRuleType,         "basic");

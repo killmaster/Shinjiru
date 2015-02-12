@@ -4,7 +4,7 @@
 #include <QtConcurrent>
 
 void MainWindow::loadUser() {
-  progress_bar->setFormat("Loading User");
+  progress_bar->setFormat(tr("Loading User"));
   progress_bar->setValue(15);
   user_future = QtConcurrent::run([&]() {
     if(this->hasUser) {
@@ -20,7 +20,7 @@ void MainWindow::loadUser() {
 void MainWindow::userLoaded() {
   hasUser = true;
   progress_bar->setValue(20);
-  progress_bar->setFormat("User Loaded");
+  progress_bar->setFormat(tr("User Loaded"));
 
   QPixmap *pix = new QPixmap(width(), height());
   pix->fill(Qt::transparent);

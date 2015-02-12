@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 
 void MainWindow::updateStatistics() {
-  progress_bar->setFormat("Updating statistics");
+  progress_bar->setFormat(tr("Updating statistics"));
   progress_bar->reset();
   QList<Anime*> animes = User::sharedUser()->getAnimeList();
 
@@ -36,7 +36,7 @@ void MainWindow::updateStatistics() {
 
     if(User::sharedUser()->scoreType() != 4) {
       int score = 0;
-      s_score = s_score.replace(tr(" Star"), "");
+      s_score = s_score.replace(" Star", "");
       s_score = s_score.replace("-", "0");
       s_score = s_score.replace(":(", "33");
       s_score = s_score.replace(":|", "66");
@@ -103,10 +103,7 @@ void MainWindow::updateStatistics() {
   int days_watched = (minutes_watched / 60.0) / 24;
   minutes_watched %= 60;
 
-
-  QString time_watched = QString::number(days_watched)    + " days, " +
-                         QString::number(hours_watched)   + " hours, and " +
-                         QString::number(minutes_watched) + " minutes";
+  QString time_watched = tr("%1 days, %2 hours, and %3 minutes").arg(days_watched).arg(hours_watched).arg(minutes_watched);
 
 
   ui->lblWatching       ->setText(QString::number(watching));

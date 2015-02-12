@@ -284,7 +284,7 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   QString old_status = anime->getMyStatus();
 
   if(anime == 0) {
-    QMessageBox::critical(this, "Shinjiru", "Unknown anime.");
+    QMessageBox::critical(this, "Shinjiru", tr("Unknown anime."));
     return;
   }
 
@@ -408,9 +408,9 @@ void MainWindow::updateEpisode() {
   QJsonObject response = API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data).object();
 
   if(response != QJsonObject())
-    trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + (" updated to episode ") + cw_episode);
+    trayIcon->showMessage("Shinjiru", tr("%1 updated to episode %2").arg(cw_anime->getTitle()).arg(cw_episode));
   else
-    trayIcon->showMessage("Shinjiru", cw_anime->getTitle() + (" was not successfully updated"));
+    trayIcon->showMessage("Shinjiru", tr("%1 was not successfully updated").arg(cw_anime->getTitle()));
 }
 
 void MainWindow::eventTick() {
