@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>3</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -302,6 +302,27 @@
             </item>
             <item row="3" column="1">
              <widget class="QLineEdit" name="autoUpdateDelayLineEdit"/>
+            </item>
+            <item row="4" column="0">
+             <widget class="QLabel" name="updateStreamLabel">
+              <property name="text">
+               <string>Update Stream</string>
+              </property>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <widget class="QComboBox" name="updateStreamComboBox">
+              <item>
+               <property name="text">
+                <string>Stable</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Nightly</string>
+               </property>
+              </item>
+             </widget>
             </item>
            </layout>
           </item>

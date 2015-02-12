@@ -121,6 +121,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->autoRecognitionCheckBox,        SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
   connect(ui->defaultTorrentRuleModeComboBox, SIGNAL(currentTextChanged(QString)), SLOT(settingsChanged()));
   connect(ui->startOnBootCheckBox,            SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
+  connect(ui->updateStreamComboBox,           SIGNAL(currentTextChanged(QString)), SLOT(settingsChanged()));
   connect(ui->minimizeToTrayCheckBox,         SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
   connect(ui->closeToTrayCheckBox,            SIGNAL(toggled(bool)),               SLOT(settingsChanged()));
   connect(ui->applyButton,                    SIGNAL(clicked()),                   SLOT(applySettings()));

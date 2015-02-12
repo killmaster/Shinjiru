@@ -12,6 +12,9 @@ void MainWindow::loadSettings() {
   QStringList list_order = settings->getValue(Settings::ListOrder, QStringList()).toStringList();
   count_total = settings->getValue(Settings::DownloadCount, 0).toInt();
   rule_total = settings->getValue(Settings::RuleCount, 0).toInt();
+  QString release_stream = settings->getValue(Settings::ReleaseStream, "Release").toString();
+
+  release_stream = release_stream == "Beta" ? "Nightly" : "Stable";
 
   if(sob) {
     #ifdef Q_OS_WIN
@@ -30,6 +33,7 @@ void MainWindow::loadSettings() {
   ui->startOnBootCheckBox->setChecked(sob);
   ui->labelDownloadedTotal->setText(QString::number(count_total));
   ui->labelRulesTotal->setText(QString::number(rule_total));
+  ui->updateStreamComboBox->setCurrentText(release_stream);
   toggleAnimeRecognition(ear);
 
   for(QString key : list_order) {
@@ -78,6 +82,7 @@ void MainWindow::applySettings() {
   settings->setValue(Settings::MinimizeToTray, minimize_to_tray);
   settings->setValue(Settings::CloseToTray, close_to_tray);
   settings->setValue(Settings::ListOrder, list_order);
+  settings->setValue(Settings::ReleaseStream, ui->updateStreamComboBox->currentText() == "Beta" ? "Nightly" : "Stable");
 
   ui->applyButton->setEnabled(false);
 }

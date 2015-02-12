@@ -27,6 +27,7 @@
 #define VER_COMPANYDOMAIN_STR       "app.shinjiru.me"
 
 #define VER_UPDATEFEED_STR          "http://app.shinjiru.me/update.xml"
+#define VER_UPDATEFEED_STR_BETA     "http://app.shinjiru.me/beta_update.xml"
 #define VER_AUTHURL_STR             "http://auth.shinjiru.me/index.php"
 #define VER_AUTHPINURL_STR          "http://auth.shinjiru.me/pin.php"
 

@@ -43,6 +43,8 @@ QString Settings::parseEnum(int setting) {
       return "download_total";
     case RuleCount:
       return "rule_total";
+    case ReleaseStream:
+      return "release_stream";
   }
 
   return "unknown";

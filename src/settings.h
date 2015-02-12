@@ -25,7 +25,8 @@ public:
     CloseToTray,
     ListOrder,
     DownloadCount,
-    RuleCount
+    RuleCount,
+    ReleaseStream
   };
 
 private:
