@@ -18,7 +18,7 @@ void MainWindow::loadSettings() {
 
   if(sob) {
     #ifdef Q_OS_WIN
-      QSettings reg("HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+      QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
       QString path = reg.value("Shinjiru", QString("")).toString();
       if(path.isEmpty()) sob = false;
     #endif
