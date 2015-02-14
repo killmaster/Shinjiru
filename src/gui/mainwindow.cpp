@@ -128,6 +128,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->defaultButton,                  SIGNAL(clicked()),                   SLOT(defaultSettings()));
   connect(ui->moveUpButton,                   SIGNAL(clicked()),                   SLOT(moveUp()));
   connect(ui->moveDownButton,                 SIGNAL(clicked()),                   SLOT(moveDown()));
+  connect(ui->openSkinsFolderButton,          &QPushButton::clicked,               [&]() {
+    QDesktopServices::openUrl(QUrl(qApp->applicationDirPath() + "/data/skin/"));
+  });
 
   connect(ui->tabWidget, &QTabWidget::currentChanged, [&](int tab) {
     if(tab != 0) {
