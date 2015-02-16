@@ -84,6 +84,10 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   progress_bar->setValue(5);
   progress_bar->setFormat("Authorizing");
 
+  QSettings s;
+  restoreGeometry(s.value("mainWindowGeometry").toByteArray());
+  restoreState(s.value("mainWindowState").toByteArray());
+
   connect(&user_future_watcher,      SIGNAL(finished()), SLOT(userLoaded()));
   connect(&user_list_future_watcher, SIGNAL(finished()), SLOT(userListLoaded()));
 
@@ -93,7 +97,13 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
-  connect(ui->actionExit,   &QAction::triggered,                             []()  {exit(0);});
+  connect(ui->actionExit,   &QAction::triggered,                             [&]() {
+    QSettings s;
+    s.setValue("mainWindowGeometry", saveGeometry());
+    s.setValue("mainWindowState", saveState());
+
+    qApp->quit();
+  });
   connect(ui->actionAbout,  &QAction::triggered,                             [&]() {showAbout();});
   connect(ui->actionHelp,   &QAction::triggered,                             [&]() {QDesktopServices::openUrl(QUrl("http://app.shinjiru.me/support.php"));});
   connect(ui->actionRL,     &QAction::triggered,                             [&]() {loadUser();});

@@ -26,5 +26,11 @@ void MainWindow::createActions() {
   connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
   quitAction = new QAction(tr("&Quit"), this);
-  connect(quitAction, SIGNAL(triggered()), qApp, SLOT(quit()));
+  connect(quitAction, &QAction::triggered, [&]() {
+    QSettings s;
+    s.setValue("mainWindowGeometry", saveGeometry());
+    s.setValue("mainWindowState", saveState());
+
+    qApp->quit();
+  });
 }
