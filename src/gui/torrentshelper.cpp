@@ -215,11 +215,11 @@ void MainWindow::reloadRules() {
 
   qDebug() << "Loaded" << adv_rules.count() << "advanced rules";
   qDebug() << "Loaded" << basic_rules.count() << "basic rules";
-
-  checkForMatches();
 }
 
 void MainWindow::checkForMatches() {
+  reloadRules();
+
   for(int j = 0; j < ui->torrentTable->rowCount(); j++) {
     QString title = ui->torrentTable->item(j, 0)->text();
     QString sub   = ui->torrentTable->item(j, 2)->text();
