@@ -61,6 +61,10 @@ int main(int argc, char *argv[]) {
     QSslConfiguration::setDefaultConfiguration(config);
   #endif
 
+  if(api_id.isEmpty() || api_secret.isEmpty()) {
+    qFatal("No API key values!");
+  }
+
   QApplication a(argc, argv);
 
   QFile logFile(qApp->applicationDirPath() + "/" + VER_PRODUCTNAME_STR + ".log");
