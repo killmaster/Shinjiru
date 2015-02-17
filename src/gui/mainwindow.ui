@@ -116,7 +116,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>4</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -1040,7 +1040,7 @@
               <item row="4" column="0">
                <widget class="QLabel" name="torrendsDownloadedFromRulesSinceLaunchLabel">
                 <property name="text">
-                 <string>Torrends Downloaded From Rules Since Launch:</string>
+                 <string>Torrents Downloaded From Rules Since Launch:</string>
                 </property>
                </widget>
               </item>
