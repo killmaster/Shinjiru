@@ -205,23 +205,28 @@ QTableWidget *MainWindow::getListTable() {
         pStatusUpdate->setEnabled(true);
         pDeleteEntry->setEnabled(true);
 
+        Premium::Context c;
+        c.mw = this;
+        c.row = row;
+        c.table = table;
+
         connect(pWatching, &QAction::triggered,
-                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_w"));
+                Premium::sharedPremium()->resolveExperimentalFeature(c, "status_update_w"));
 
         connect(pOnHold, &QAction::triggered,
-                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_o"));
+                Premium::sharedPremium()->resolveExperimentalFeature(c, "status_update_o"));
 
         connect(pPlanToWatch, &QAction::triggered,
-                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_p"));
+                Premium::sharedPremium()->resolveExperimentalFeature(c, "status_update_p"));
 
         connect(pCompleted, &QAction::triggered,
-                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_c"));
+                Premium::sharedPremium()->resolveExperimentalFeature(c, "status_update_c"));
 
         connect(pDropped, &QAction::triggered,
-                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_d"));
+                Premium::sharedPremium()->resolveExperimentalFeature(c, "status_update_d"));
 
         connect(pDeleteEntry, &QAction::triggered,
-                Premium::sharedPremium()->resolveExperimentalFeature(this, "delete_entry"));
+                Premium::sharedPremium()->resolveExperimentalFeature(c, "delete_entry"));
       }
     #endif
 
