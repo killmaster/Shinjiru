@@ -1,6 +1,10 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+#ifdef HAS_PREMIUM
+  #include "../premium.h"
+#endif
+
 #include <QtConcurrent>
 
 void MainWindow::loadUser() {

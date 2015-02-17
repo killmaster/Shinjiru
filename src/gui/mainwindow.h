@@ -30,10 +30,6 @@
 #include "facetablewidgetitem.h"
 #include "overlay.h"
 
-#ifdef HAS_PREMIUM
-  #include "../premium.h"
-#endif
-
 namespace Ui {
   class MainWindow;
 }

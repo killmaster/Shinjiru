@@ -4,6 +4,10 @@
 #include <QHeaderView>
 #include <QtConcurrent>
 
+#ifdef HAS_PREMIUM
+  #include "../premium.h"
+#endif
+
 void MainWindow::loadUserList() {
   progress_bar->setValue(25);
   progress_bar->setFormat(tr("Downloading User List"));
@@ -195,6 +199,31 @@ QTableWidget *MainWindow::getListTable() {
     pStatusUpdate->addAction(pDropped);
 
     pDeleteEntry->setEnabled(false);
+
+    #ifdef HAS_PREMIUM
+      if(Premium::sharedPremium()->pass()) {
+        pStatusUpdate->setEnabled(true);
+        pDeleteEntry->setEnabled(true);
+
+        connect(pWatching, &QAction::triggered,
+                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_w"));
+
+        connect(pOnHold, &QAction::triggered,
+                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_o"));
+
+        connect(pPlanToWatch, &QAction::triggered,
+                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_p"));
+
+        connect(pCompleted, &QAction::triggered,
+                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_c"));
+
+        connect(pDropped, &QAction::triggered,
+                Premium::sharedPremium()->resolveExperimentalFeature(this, "status_update_d"));
+
+        connect(pDeleteEntry, &QAction::triggered,
+                Premium::sharedPremium()->resolveExperimentalFeature(this, "delete_entry"));
+      }
+    #endif
 
 
     connect(pAnimePanel, &QAction::triggered, [&, row, table]() {
