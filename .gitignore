@@ -5,6 +5,10 @@
 # Sensitive API data thing
 app.h
 
+# Top Secret project stuff
+premium.h
+premium.cpp
+
 # C++ objects and libs
 
 *.slo

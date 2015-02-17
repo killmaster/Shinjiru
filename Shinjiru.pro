@@ -19,6 +19,14 @@ include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
 include(lib/fervor/fervor.pri)
 
+exists(src/premium.cpp) {
+  SOURCES += src/premium.cpp
+  HEADERS += src/premium.h
+  DEFINES += HAS_PREMIUM
+} else {
+  warning("Cannot find premium source files, premium features will be disabled.")
+}
+
 win32:include(src/lib/crashhandler/crash_handler.pri)
 linux:include(src/lib/crashhandler/crash_handler.pri)
 
@@ -58,7 +66,8 @@ SOURCES   += \
     src/gui/apiwebview.cpp \
     src/gui/rulemanager.cpp \
     src/gui/overlay.cpp \
-    src/gui/searchpanel.cpp
+    src/gui/searchpanel.cpp \
+    src/premium.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -91,7 +100,8 @@ HEADERS   += \
     src/gui/rulemanager.h \
     src/gui/overlay.h \
     src/gui/searchpanel.h \
-    src/version.h
+    src/version.h \
+    src/premium.h
 
 FORMS     += \
     src/gui/airinganime.ui \

@@ -32,5 +32,9 @@ void MainWindow::userLoaded() {
   connect(User::sharedUser(), SIGNAL(new_image()), SLOT(repaint()));
   repaint();
 
+  #ifdef HAS_PREMIUM
+    Premium::sharedPremium()->loadPremium();
+  #endif
+
   loadUserList();
 }
