@@ -416,12 +416,20 @@ void MainWindow::updateEpisode() {
   data.insert("list_status",      "watching");
 
   cw_anime->setMyProgress(cw_episode.toInt());
+
+  if(cw_anime->getMyProgress() == cw_anime->getEpisodeCount() && cw_anime->getEpisodeCount() != 0) {
+    data.insert("list_status", "completed");
+  }
+
   userListLoaded();
 
   QJsonObject response = API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data).object();
 
   if(response != QJsonObject())
     trayIcon->showMessage("Shinjiru", tr("%1 updated to episode %2").arg(cw_anime->getTitle()).arg(cw_episode));
+    if(data.value("list_status") == "completed") {
+      trayIcon->showMessage("Shinjiru", tr("%1 marked as completed").arg(cw_anime->getTitle()));
+    }
   else
     trayIcon->showMessage("Shinjiru", tr("%1 was not successfully updated").arg(cw_anime->getTitle()));
 }
