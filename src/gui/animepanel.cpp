@@ -88,8 +88,6 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
   if(my_status == "Plan to watch") my_status = "Plan to Watch";
   ui->comboStatus->setCurrentText(my_status);
 
-
-
   if(anime->needsLoad() || anime->needsCover()) {
     connect(anime, SIGNAL(finishedReloading()), SLOT(refreshDisplay()));
     connect(anime, SIGNAL(new_image()), SLOT(repaint()));
