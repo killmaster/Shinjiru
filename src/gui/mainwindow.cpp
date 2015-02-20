@@ -425,13 +425,15 @@ void MainWindow::updateEpisode() {
 
   QJsonObject response = API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data).object();
 
-  if(response != QJsonObject())
+  if(response != QJsonObject()) {
     trayIcon->showMessage("Shinjiru", tr("%1 updated to episode %2").arg(cw_anime->getTitle()).arg(cw_episode));
     if(data.value("list_status") == "completed") {
       trayIcon->showMessage("Shinjiru", tr("%1 marked as completed").arg(cw_anime->getTitle()));
     }
-  else
+  }
+  else {
     trayIcon->showMessage("Shinjiru", tr("%1 was not successfully updated").arg(cw_anime->getTitle()));
+  }
 }
 
 void MainWindow::eventTick() {
