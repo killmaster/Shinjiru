@@ -110,6 +110,10 @@ void AnimePanel::paintEvent(QPaintEvent *event) {
   m.setRight(20 + cover.width());
   ui->scrollLayout->setContentsMargins(m);
 
+  m = ui->lblSynonyms->contentsMargins();
+  m.setRight(20 + cover.width());
+  ui->lblSynonyms->setContentsMargins(m);
+
   p.drawPixmap(width() - 235, 10, cover.width(), cover.height(), cover);
   p.drawRect  (width() - 235, 10, cover.width(), cover.height());
 
