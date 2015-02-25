@@ -1,8 +1,12 @@
 #include "mainwindow.h"
+#include "ui_mainwindow.h"
 
 void MainWindow::initTray() {
   trayIconMenu = new QMenu(this);
   trayIconMenu->addAction(restoreAction);
+  trayIconMenu->addSeparator();
+  trayIconMenu->addAction(animeRecognitionAction);
+  trayIconMenu->addAction(cancelUpdateAction);
   trayIconMenu->addSeparator();
   trayIconMenu->addAction(quitAction);
 
@@ -16,6 +20,11 @@ void MainWindow::initTray() {
       if(showFunc.isEmpty()) showNormal();
       else QMetaObject::invokeMethod(this, showFunc.toLocal8Bit().data(),Qt::DirectConnection);
       qApp->setActiveWindow(this);
+    }
+
+    if(reason == QSystemTrayIcon::Context) {
+      animeRecognitionAction->setChecked(ui->actionEAR->isChecked());
+      cancelUpdateAction->setEnabled(watch_timer->isActive());
     }
   });
 }
@@ -32,5 +41,17 @@ void MainWindow::createActions() {
     s.setValue("mainWindowState", saveState());
 
     qApp->quit();
+  });
+
+  animeRecognitionAction = new QAction(tr("&Anime Recognition"), this);
+  animeRecognitionAction->setCheckable(true);
+  connect(animeRecognitionAction, &QAction::triggered, [&]() {
+    this->toggleAnimeRecognition(animeRecognitionAction->isChecked());
+  });
+
+  cancelUpdateAction = new QAction(tr("&Cancel Update"), this);
+  cancelUpdateAction->setEnabled(false);
+  connect(cancelUpdateAction, &QAction::triggered, [&]() {
+    watch_timer->stop();
   });
 }

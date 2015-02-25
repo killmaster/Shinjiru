@@ -99,6 +99,8 @@ private:
 
   QAction *quitAction;
   QAction *restoreAction;
+  QAction *animeRecognitionAction;
+  QAction *cancelUpdateAction;
 
   int auto_update_delay;
   bool minimize_to_tray;
