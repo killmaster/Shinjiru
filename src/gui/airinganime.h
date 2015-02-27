@@ -21,6 +21,7 @@ public:
   ~AiringAnime();
   void setAnime(Anime *anime);
   Anime* getAnime();
+  void tick();
 
 protected:
   void paintEvent(QPaintEvent *);

@@ -69,6 +69,12 @@ void        Anime::setMyStatus(QString status)            { this ->my_status = s
 int         Anime::getDuration()                          { return duration; }
 void        Anime::setDuration(int duration)              { this ->duration = duration; }
 
+int         Anime::getCountdown()                         { return countdown; }
+void        Anime::setCountdown(int c)                    { this ->countdown = c; }
+
+int         Anime::getNextEpisode()                       { return next_episode; }
+void        Anime::setNextEpisode(int next)               { this ->next_episode = next; }
+
 void Anime::downloadCover() {
   this->needCover = false;
   anime_image_control = new FileDownloader(getCoverURL());

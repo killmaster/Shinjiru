@@ -90,6 +90,8 @@ private:
   QList<QMap<QString, QVariant>> adv_rules;
   QList<QMap<QString, QVariant>> basic_rules;
 
+  QList<AiringAnime *> airing_anime;
+
   QStringList airing;
 
   QSystemTrayIcon *trayIcon;

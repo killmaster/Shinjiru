@@ -447,6 +447,13 @@ void MainWindow::eventTick() {
     loadUser();
   }
 
+  for(int i = 0; i < airing_anime.count(); i++) {
+      AiringAnime *aa = airing_anime.at(i);
+
+      if(!aa->getAnime()->needsLoad())
+        aa->tick();
+  }
+
   torrent_refresh_time--;
   user_refresh_time--;
   ui->refreshButton->setText(tr("Refresh (%1)").arg(QString::number(torrent_refresh_time)));

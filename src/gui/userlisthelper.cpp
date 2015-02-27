@@ -25,6 +25,7 @@ void MainWindow::userListLoaded() {
   progress_bar->setFormat(tr("Parsing User List"));
 
   airing.clear();
+  airing_anime.clear();
 
   QLayoutItem *item;
 
@@ -278,11 +279,14 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
   AiringAnime *newPanel = new AiringAnime(this, User::sharedUser()->scoreType());
   newPanel->setAnime(anime);
 
+
   int width = layout->geometry().width();
   int cwidth = layout->contentsWidth();
 
   if(ui->tabWidget->currentIndex() == 3)
     layout->setContentsMargins((width-cwidth)/2, 0, 0, 0);
+
+  airing_anime.append(newPanel);
 
   return newPanel;
 }

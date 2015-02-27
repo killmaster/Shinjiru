@@ -111,12 +111,6 @@ void MainWindow::torrentContextMenu(QPoint pos) {
   pContextMenu->addAction(pDownloadAction);
   pContextMenu->addAction(pRuleAction);
   pContextMenu->exec(mapToGlobal(pos));
-  delete pContextMenu;
-  delete signalMapper1;
-  delete signalMapper2;
-  signalMapper1 = NULL;
-  signalMapper2 = NULL;
-  pContextMenu = NULL;
 }
 
 void MainWindow::download(int row) {

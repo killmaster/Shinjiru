@@ -76,6 +76,12 @@ public:
   int getDuration();
   void setDuration(int duration);
 
+  int getCountdown();
+  void setCountdown(int c);
+
+  int getNextEpisode();
+  void setNextEpisode(int next);
+
   void downloadCover();
 
 signals:
@@ -99,6 +105,9 @@ private:
   QString synopsis;
   QUrl cover_url;
   QPixmap cover_image;
+
+  int countdown;
+  int next_episode;
 
   FileDownloader *anime_image_control;
 

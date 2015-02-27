@@ -41,7 +41,6 @@ User::User() : QObject(0) {
 }
 
 User::~User() {
-  if(user_image_control != nullptr) delete user_image_control;
   for(Anime *a : anime_list){
     delete a;
   }
@@ -61,6 +60,9 @@ bool User::loadProfileImage() {
   event.exec();
 
   this->setUserImage(user_image_control->downloadedData());
+
+  delete user_image_control;
+  user_image_control = nullptr;
 
   return true;
 }
@@ -290,6 +292,13 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
   anime->setEpisodeCount(           result.value("total_episodes")  .toInt());
   anime->setAverageScore(           result.value("average_score")   .toString());
   anime->setTitle(                  result.value(title_language)    .toString());
+
+  if(anime->getAiringStatus() == "currently airing") {
+    QJsonObject airing = result.value("airing").toObject();
+
+    anime->setNextEpisode(airing.value("next_episode").toInt());
+    anime->setCountdown(airing.value("countdown").toInt());
+  }
 
   QJsonArray synonyms = result.value("synonyms").toArray();
 

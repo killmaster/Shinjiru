@@ -45,7 +45,6 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
 
     connect(rw, &RuleWizard::accepted, [&, rw]() {
       ui->listWidget->addItem(rw->fileName() + ".str");
-      delete rw;
     });
   });
 
