@@ -70,13 +70,13 @@ int main(int argc, char *argv[]) {
   QFile logFile(qApp->applicationDirPath() + "/" + VER_PRODUCTNAME_STR + ".log");
   if(logFile.exists()) logFile.remove();
 
-  Settings *s = new Settings(0);
-  QString release_stream = s->getValue(Settings::ReleaseStream, "Release").toString();
-
   QCoreApplication::setApplicationName(VER_PRODUCTNAME_STR);
   QCoreApplication::setApplicationVersion(VER_PRODUCTVERSION_STR);
   QCoreApplication::setOrganizationName(VER_COMPANYNAME_STR);
   QCoreApplication::setOrganizationDomain(VER_COMPANYDOMAIN_STR);
+
+  Settings *s = new Settings;
+  QString release_stream = s->getValue(Settings::ReleaseStream, "Release").toString();
 
   if(release_stream == "Release")
     FvUpdater::sharedUpdater()->SetFeedURL(VER_UPDATEFEED_STR);
