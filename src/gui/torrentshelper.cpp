@@ -90,6 +90,8 @@ void MainWindow::refreshTorrentListing() {
 
 void MainWindow::torrentContextMenu(QPoint pos) {
   QTableWidgetItem *item = ui->torrentTable->itemAt(pos);
+  if(item == 0) return;
+
   int row = item->row();
   pos.setY(pos.y() + 120);
   QAction *pDownloadAction = new QAction("Download",ui->torrentTable);
