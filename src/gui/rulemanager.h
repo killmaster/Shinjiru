@@ -17,6 +17,7 @@ public:
 
 private:
   Ui::RuleManager *ui;
+  void reloadList();
 };
 
 #endif // RULEMANAGER_H

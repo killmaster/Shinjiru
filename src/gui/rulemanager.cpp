@@ -32,19 +32,21 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
   });
 
   connect(ui->deleteButton, &QPushButton::clicked, [&, rule_dir]() {
-    qDebug() << "Deleted rule" << ui->listWidget->selectedItems().at(0)->text();
     if(ui->listWidget->selectedItems().length() == 0) return;
-    QFile file(rule_dir.absolutePath()+ ui->listWidget->selectedItems().at(0)->text());
+
+    qDebug() << "Deleted rule" << ui->listWidget->selectedItems().at(0)->text();
+    QFile file(rule_dir.absolutePath() + "/" + ui->listWidget->selectedItems().at(0)->text());
     file.remove();
-    ui->listWidget->removeItemWidget(ui->listWidget->selectedItems().at(0));
+
+    reloadList();
   });
 
   connect(ui->newButton, &QPushButton::clicked, [&, default_rule]() {
     RuleWizard *rw = new RuleWizard(this, default_rule);
     rw->show();
 
-    connect(rw, &RuleWizard::accepted, [&, rw]() {
-      ui->listWidget->addItem(rw->fileName() + ".str");
+    connect(rw, &RuleWizard::accepted, [&]() {
+      //reloadList();
     });
   });
 
@@ -57,4 +59,19 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
 
 RuleManager::~RuleManager() {
   delete ui;
+}
+
+void RuleManager::reloadList() {
+  ui->listWidget->clear();
+
+  QDir rd(QCoreApplication::applicationDirPath() + "/rules/");
+  rd.setFilter(QDir::NoDotAndDotDot);
+  if(!rd.exists()) rd.mkdir(".");
+
+  QDirIterator dit(rd.absolutePath(), QStringList() << "*.str", QDir::Files, QDirIterator::Subdirectories);
+
+  while(dit.hasNext()) {
+    QString file = dit.next().split("/").last();
+    ui->listWidget->addItem(file);
+  }
 }
