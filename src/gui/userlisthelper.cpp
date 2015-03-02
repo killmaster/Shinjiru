@@ -147,7 +147,8 @@ void MainWindow::userListLoaded() {
     for(int j = 0; j < ui->listTabs->count(); j++) {
       tab_texts << ui->listTabs->tabText(j).toLower();
     }
-    int from = tab_texts.indexOf(QRegExp(current + " \\([0-9]+\\)"));
+
+    int from = tab_texts.indexOf(QRegExp(QRegExp::escape(current) + " \\([0-9]+\\)"));
     tb->moveTab(from, i);
   }
 
