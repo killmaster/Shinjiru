@@ -71,7 +71,9 @@ SOURCES   += \
     src/gui/rulemanager.cpp \
     src/gui/overlay.cpp \
     src/gui/searchpanel.cpp \
-    src/premium.cpp
+    src/premium.cpp \
+    src/gui/seasonhelper.cpp \
+    src/gui/seasonanime.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -105,7 +107,8 @@ HEADERS   += \
     src/gui/overlay.h \
     src/gui/searchpanel.h \
     src/version.h \
-    src/premium.h
+    src/premium.h \
+    src/gui/seasonanime.h
 
 FORMS     += \
     src/gui/airinganime.ui \
@@ -115,7 +118,8 @@ FORMS     += \
     src/gui/about.ui \
     src/gui/apiwebview.ui \
     src/gui/rulemanager.ui \
-    src/gui/searchpanel.ui
+    src/gui/searchpanel.ui \
+    src/gui/seasonanime.ui
 
 RESOURCES += res/res.qrc
 

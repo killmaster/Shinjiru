@@ -53,11 +53,23 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   ui->listTabs->tabBar()->setFont(font);
   ui->orderListWidget->setFont(font);
 
+  int currentYear = QDate::currentDate().year();
+  int lowerYear = currentYear - 10;
+
+  while(currentYear > lowerYear) {
+    ui->comboYear->addItem(QString::number(currentYear));
+    currentYear--;
+  }
 
   QWidget *container = new QWidget(ui->scrollArea);
   layout = new FlowLayout(container);
   ui->scrollArea->setWidget(container);
   container->setLayout(layout);
+
+  QWidget *container2 = new QWidget(ui->scrollArea_2);
+  layout2 = new FlowLayout(container2);
+  ui->scrollArea_2->setWidget(container2);
+  container2->setLayout(layout2);
 
   QVariantMap black;
   black.insert("color", QColor(0, 0, 0));
@@ -68,6 +80,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   ui->airingButton    ->setIcon(awesome->icon(fa::clocko,    black));
   ui->torrentsButton  ->setIcon(awesome->icon(fa::rss,       black));
   ui->animeButton     ->setIcon(awesome->icon(fa::bars,      black));
+  ui->seasonsButton   ->setIcon(awesome->icon(fa::tree,      black));
   ui->statisticsButton->setIcon(awesome->icon(fa::piechart,  black));
   ui->moveDownButton  ->setIcon(awesome->icon(fa::arrowdown, black));
   ui->moveUpButton    ->setIcon(awesome->icon(fa::arrowup,   black));
@@ -94,6 +107,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->animeButton,      SIGNAL(clicked()),   SLOT(showAnimeTab()));
   connect(ui->airingButton,     SIGNAL(clicked()),   SLOT(showAiringTab()));
   connect(ui->torrentsButton,   SIGNAL(clicked()),   SLOT(showTorrentsTab()));
+  connect(ui->seasonsButton,    SIGNAL(clicked()),   SLOT(showSeasonsTab()));
   connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
@@ -119,6 +133,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
   connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
   connect(event_timer,    SIGNAL(timeout()),            SLOT(eventTick()));
+
+  connect(ui->comboSeason, SIGNAL(currentTextChanged(QString)), SLOT(loadSelectedSeason()));
+  connect(ui->comboYear, SIGNAL(currentTextChanged(QString)), SLOT(loadSelectedSeason()));
 
   connect(ui->torrentTable,      SIGNAL(customContextMenuRequested(QPoint)), SLOT(torrentContextMenu(QPoint)));
   connect(ui->torrentFilter,     SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
@@ -237,6 +254,12 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
   int cwidth = layout->contentsWidth();
 
   layout->setContentsMargins((width-cwidth)/2, 0, 0, 0);
+
+
+  width = layout2->geometry().width();
+  cwidth = layout2->contentsWidth();
+
+  layout2->setContentsMargins((width-cwidth)/2, 0, 0, 0);
 }
 
 void MainWindow::paintEvent(QPaintEvent *event) {
@@ -279,12 +302,22 @@ void MainWindow::showAiringTab()     { ui->tabWidget->setCurrentIndex(3);
                                        int width = layout->geometry().width();
                                        int cwidth = layout->contentsWidth();
 
-                                       if(cwidth == -6) {
+                                       if(cwidth < 0) {
                                          width = this->width() - 2;
-                                         cwidth = 747;
+                                         cwidth = this->width() - (this->width() % 200);
                                        }
                                        layout->setContentsMargins((width-cwidth)/2, 0, 0, 0); }
 void MainWindow::showStatisticsTab() { ui->tabWidget->setCurrentIndex(4); }
+void MainWindow::showSeasonsTab() { ui->tabWidget->setCurrentIndex(5);
+                                    int width = layout2->geometry().width();
+                                    int cwidth = layout2->contentsWidth();
+
+                                    if(cwidth < 0) {
+                                      width = this->width() - 2;
+                                      cwidth = this->width() - (this->width() % 200);
+                                    }
+
+                                    layout2->setContentsMargins((width-cwidth)/2, 0, 0, 0); }
 
 void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   Q_UNUSED(column);

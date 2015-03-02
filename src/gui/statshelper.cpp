@@ -122,4 +122,8 @@ void MainWindow::updateStatistics() {
 
   progress_bar->setFormat("");
   progress_bar->reset();
+
+  if(layout2->count() == 0) {
+    this->loadSelectedSeason();
+  }
 }

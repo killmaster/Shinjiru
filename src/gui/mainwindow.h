@@ -29,6 +29,7 @@
 #include "progresstablewidgetitem.h"
 #include "facetablewidgetitem.h"
 #include "overlay.h"
+#include "seasonanime.h"
 
 namespace Ui {
   class MainWindow;
@@ -59,6 +60,7 @@ private:
   bool hasUser;
 
   FlowLayout *layout;
+  FlowLayout *layout2;
 
   QFuture<void> user_future;
   QFutureWatcher<void> user_future_watcher;
@@ -130,6 +132,7 @@ private slots:
   void showAnimeTab();
   void showSettingsTab();
   void showTorrentsTab();
+  void showSeasonsTab();
   void showAiringTab();
   void showStatisticsTab();
 
@@ -176,6 +179,8 @@ private slots:
 
   void filterList(int);
   void filterList(QString);
+
+  void loadSelectedSeason();
 };
 
 #endif // MAINWINDOW_H
