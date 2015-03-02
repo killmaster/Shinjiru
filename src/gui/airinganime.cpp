@@ -47,7 +47,8 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
     countdown /= 24; //convert to days
     cd = QString::number(countdown) + " day" + (countdown != 1 ? "s" : "");
   } else {
-    cd = QString::number(countdown) + " hour" + (countdown != 1 ? "s" : "");
+    if(countdown == 0) cd = "<1 hour";
+    else cd = QString::number(countdown) + " hour" + (countdown != 1 ? "s" : "");
   }
 
   p.drawText(QRect(0, height() - 20, width() - 5, 20), Qt::AlignRight, cd);
