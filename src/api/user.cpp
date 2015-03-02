@@ -88,7 +88,17 @@ void User::loadUserList() {
   qDebug() << "Fetching user list";
 
   QJsonObject user_list_data = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(this->displayName())).object();
+
   QJsonObject custom_list_data = user_list_data.value("custom_lists").toObject();
+
+  if(user_list_data.value("custom_lists").isArray()) {
+    QJsonArray ar = user_list_data.value("custom_lists").toArray();
+
+    for(int i = 0; i < ar.count(); i++) {
+      custom_list_data.insert(QString::number(i), ar.at(i));
+    }
+  }
+
   user_list_data = user_list_data.value("lists").toObject();
 
   Anime *item;
