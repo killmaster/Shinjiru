@@ -8,14 +8,16 @@
 #include <QtConcurrent>
 
 void MainWindow::loadUser() {
+  if(!ui->actionRL->isEnabled()) return;
+
   progress_bar->setFormat(tr("Loading User"));
   progress_bar->setValue(15);
+  ui->actionRL->setEnabled(false);
   user_future = QtConcurrent::run([&]() {
     if(this->hasUser) {
       User::sharedUser()->remake();
-    }
-
-    User::sharedUser();
+    } else
+      User::sharedUser();
   });
 
   user_future_watcher.setFuture(user_future);

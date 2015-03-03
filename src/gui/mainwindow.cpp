@@ -325,7 +325,7 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   QString title = source->item(row, 0)->text();
   QString episodes = source->item(row, 1)->text();
   QString score = source->item(row, 2)->text();
-  QString type = source->item(row, 3)->text();
+  QString type = source->item(row, source->columnCount() - 1)->text();
   Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
   QString old_status = anime->getMyStatus();
 

@@ -24,7 +24,6 @@ User* User::sharedUser() {
 }
 
 User::User() : QObject(0) {
-  qDebug() << "Requesting current user from AniList...";
   QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER).object();
 
   user_image_control = nullptr;

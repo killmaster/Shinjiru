@@ -141,7 +141,7 @@ private slots:
   void showAnimePanel(int, int);
   void showAnimePanel(int, int, QTableWidget *);
 
-  QTableWidget *getListTable();
+  QTableWidget *getListTable(bool);
 
   AiringAnime *addAiring(Anime *);
 

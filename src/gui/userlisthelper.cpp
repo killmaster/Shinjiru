@@ -55,8 +55,14 @@ void MainWindow::userListLoaded() {
 
   for(QString key: lists.keys()) {
     if(key == "") continue;
+    bool isCustom = true;
+
+    if(key == "completed" || key == "on-hold" || key == "plan_to_watch" || key == "dropped" || key == "watching") {
+      isCustom = false;
+    }
+
     current_list++;
-    QTableWidget *table = getListTable();
+    QTableWidget *table = getListTable(isCustom);
 
     connect(table, SIGNAL(cellDoubleClicked(int,int)), SLOT(showAnimePanel(int, int)));
 
@@ -67,7 +73,16 @@ void MainWindow::userListLoaded() {
       ProgressTableWidgetItem *progressData = new ProgressTableWidgetItem;
       QTableWidgetItem        *scoreData    = new QTableWidgetItem();
       FaceTableWidgetItem     *faceData     = new FaceTableWidgetItem;
+      QTableWidgetItem        *statusData;
       QTableWidgetItem        *typeData     = new QTableWidgetItem(anime->getType());
+
+      if(isCustom) {
+        QString status = anime->getMyStatus();
+        status.replace("plan to watch", "plan to Watch");
+        status = status.at(0).toUpper() + status.right(status.length() - 1);
+
+        statusData = new QTableWidgetItem(status);
+      }
 
       if(User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
         scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
@@ -98,7 +113,12 @@ void MainWindow::userListLoaded() {
         table->setItem(row, 2, faceData);
       else
         table->setItem(row, 2, scoreData);
-      table->setItem(row, 3, typeData);
+      if(isCustom) {
+        table->setItem(row, 3, statusData);
+        table->setItem(row, 4, typeData);
+      } else {
+        table->setItem(row, 3, typeData);
+      }
 
       double current_progress = (double)row / list.count() * space_per_list;
 
@@ -155,16 +175,23 @@ void MainWindow::userListLoaded() {
   progress_bar->reset();
   progress_bar->setFormat("");
 
+  ui->actionRL->setEnabled(true);
+
   updateStatistics();
 }
 
-QTableWidget *MainWindow::getListTable() {
+QTableWidget *MainWindow::getListTable(bool custom_list) {
   QTableWidget *table = new QTableWidget(this);
 
   QStringList default_list_labels;
-  default_list_labels << tr("Title") << tr("Episodes") << tr("Score") << tr("Type");
+  default_list_labels << tr("Title") << tr("Episodes") << tr("Score");
 
-  table->setColumnCount(4);
+  if(custom_list) default_list_labels << tr("Status");
+
+  default_list_labels << tr("Type");
+
+
+  table->setColumnCount(custom_list ? 5 : 4);
   table->setHorizontalHeaderLabels(default_list_labels);
   table->verticalHeader()->hide();
   table->setEditTriggers(QTableWidget::NoEditTriggers);
