@@ -255,7 +255,7 @@ Anime *User::getAnimeByTitle(QString title) {
     }
   }
 
-  return 0;
+  return nullptr;
 }
 
 Anime *User::getAnimeByData(QString title, QString episodes, QString score, QString type) {
@@ -272,7 +272,7 @@ Anime *User::getAnimeByData(QString title, QString episodes, QString score, QStr
     }
   }
 
-  return 0;
+  return getAnimeByTitle(title);
 }
 
 void User::loadAnimeData(Anime *anime, bool download_cover) {

@@ -329,10 +329,11 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
   QString old_status = anime->getMyStatus();
 
-  if(anime == 0) {
+  if(anime == nullptr) {
     QMessageBox::critical(this, "Shinjiru", tr("Unknown anime."));
     return;
   }
+
 
   AnimePanel *ap = new AnimePanel(this, anime, User::sharedUser()->scoreType());
 
