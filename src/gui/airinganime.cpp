@@ -23,6 +23,7 @@ AiringAnime::AiringAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(n
 
 AiringAnime::~AiringAnime() {
   delete ui;
+  delete text;
 }
 
 void AiringAnime::paintEvent(QPaintEvent *event) {

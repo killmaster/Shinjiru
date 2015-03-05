@@ -15,7 +15,7 @@ QString     Anime::getID()                                { return id; }
 void        Anime::setID(QString id)                      { this ->id = id.trimmed(); }
 
 QStringList Anime::getSynonyms()                          { return synonyms; }
-void        Anime::addSynonym(QString synonym)            { synonyms.append(synonym); }
+void        Anime::addSynonym(QString synonym)            { if(!synonyms.contains(synonym)) synonyms.append(synonym); }
 
 QString     Anime::getRomajiTitle()                       { return romaji_title; }
 void        Anime::setRomajiTitle(QString title)          { this ->romaji_title = title; }

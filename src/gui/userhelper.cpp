@@ -24,7 +24,6 @@ void MainWindow::loadUser() {
 }
 
 void MainWindow::userLoaded() {
-  hasUser = true;
   progress_bar->setValue(20);
   progress_bar->setFormat(tr("User Loaded"));
 
@@ -42,5 +41,11 @@ void MainWindow::userLoaded() {
     Premium::sharedPremium()->loadPremium();
   #endif
 
-  loadUserList();
+  if(!hasUser) {
+    loadUserList();
+  } else {
+    userListLoaded();
+  }
+
+  hasUser = true;
 }

@@ -71,6 +71,8 @@ private:
 
   FileDownloader *user_image_control;
 
+  void fetchUpdatedList();
+
 private slots:
   bool loadProfileImage();
 };
