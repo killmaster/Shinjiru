@@ -257,7 +257,6 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
       Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
       anime->setMyProgress(anime->getMyProgress() + 1);
 
-
       table->item(row, 1)->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
 
       QMap<QString, QString> data;
@@ -267,7 +266,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
       API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
     });
 
-    connect(pWatching, &QAction::triggered, [&]() {
+    connect(pWatching, &QAction::triggered, [&, row, table]() {
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
@@ -286,12 +285,11 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
       if(old_status != "watching") {
         User::sharedUser()->removeFromList(old_status, anime);
-        User::sharedUser()->fetchUpdatedList();
         this->userListLoaded();
       }
     });
 
-    connect(pPlanToWatch, &QAction::triggered, [&]() {
+    connect(pPlanToWatch, &QAction::triggered, [&, row, table]() {
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
@@ -310,12 +308,11 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
       if(old_status != "plan to watch") {
         User::sharedUser()->removeFromList(old_status, anime);
-        User::sharedUser()->fetchUpdatedList();
         this->userListLoaded();
       }
     });
 
-    connect(pOnHold, &QAction::triggered, [&]() {
+    connect(pOnHold, &QAction::triggered, [&, row, table]() {
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
@@ -334,12 +331,11 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
       if(old_status != "on-hold") {
         User::sharedUser()->removeFromList(old_status, anime);
-        User::sharedUser()->fetchUpdatedList();
         this->userListLoaded();
       }
     });
 
-    connect(pDropped, &QAction::triggered, [&]() {
+    connect(pDropped, &QAction::triggered, [&, row, table]() {
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
@@ -358,12 +354,11 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
       if(old_status != "dropped") {
         User::sharedUser()->removeFromList(old_status, anime);
-        User::sharedUser()->fetchUpdatedList();
         this->userListLoaded();
       }
     });
 
-    connect(pCompleted, &QAction::triggered, [&]() {
+    connect(pCompleted, &QAction::triggered, [&, row, table]() {
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
@@ -382,7 +377,6 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
       if(old_status != "completed") {
         User::sharedUser()->removeFromList(old_status, anime);
-        User::sharedUser()->fetchUpdatedList();
         this->userListLoaded();
       }
     });
