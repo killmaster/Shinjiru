@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QJsonArray>
 #include <QEventLoop>
+#include <QMessageBox>
 
 User* User::m_Instance = 0;
 
@@ -481,5 +482,17 @@ void User::fetchUpdatedList() {
   for(int k = 0; k < customLists().length(); k++) {
     QString key = this->customLists().at(k).toString();
     user_lists.insert(key , custom.value(key));
+  }
+}
+
+void User::removeFromList(QString list, Anime *anime) {
+  list = list.replace("-", "_");
+  list = list.replace(" ", "_");
+
+  QMap<QString, Anime*> user_list = user_lists.value(list);
+
+  if(user_list.contains(anime->getID())) {
+    user_list.remove(anime->getID());
+    user_lists.insert(list, user_list);
   }
 }

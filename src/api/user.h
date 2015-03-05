@@ -43,6 +43,10 @@ public slots:
   void setCustomLists(const QVariantList list)     { this->custom_lists = list; }
   void setNotificationCount(const int count)       { this->notifications = count; }
 
+
+  void fetchUpdatedList();
+  void removeFromList(QString list, Anime *anime);
+
   void loadUserList();
   void loadAnimeData(Anime *, bool);
 
@@ -70,8 +74,6 @@ private:
   int notifications;
 
   FileDownloader *user_image_control;
-
-  void fetchUpdatedList();
 
 private slots:
   bool loadProfileImage();
