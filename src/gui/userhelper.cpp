@@ -27,13 +27,6 @@ void MainWindow::userLoaded() {
   progress_bar->setValue(20);
   progress_bar->setFormat(tr("User Loaded"));
 
-  QPixmap *pix = new QPixmap(width(), height());
-  pix->fill(Qt::transparent);
-
-  QPainter p(pix);
-  p.setPen(QColor(30,30,30));
-  p.setBrush(QColor(255,255,255));
-
   connect(User::sharedUser(), SIGNAL(new_image()), SLOT(repaint()));
   repaint();
 
