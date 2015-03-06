@@ -46,6 +46,7 @@ public slots:
 
   void fetchUpdatedList();
   void removeFromList(QString list, Anime *anime);
+  void remove(Anime *anime);
 
   void loadUserList();
   void loadAnimeData(Anime *, bool);

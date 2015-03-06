@@ -496,3 +496,10 @@ void User::removeFromList(QString list, Anime *anime) {
     user_lists.insert(list, user_list);
   }
 }
+
+void User::remove(Anime *anime) {
+  removeFromList(anime->getMyStatus(), anime);
+  anime_list.removeAll(anime);
+
+  delete anime;
+}

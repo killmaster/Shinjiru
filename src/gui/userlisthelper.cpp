@@ -220,29 +220,11 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
     QAction *pCompleted        = new QAction(tr("Completed"), pStatusUpdate);
     QAction *pDropped          = new QAction(tr("Dropped"), pStatusUpdate);
 
-    pStatusUpdate->setEnabled(true);
     pStatusUpdate->addAction(pWatching);
     pStatusUpdate->addAction(pOnHold);
     pStatusUpdate->addAction(pPlanToWatch);
     pStatusUpdate->addAction(pCompleted);
     pStatusUpdate->addAction(pDropped);
-
-    pDeleteEntry->setEnabled(false);
-
-    #ifdef HAS_PREMIUM
-      if(Premium::sharedPremium()->pass()) {
-        pDeleteEntry->setEnabled(true);
-
-        Premium::Context c;
-        c.mw = this;
-        c.row = row;
-        c.table = table;
-
-        connect(pDeleteEntry, &QAction::triggered,
-                Premium::sharedPremium()->resolveExperimentalFeature(c, "delete_entry"));
-      }
-    #endif
-
 
     connect(pAnimePanel, &QAction::triggered, [&, row, table]() {
       this->showAnimePanel(row, 0, table);
@@ -267,98 +249,26 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
     });
 
     connect(pWatching, &QAction::triggered, [&, row, table]() {
-      QString title = table->item(row, 0)->text();
-      QString episodes = table->item(row, 1)->text();
-      QString score = table->item(row, 2)->text();
-      QString type = table->item(row, table->columnCount() - 1)->text();
-
-      Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
-
-      QString old_status = anime->getMyStatus();
-      anime->setMyStatus("watching");
-
-      QMap<QString, QString> data;
-      data.insert("id", anime->getID());
-      data.insert("list_status", anime->getMyStatus());
-
-      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
-
-      if(old_status != "watching") {
-        User::sharedUser()->removeFromList(old_status, anime);
-        this->userListLoaded();
-      }
+      updateStatus(row, table, "watching");
     });
 
     connect(pPlanToWatch, &QAction::triggered, [&, row, table]() {
-      QString title = table->item(row, 0)->text();
-      QString episodes = table->item(row, 1)->text();
-      QString score = table->item(row, 2)->text();
-      QString type = table->item(row, table->columnCount() - 1)->text();
-
-      Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
-
-      QString old_status = anime->getMyStatus();
-      anime->setMyStatus("plan to watch");
-
-      QMap<QString, QString> data;
-      data.insert("id", anime->getID());
-      data.insert("list_status", anime->getMyStatus());
-
-      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
-
-      if(old_status != "plan to watch") {
-        User::sharedUser()->removeFromList(old_status, anime);
-        this->userListLoaded();
-      }
+      updateStatus(row, table, "plan to watch");
     });
 
     connect(pOnHold, &QAction::triggered, [&, row, table]() {
-      QString title = table->item(row, 0)->text();
-      QString episodes = table->item(row, 1)->text();
-      QString score = table->item(row, 2)->text();
-      QString type = table->item(row, table->columnCount() - 1)->text();
-
-      Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
-
-      QString old_status = anime->getMyStatus();
-      anime->setMyStatus("on-hold");
-
-      QMap<QString, QString> data;
-      data.insert("id", anime->getID());
-      data.insert("list_status", anime->getMyStatus());
-
-      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
-
-      if(old_status != "on-hold") {
-        User::sharedUser()->removeFromList(old_status, anime);
-        this->userListLoaded();
-      }
+      updateStatus(row, table, "on-hold");
     });
 
     connect(pDropped, &QAction::triggered, [&, row, table]() {
-      QString title = table->item(row, 0)->text();
-      QString episodes = table->item(row, 1)->text();
-      QString score = table->item(row, 2)->text();
-      QString type = table->item(row, table->columnCount() - 1)->text();
-
-      Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
-
-      QString old_status = anime->getMyStatus();
-      anime->setMyStatus("dropped");
-
-      QMap<QString, QString> data;
-      data.insert("id", anime->getID());
-      data.insert("list_status", anime->getMyStatus());
-
-      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
-
-      if(old_status != "dropped") {
-        User::sharedUser()->removeFromList(old_status, anime);
-        this->userListLoaded();
-      }
+     updateStatus(row, table, "dropped");
     });
 
     connect(pCompleted, &QAction::triggered, [&, row, table]() {
+      updateStatus(row, table, "completed");
+    });
+
+    connect(pDeleteEntry, &QAction::triggered, [&, row, table]() {
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
@@ -366,19 +276,10 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
       Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
 
-      QString old_status = anime->getMyStatus();
-      anime->setMyStatus("completed");
+      API::sharedAPI()->sharedAniListAPI()->deleteResource(API::sharedAPI()->sharedAniListAPI()->API_DELETE_ANIME(anime->getID()));
 
-      QMap<QString, QString> data;
-      data.insert("id", anime->getID());
-      data.insert("list_status", anime->getMyStatus());
-
-      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
-
-      if(old_status != "completed") {
-        User::sharedUser()->removeFromList(old_status, anime);
-        this->userListLoaded();
-      }
+      User::sharedUser()->remove(anime);
+      this->userListLoaded();
     });
 
     QMenu *pContextMenu = new QMenu(this);
@@ -466,4 +367,27 @@ void MainWindow::addSearchPrompt() {
   over->addDrawing("blank_table", pix);
 
   w->setAttribute(Qt::WA_TransparentForMouseEvents);
+}
+
+void MainWindow::updateStatus(int row, QTableWidget *table, QString status) {
+  QString title = table->item(row, 0)->text();
+  QString episodes = table->item(row, 1)->text();
+  QString score = table->item(row, 2)->text();
+  QString type = table->item(row, table->columnCount() - 1)->text();
+
+  Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
+
+  QString old_status = anime->getMyStatus();
+  anime->setMyStatus(status);
+
+  QMap<QString, QString> data;
+  data.insert("id", anime->getID());
+  data.insert("list_status", anime->getMyStatus());
+
+  API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+
+  if(old_status != status) {
+    User::sharedUser()->removeFromList(old_status, anime);
+    this->userListLoaded();
+  }
 }

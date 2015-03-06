@@ -172,6 +172,8 @@ private slots:
   void initTray();
   void createActions();
 
+  void updateStatus(int row, QTableWidget *table, QString status);
+
   void moveUp();
   void moveDown();
 
