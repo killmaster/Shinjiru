@@ -82,6 +82,12 @@ public:
   int getNextEpisode();
   void setNextEpisode(int next);
 
+  bool isDefaultHidden();
+  void setDefaultHidden(bool hidden);
+
+  QList<int> getCustomLists();
+  void setCustomLists(QList<int> lists);
+
   void downloadCover();
 
 signals:
@@ -108,6 +114,9 @@ private:
 
   int countdown;
   int next_episode;
+
+  bool default_hidden;
+  QList<int> custom_lists;
 
   FileDownloader *anime_image_control;
 

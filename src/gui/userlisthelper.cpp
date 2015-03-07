@@ -213,12 +213,75 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
     QAction *pEpisodeIncrement = new QAction(tr("Increment Progress by 1"), table);
     QMenu   *pStatusUpdate     = new QMenu(tr("Status"), table);
     QAction *pDeleteEntry      = new QAction(tr("Delete Entry"), table);
+    QMenu   *pCustomLists      = new QMenu(tr("Custom Lists"), table);
 
     QAction *pWatching         = new QAction(tr("Watching"), pStatusUpdate);
     QAction *pOnHold           = new QAction(tr("On Hold"), pStatusUpdate);
     QAction *pPlanToWatch      = new QAction(tr("Plan to Watch"), pStatusUpdate);
     QAction *pCompleted        = new QAction(tr("Completed"), pStatusUpdate);
     QAction *pDropped          = new QAction(tr("Dropped"), pStatusUpdate);
+
+    QAction *pHideDefault      = new QAction(tr("Hide Default"), pCustomLists);
+
+
+    QString title = table->item(row, 0)->text();
+    QString episodes = table->item(row, 1)->text();
+    QString score = table->item(row, 2)->text();
+    QString type = table->item(row, table->columnCount() - 1)->text();
+
+    Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
+
+    for(int i = 0; i < User::sharedUser()->customLists().length(); i++) {
+      if(User::sharedUser()->customLists().at(i).toString().isEmpty()) continue;
+
+      QAction *temp = new QAction(User::sharedUser()->customLists().at(i).toString(), table);
+      temp->setCheckable(true);
+
+      if(anime->getCustomLists().at(i) == 1) {
+        temp->setChecked(true);
+      } else {
+        temp->setChecked(false);
+      }
+
+      connect(temp, &QAction::toggled, [&, anime, i](bool selected) {
+        QList<int> custom = anime->getCustomLists();
+        custom.replace(i, selected ? 1 : 0);
+
+        QMap<QString, QString> data;
+        data.insert("id", anime->getID());
+        QString d;
+        for(int i = 0; i < custom.length(); i++) {
+          d += QString::number(custom.at(i)) + ((i == custom.length() - 1) ? "" : ",");
+        }
+
+        data.insert("custom_lists", d);
+
+        API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+
+        this->userListLoaded();
+      });
+
+      pCustomLists->addAction(temp);
+    }
+
+    pHideDefault->setCheckable(true);
+    pHideDefault->setChecked(anime->isDefaultHidden());
+
+    pCustomLists->addAction(pHideDefault);
+
+    connect(pHideDefault, &QAction::toggled, [&, anime, table](bool selected) {
+      QMap<QString, QString> data;
+      data.insert("id", anime->getID());
+      data.insert("hidden_default", selected ? "1" : "0");
+
+      if(selected) {
+        User::sharedUser()->removeFromList(anime->getMyStatus(), anime);
+      }
+
+      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+
+      this->userListLoaded();
+    });
 
     pStatusUpdate->addAction(pWatching);
     pStatusUpdate->addAction(pOnHold);
@@ -287,6 +350,11 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
     pContextMenu->addAction(pAnimePanel);
     pContextMenu->addAction(pEpisodeIncrement);
     pContextMenu->addMenu(pStatusUpdate);
+    if(User::sharedUser()->customLists().length() > 0) {
+      pContextMenu->addMenu(pCustomLists);
+    } else {
+      delete pCustomLists;
+    }
     pContextMenu->addAction(pDeleteEntry);
 
     pContextMenu->exec(mapToGlobal(pos));

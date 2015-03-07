@@ -75,6 +75,12 @@ void        Anime::setCountdown(int c)                    { this ->countdown = c
 int         Anime::getNextEpisode()                       { return next_episode; }
 void        Anime::setNextEpisode(int next)               { this ->next_episode = next; }
 
+bool        Anime::isDefaultHidden()                      { return default_hidden; }
+void        Anime::setDefaultHidden(bool hidden)          { this ->default_hidden = hidden; }
+
+QList<int>  Anime::getCustomLists()                       { return custom_lists; }
+void        Anime::setCustomLists(QList<int> lists)       { this ->custom_lists = lists; }
+
 void Anime::downloadCover() {
   this->needCover = false;
   anime_image_control = new FileDownloader(getCoverURL());

@@ -134,6 +134,17 @@ void User::loadUserList() {
       anime_data->setMyNotes(                anime      .value("notes")           .toString());
       anime_data->setMyRewatch(              anime      .value("rewatched")       .toInt(0));
       anime_data->setMyStatus(               anime      .value("list_status")     .toString());
+      anime_data->setDefaultHidden(          anime      .value("hidden_default")  .toInt());
+
+      QVariantList v = anime.value("custom_lists").toArray().toVariantList();
+
+      QList<int> custom_lists;
+
+      for(int i = 0; i < v.length(); i++) {
+        custom_lists.append(v.at(i).toInt());
+      }
+
+      anime_data->setCustomLists(custom_lists);
 
       QJsonArray synonyms = inner_anime.value("synonyms").toArray();
 
@@ -191,6 +202,17 @@ void User::loadUserList() {
       anime_data->setMyNotes(                anime      .value("notes")           .toString());
       anime_data->setMyRewatch(              anime      .value("rewatched")       .toInt(0));
       anime_data->setMyStatus(               anime      .value("list_status")     .toString());
+      anime_data->setDefaultHidden(          anime      .value("hidden_default")  .toInt());
+
+      QVariantList v = anime.value("custom_lists").toArray().toVariantList();
+
+      QList<int> custom_lists;
+
+      for(int i = 0; i < v.length(); i++) {
+        custom_lists.append(v.at(i).toInt());
+      }
+
+      anime_data->setCustomLists(custom_lists);
 
       QJsonArray synonyms = inner_anime.value("synonyms").toArray();
 
@@ -390,6 +412,17 @@ void User::fetchUpdatedList() {
       anime_data->setMyNotes(                anime      .value("notes")           .toString());
       anime_data->setMyRewatch(              anime      .value("rewatched")       .toInt(0));
       anime_data->setMyStatus(               anime      .value("list_status")     .toString());
+      anime_data->setDefaultHidden(          anime      .value("hidden_default")  .toInt());
+
+      QVariantList v = anime.value("custom_lists").toArray().toVariantList();
+
+      QList<int> custom_lists;
+
+      for(int i = 0; i < v.length(); i++) {
+        custom_lists.append(v.at(i).toInt());
+      }
+
+      anime_data->setCustomLists(custom_lists);
 
       QJsonArray synonyms = inner_anime.value("synonyms").toArray();
 
@@ -451,6 +484,17 @@ void User::fetchUpdatedList() {
       anime_data->setMyNotes(                anime      .value("notes")           .toString());
       anime_data->setMyRewatch(              anime      .value("rewatched")       .toInt(0));
       anime_data->setMyStatus(               anime      .value("list_status")     .toString());
+      anime_data->setDefaultHidden(          anime      .value("hidden_default")  .toInt());
+
+      QVariantList v = anime.value("custom_lists").toArray().toVariantList();
+
+      QList<int> custom_lists;
+
+      for(int i = 0; i < v.length(); i++) {
+        custom_lists.append(v.at(i).toInt());
+      }
+
+      anime_data->setCustomLists(custom_lists);
 
       QJsonArray synonyms = inner_anime.value("synonyms").toArray();
 
