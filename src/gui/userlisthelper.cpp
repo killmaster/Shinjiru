@@ -29,6 +29,12 @@ void MainWindow::userListLoaded() {
 
   QLayoutItem *item;
 
+  int index = 0;
+
+  if(ui->listTabs->count() > 0) {
+    index = ui->listTabs->currentIndex();
+  }
+
   while(item = layout->takeAt(0)){
     delete item->widget();
     delete item;
@@ -177,6 +183,8 @@ void MainWindow::userListLoaded() {
 
   ui->actionRL->setEnabled(true);
 
+  ui->listTabs->setCurrentIndex(index);
+
   updateStatistics();
 }
 
@@ -246,6 +254,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
       connect(temp, &QAction::toggled, [&, anime, i](bool selected) {
         QList<int> custom = anime->getCustomLists();
         custom.replace(i, selected ? 1 : 0);
+        anime->setCustomLists(custom);
 
         QMap<QString, QString> data;
         data.insert("id", anime->getID());
