@@ -365,6 +365,7 @@ void User::fetchUpdatedList() {
   qDebug() << "Fetching updated user list";
 
   QJsonObject user_list_data = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(this->displayName())).object();
+
   QJsonObject custom_list_data = user_list_data.value("custom_lists").toObject();
 
   if(user_list_data.value("custom_lists").isArray()) {
@@ -542,8 +543,19 @@ void User::removeFromList(QString list, Anime *anime) {
 }
 
 void User::remove(Anime *anime) {
-  removeFromList(anime->getMyStatus(), anime);
+  for(QString key : user_lists.keys()) {
+    QMap<QString, Anime*> m = user_lists.value(key);
+    if(m.contains(anime->getID())) {
+      m.remove(anime->getID());
+      user_lists.insert(key, m);
+    }
+  }
+
   anime_list.removeAll(anime);
 
   delete anime;
+}
+
+QByteArray User::listJson() {
+  return API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(this->displayName())).toJson();
 }

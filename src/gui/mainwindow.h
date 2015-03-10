@@ -183,6 +183,8 @@ private slots:
   void filterList(QString);
 
   void loadSelectedSeason();
+
+  void exportListJSON();
 };
 
 #endif // MAINWINDOW_H

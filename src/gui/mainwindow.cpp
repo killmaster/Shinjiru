@@ -3,6 +3,7 @@
 
 #include <QDesktopServices>
 #include <QIcon>
+#include <QFileDialog>
 
 #include "../app.h"
 #include "../api/api.h"
@@ -127,6 +128,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->actionVP,     SIGNAL(triggered()),                             SLOT(viewProfile()));
   connect(ui->actionEAR,    SIGNAL(triggered(bool)),                         SLOT(toggleAnimeRecognition(bool)));
   connect(ui->actionUpdate, SIGNAL(triggered()), FvUpdater::sharedUpdater(), SLOT(CheckForUpdatesNotSilent()));
+  connect(ui->actionExport, SIGNAL(triggered()),                             SLOT(exportListJSON()));
 
   connect(ui->disconnectButton, SIGNAL(clicked()), SLOT(resetAPI()));
 
@@ -577,5 +579,25 @@ void MainWindow::moveDown() {
       ui->orderListWidget->setCurrentRow(row + 1);
       this->settingsChanged();
     }
+  }
+}
+
+void MainWindow::exportListJSON() {
+  if(!this->hasUser) return;
+
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), qApp->applicationDirPath(),tr("Json File (*.json)"));
+
+  if(fileName.isEmpty()) return;
+  QFile f(fileName);
+  f.open(QFile::WriteOnly);
+  if(f.isOpen()) {
+    QByteArray data = User::sharedUser()->listJson();
+    int bytes = f.write(data);
+
+    if(bytes != data.length() || bytes == -1) {
+      QMessageBox::information(this, "Shinjiru", tr("Error %d: File could not be written to").arg(bytes));
+    }
+
+    f.close();
   }
 }

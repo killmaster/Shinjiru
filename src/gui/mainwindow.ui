@@ -1234,6 +1234,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="actionExport"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuAniList">
@@ -1329,6 +1330,11 @@
   <action name="actionAS">
    <property name="text">
     <string>&amp;Anime Search</string>
+   </property>
+  </action>
+  <action name="actionExport">
+   <property name="text">
+    <string>Export List</string>
    </property>
   </action>
  </widget>

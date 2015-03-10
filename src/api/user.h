@@ -51,6 +51,8 @@ public slots:
   void loadUserList();
   void loadAnimeData(Anime *, bool);
 
+  QByteArray listJson();
+
 signals:
   void new_image();
 
