@@ -1,7 +1,7 @@
 QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 1.1.0
+VERSION = 1.2.0
 TEMPLATE = app
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -71,7 +71,6 @@ SOURCES   += \
     src/gui/rulemanager.cpp \
     src/gui/overlay.cpp \
     src/gui/searchpanel.cpp \
-    src/premium.cpp \
     src/gui/seasonhelper.cpp \
     src/gui/seasonanime.cpp
 
@@ -107,7 +106,6 @@ HEADERS   += \
     src/gui/overlay.h \
     src/gui/searchpanel.h \
     src/version.h \
-    src/premium.h \
     src/gui/seasonanime.h
 
 FORMS     += \
