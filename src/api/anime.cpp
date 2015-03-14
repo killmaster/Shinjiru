@@ -82,6 +82,9 @@ QList<int>  Anime::getCustomLists()                       { return custom_lists;
 void        Anime::setCustomLists(QList<int> lists)       { this ->custom_lists = lists; }
 
 void Anime::downloadCover() {
+  if(!this->needsCover()) {
+    qDebug() << "Redownloading cover for anime " << this->getTitle();
+  }
   this->needCover = false;
   anime_image_control = new FileDownloader(getCoverURL());
   connect(anime_image_control, &FileDownloader::downloaded, [&]() {

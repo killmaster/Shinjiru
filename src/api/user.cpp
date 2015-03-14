@@ -299,6 +299,28 @@ Anime *User::getAnimeByData(QString title, QString episodes, QString score, QStr
 }
 
 void User::loadAnimeData(Anime *anime, bool download_cover) {
+  int queue_size = queue.size();
+
+  QMap<Anime *, bool> data;
+  data.insert(anime, download_cover);
+  queue.push(data);
+
+  if(queue_size == 0) {
+    QtConcurrent::run([&] () {
+      loadNext();
+    });
+  }
+}
+
+void User::loadNext() {
+  if(queue.size() == 0) return;
+
+  QMap<Anime *, bool> data = queue.front();
+  queue.pop();
+
+  Anime *anime = data.keys().first();
+  bool download_cover = data.values().first();
+
   QString ID = anime->getID();
   QUrl ID_URL = API::sharedAPI()->sharedAniListAPI()->API_ANIME(ID);
 
@@ -307,9 +329,10 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
   anime->setCoverURL(          QUrl(result.value("image_url_lge")   .toString()));
 
   if(download_cover) {
-    if(anime->needsCover()) {
-      anime->downloadCover();
-    }
+    QEventLoop evt;
+    connect(anime, SIGNAL(new_image()), &evt, SLOT(quit()));
+    anime->downloadCover();
+    evt.exec();
   }
 
   QString description = result.value("description").toString();
@@ -341,6 +364,12 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
   anime->finishReload();
 
   qDebug() << "Loaded extra data for anime" << anime->getTitle();
+
+  if(queue.size() > 0) {
+    QtConcurrent::run([&]() {
+      loadNext();
+    });
+  }
 }
 
 User* User::remake() {

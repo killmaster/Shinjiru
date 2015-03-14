@@ -5,6 +5,8 @@
 #include <QMap>
 #include <QVariantList>
 
+#include <queue>
+
 #include <anilistapi.h>
 
 #include "anime.h"
@@ -43,13 +45,14 @@ public slots:
   void setCustomLists(const QVariantList list)     { this->custom_lists = list; }
   void setNotificationCount(const int count)       { this->notifications = count; }
 
-
   void fetchUpdatedList();
   void removeFromList(QString list, Anime *anime);
   void remove(Anime *anime);
 
   void loadUserList();
   void loadAnimeData(Anime *, bool);
+
+  void loadNext();
 
   QByteArray listJson();
 
@@ -75,6 +78,8 @@ private:
   int anime_time;
   QVariantList custom_lists;
   int notifications;
+
+  std::queue<QMap<Anime *, bool>> queue;
 
   FileDownloader *user_image_control;
 
