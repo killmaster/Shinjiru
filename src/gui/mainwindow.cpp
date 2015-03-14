@@ -343,7 +343,7 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
     User::sharedUser()->loadAnimeData(anime, true);
   }
 
-  connect(ap, &AnimePanel::destroyed, [&, source, anime, row, old_status]() {
+  connect(ap, &AnimePanel::accepted, [&, source, anime, row, old_status]() {
    /* static_cast<ProgressTableWidgetItem *>(source->item(row, 1))->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
     QTableWidgetItem *scoreData = source->item(row, 2);
     if(User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
