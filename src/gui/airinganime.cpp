@@ -4,6 +4,7 @@
 #include "../api/anime.h"
 #include "scrolltext.h"
 #include "animepanel.h"
+#include "../api/user.h"
 
 #include <QPainter>
 
@@ -80,8 +81,9 @@ Anime* AiringAnime::getAnime() {
 void AiringAnime::tick() {
   int c = anime->getCountdown();
   if(c == 0) {
-    c = 604801; // TODO: This is bad, defaults to a week which isn't always correct
+    c = 604801;
     anime->setNextEpisode(anime->getNextEpisode() + 1);
+    User::sharedUser()->loadAnimeData(anime, false);
   }
 
   c--;
