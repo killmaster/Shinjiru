@@ -38,6 +38,10 @@ void MainWindow::loadSelectedSeason() {
 
       if(a->needsLoad() || a->needsCover()) {
         User::sharedUser()->loadAnimeData(a, true);
+
+        QEventLoop evt;
+        connect(a, SIGNAL(finishedReloading()), &evt, SLOT(quit()));
+        evt.exec();
       }
 
       QString current_season_text = ui->comboSeason->currentText() + " " + ui->comboYear->currentText();

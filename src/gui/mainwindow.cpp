@@ -344,43 +344,6 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   }
 
   connect(ap, &AnimePanel::accepted, [&, source, anime, row, old_status]() {
-   /* static_cast<ProgressTableWidgetItem *>(source->item(row, 1))->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
-    QTableWidgetItem *scoreData = source->item(row, 2);
-    if(User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
-      scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
-    } else if(User::sharedUser()->scoreType() == 4) {
-      scoreData->setData(Qt::DisplayRole, anime->getMyScore().toDouble());
-    } else {
-      scoreData->setText(anime->getMyScore());
-    }
-
-    if(anime->getMyStatus() != old_status) {
-      int tab = -1;
-      int old_tab = -1;
-      for(int t = 0; t < ui->listTabs->count(); t++) {
-        if(ui->listTabs->tabText(t).contains(anime->getMyStatus())) {
-          tab = t;
-        }
-        if(ui->listTabs->tabText(t).contains(old_status)) {
-          old_tab = t;
-        }
-      }
-
-      if(tab == -1) return;
-      ui->listTabs->setCurrentIndex(tab);
-      QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->widget(tab)->layout()->itemAt(0)->widget());
-      w->insertRow(0);
-      w->setItem(0, 0, source->takeItem(row, 0));
-      w->setItem(0, 1, source->takeItem(row, 1));
-      w->setItem(0, 2, source->takeItem(row, 2));
-      w->setItem(0, 3, source->takeItem(row, 3));
-      source->removeRow(row);
-      ui->listTabs->setTabText(tab, anime->getMyStatus() + "(" + QString::number(w->rowCount()) + ")");
-      ui->listTabs->setTabText(old_tab, old_status + "(" + QString::number(source->rowCount()) + ")");
-    }
-
-    source->clearSelection();
-    updateStatistics();*/
     this->userListLoaded();
   });
 

@@ -55,5 +55,5 @@ void SeasonAnime::setAnime(Anime *anime) {
 }
 
 Anime* SeasonAnime::getAnime() {
-    return this->anime;
+  return this->anime;
 }
