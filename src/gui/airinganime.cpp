@@ -38,7 +38,8 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
   p.fillRect  (0, 0, width(), 30, QBrush(QColor(0,0,0, 200)));
 
   p.fillRect(0, height() - 20, width(), 20, QBrush(QColor(0,0,0, 200)));
-  p.drawText(QRect(5, height() - 20, width() - 5, 20), Qt::AlignLeft, "Ep. " + QString::number(anime->getNextEpisode()));
+  QString next = anime->getNextEpisode() == 0 ? "?" : QString::number(anime->getNextEpisode());
+  p.drawText(QRect(5, height() - 20, width() - 5, 20), Qt::AlignLeft, "Ep. " + next);
 
   QString cd = "";
 
@@ -52,6 +53,8 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
     if(countdown == 0) cd = "<1 hour";
     else cd = QString::number(countdown) + " hour" + (countdown != 1 ? "s" : "");
   }
+
+  if(!anime->hasAiringSchedule()) cd = "? hours";
 
   p.drawText(QRect(0, height() - 20, width() - 5, 20), Qt::AlignRight, cd);
 
@@ -79,8 +82,12 @@ Anime* AiringAnime::getAnime() {
 }
 
 void AiringAnime::tick() {
+  if(!anime->hasAiringSchedule()) {
+    return;
+  }
+
   int c = anime->getCountdown();
-  if(c == 0 && anime->hasAiringSchedule()) {
+  if(c == 0) {
     c = 604801;
     anime->setNextEpisode(anime->getNextEpisode() + 1);
     User::sharedUser()->loadAnimeData(anime, false);
