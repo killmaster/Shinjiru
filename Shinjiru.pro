@@ -121,6 +121,8 @@ FORMS     += \
 
 RESOURCES += res/res.qrc
 
+TRANSLATIONS += shinjiru_en.ts
+
 RC_FILE = Shinjiru.rc
 
 macx: LIBS += -lssl
