@@ -31,6 +31,9 @@ private:
   QStringList windowList;
   bool isMediaPlayer(QString window_title);
   QString found_title;
+
+  QRegExp video;
+  QRegExp exceptions;
 };
 
 #endif // WINDOWWATCHER_H

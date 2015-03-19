@@ -1,7 +1,13 @@
 #include "windowwatcher.h"
 
+#include <QDebug>
+
 WindowWatcher::WindowWatcher(QObject *parent) : QObject(parent) {
   timer = new QTimer(this);
+
+
+  video = QRegExp("(.*(\\.mkv|\\.mp4|\\.avi)).*");
+  exceptions = QRegExp("(\\.png|\\.gif|\\.jpg|\\.jpeg)");
 
   connect(timer, SIGNAL(timeout()), SLOT(timeOut()));
 
@@ -47,14 +53,16 @@ void WindowWatcher::timeOut() {
     if(!isMediaPlayer(window)) continue;
     title = true;
     emit title_found(found_title);
+    return;
   }
 
   if(!title) emit title_found("");
 }
 
 bool WindowWatcher::isMediaPlayer(QString window_title) {
-  QRegExp video("(.*(\\.mkv|\\.mp4|\\.avi)).*");
   if(video.exactMatch(window_title)) {
+    if(window_title.contains(exceptions)) return false;
+
     found_title = window_title;
 
     /* TODO
