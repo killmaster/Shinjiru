@@ -80,7 +80,7 @@ Anime* AiringAnime::getAnime() {
 
 void AiringAnime::tick() {
   int c = anime->getCountdown();
-  if(c == 0) {
+  if(c == 0 && anime->hasAiringSchedule()) {
     c = 604801;
     anime->setNextEpisode(anime->getNextEpisode() + 1);
     User::sharedUser()->loadAnimeData(anime, false);

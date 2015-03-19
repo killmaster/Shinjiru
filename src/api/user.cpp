@@ -353,6 +353,12 @@ void User::loadNext() {
 
     anime->setNextEpisode(airing.value("next_episode").toInt());
     anime->setCountdown(airing.value("countdown").toInt());
+
+    if(anime->getCountdown() > 0) {
+      anime->setAiringSchedule(true);
+    } else {
+      anime->setAiringSchedule(false);
+    }
   }
 
   QJsonArray synonyms = result.value("synonyms").toArray();

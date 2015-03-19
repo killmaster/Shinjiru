@@ -88,6 +88,9 @@ public:
   QList<int> getCustomLists();
   void setCustomLists(QList<int> lists);
 
+  bool hasAiringSchedule();
+  void setAiringSchedule(bool schedule);
+
   void downloadCover();
 
 signals:
@@ -111,6 +114,7 @@ private:
   QString synopsis;
   QUrl cover_url;
   QPixmap cover_image;
+  bool has_schedule;
 
   int countdown;
   int next_episode;

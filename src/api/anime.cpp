@@ -81,6 +81,9 @@ void        Anime::setDefaultHidden(bool hidden)          { this ->default_hidde
 QList<int>  Anime::getCustomLists()                       { return custom_lists; }
 void        Anime::setCustomLists(QList<int> lists)       { this ->custom_lists = lists; }
 
+bool        Anime::hasAiringSchedule()                    { return has_schedule; }
+void        Anime::setAiringSchedule(bool schedule)       { this ->has_schedule = schedule; }
+
 void Anime::downloadCover() {
   if(!this->needsCover()) {
     qDebug() << "Redownloading cover for anime " << this->getTitle();
