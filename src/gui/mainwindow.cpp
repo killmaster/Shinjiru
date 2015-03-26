@@ -84,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   ui->airingButton    ->setIcon(awesome->icon(fa::clocko,    black));
   ui->torrentsButton  ->setIcon(awesome->icon(fa::rss,       black));
   ui->animeButton     ->setIcon(awesome->icon(fa::bars,      black));
-  ui->seasonsButton   ->setIcon(awesome->icon(fa::tree,      black));
+  ui->seasonsButton   ->setIcon(awesome->icon(fa::th,        black));
   ui->statisticsButton->setIcon(awesome->icon(fa::piechart,  black));
   ui->moveDownButton  ->setIcon(awesome->icon(fa::arrowdown, black));
   ui->moveUpButton    ->setIcon(awesome->icon(fa::arrowup,   black));
