@@ -83,3 +83,8 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
 SearchPanel::~SearchPanel() {
   delete ui;
 }
+
+void SearchPanel::setSearch(QString text) {
+  ui->lineEdit->setText(text);
+  ui->searchButton->click();
+}

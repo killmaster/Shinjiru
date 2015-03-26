@@ -15,8 +15,11 @@ public:
   explicit SearchPanel(QWidget *parent = 0);
   ~SearchPanel();
 
+  void setSearch(QString text);
+
 private:
   Ui::SearchPanel *ui;
+
 };
 
 #endif // SEARCHPANEL_H

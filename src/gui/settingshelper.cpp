@@ -102,3 +102,37 @@ void MainWindow::defaultSettings() {
     exit(0);
   }
 }
+
+void MainWindow::resetAPI() {
+  API::sharedAPI()->sharedAniListAPI()->setAuthorizationCode("");
+  API::sharedAPI()->sharedAniListAPI()->setAuthorizationPin("");
+
+  settings->setValue(Settings::AniListAccess, "");
+  settings->setValue(Settings::AniListExpires, QDateTime::currentDateTimeUtc());
+  settings->setValue(Settings::AniListRefresh, "");
+
+  QProcess::startDetached(QApplication::applicationFilePath());
+  exit(0);
+}
+
+void MainWindow::moveUp() {
+ if(ui->orderListWidget->selectedItems().count() == 1) {
+   int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
+   if(row != 0) {
+     ui->orderListWidget->insertItem(row - 1, ui->orderListWidget->takeItem(row)->text());
+     ui->orderListWidget->setCurrentRow(row - 1);
+     this->settingsChanged();
+   }
+ }
+}
+
+void MainWindow::moveDown() {
+  if(ui->orderListWidget->selectedItems().count() == 1) {
+    int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
+    if(row != ui->orderListWidget->count()) {
+      ui->orderListWidget->insertItem(row + 1, ui->orderListWidget->takeItem(row)->text());
+      ui->orderListWidget->setCurrentRow(row + 1);
+      this->settingsChanged();
+    }
+  }
+}

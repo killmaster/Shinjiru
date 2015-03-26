@@ -10,6 +10,13 @@
     <height>500</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+    <stylestrategy>PreferAntialias</stylestrategy>
+    <kerning>false</kerning>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Shinjiru</string>
   </property>
@@ -33,17 +40,20 @@
     <item>
      <widget class="QWidget" name="navigationBar" native="true">
       <layout class="QHBoxLayout" name="HorizontalLayout">
+       <property name="spacing">
+        <number>0</number>
+       </property>
        <property name="leftMargin">
-        <number>6</number>
+        <number>2</number>
        </property>
        <property name="topMargin">
-        <number>6</number>
+        <number>1</number>
        </property>
        <property name="rightMargin">
-        <number>6</number>
+        <number>2</number>
        </property>
        <property name="bottomMargin">
-        <number>6</number>
+        <number>0</number>
        </property>
        <item>
         <widget class="QPushButton" name="animeButton">
@@ -149,13 +159,13 @@
             <number>2</number>
            </property>
            <property name="leftMargin">
-            <number>4</number>
+            <number>3</number>
            </property>
            <property name="topMargin">
             <number>0</number>
            </property>
            <property name="rightMargin">
-            <number>4</number>
+            <number>3</number>
            </property>
            <property name="bottomMargin">
             <number>0</number>
@@ -198,7 +208,7 @@
              <item>
               <layout class="QHBoxLayout" name="horizontalLayout_9">
                <property name="leftMargin">
-                <number>60</number>
+                <number>52</number>
                </property>
               </layout>
              </item>
@@ -564,24 +574,30 @@
          <number>2</number>
         </property>
         <property name="leftMargin">
-         <number>4</number>
+         <number>3</number>
         </property>
         <property name="topMargin">
          <number>0</number>
         </property>
         <property name="rightMargin">
-         <number>4</number>
+         <number>3</number>
         </property>
         <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
+          <property name="spacing">
+           <number>0</number>
+          </property>
           <property name="leftMargin">
            <number>0</number>
           </property>
           <property name="rightMargin">
            <number>0</number>
+          </property>
+          <property name="bottomMargin">
+           <number>5</number>
           </property>
           <item>
            <widget class="QPushButton" name="refreshButton">
@@ -645,7 +661,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_10">
             <property name="leftMargin">
-             <number>60</number>
+             <number>53</number>
             </property>
            </layout>
           </item>
@@ -723,7 +739,7 @@
          <number>0</number>
         </property>
         <property name="topMargin">
-         <number>25</number>
+         <number>30</number>
         </property>
         <property name="rightMargin">
          <number>0</number>
@@ -742,7 +758,7 @@
              <x>0</x>
              <y>0</y>
              <width>892</width>
-             <height>371</height>
+             <height>377</height>
             </rect>
            </property>
           </widget>
@@ -1136,7 +1152,7 @@
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_11">
           <property name="bottomMargin">
-           <number>3</number>
+           <number>8</number>
           </property>
           <item>
            <spacer name="horizontalSpacer_6">
@@ -1188,7 +1204,7 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_13">
             <property name="leftMargin">
-             <number>63</number>
+             <number>55</number>
             </property>
            </layout>
           </item>
@@ -1207,7 +1223,7 @@
                <x>0</x>
                <y>0</y>
                <width>890</width>
-               <height>368</height>
+               <height>374</height>
               </rect>
              </property>
             </widget>

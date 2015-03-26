@@ -94,6 +94,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   ui->listTabs->setCurrentIndex(0);
 
   ui->statusBar->addWidget(progress_bar);
+  ui->statusBar->layout()->setContentsMargins(1,0,0,0);
   progress_bar->setRange(0, 100);
   progress_bar->setValue(5);
   progress_bar->setFormat("Authorizing");
@@ -119,7 +120,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
     qApp->quit();
   });
-  connect(ui->actionAbout,  &QAction::triggered,                             [&]() {showAbout();});
+  connect(ui->actionAbout,  &QAction::triggered,                             [&]() {About *about = new About(this); about->show();});
   connect(ui->actionHelp,   &QAction::triggered,                             [&]() {QDesktopServices::openUrl(QUrl("http://app.shinjiru.me/support.php"));});
   connect(ui->actionRL,     &QAction::triggered,                             [&]() {loadUser();});
   connect(ui->actionAS,     &QAction::triggered,                             [&]() {SearchPanel *sp = new SearchPanel(this); sp->show();});
@@ -170,6 +171,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   });
 
   connect(ui->listFilterLineEdit, SIGNAL(textChanged(QString)), SLOT(filterList(QString)));
+  connect(ui->listFilterLineEdit, SIGNAL(returnPressed()), SLOT(showSearch()));
   connect(ui->listTabs, SIGNAL(currentChanged(int)), SLOT(filterList(int)));
 
   this->show();
@@ -267,32 +269,32 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 void MainWindow::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
+  p.setRenderHint(QPainter::SmoothPixmapTransform, true);
+
 
   int notification_count = 0;
 
   if(this->hasUser) {
-    p.drawPixmap(width() - 60, 24, 50, 50, User::sharedUser()->userImage());
+    p.drawPixmap(width() - 52, 24, 42, 42, User::sharedUser()->userImage());
     notification_count = User::sharedUser()->notificationCount();
   }
 
-  p.drawRect(width() - 60, 24, 50, 50);
+  p.drawRect(width() - 52, 24, 42, 42);
 
   if(notification_count > 0) p.setBrush(QColor(255,120,120));
   else p.setBrush(QColor(255,255,255));
 
-  p.drawEllipse(width() - 25.0f,60.0f, 20.0f, 20.0f);
+  p.drawEllipse(width() - 20.0f, 57.0f, 17.0f, 17.0f);
   QString notif = notification_count >= 9 ? "9+" : QString::number(notification_count);
-  p.drawText(width() - 25.0f, 59.0f, 20.0f, 20.0f, Qt::AlignCenter, notif);
+  p.drawText(width() - 19.0f, 57.0f, 17.0f, 17.0f, Qt::AlignCenter, notif);
 
   QFont font = p.font();
-  font.setPointSize(14);
+  font.setPointSize(12);
   p.setFont(font);
 
   if(this->hasUser) {
-    p.drawText(0, 30, width() - 65, 40, Qt::AlignRight, User::sharedUser()->displayName());
+    p.drawText(0, 25, width() - 57, 40, Qt::AlignRight, User::sharedUser()->displayName());
   }
-
-  p.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
   event->accept();
 }
@@ -419,6 +421,7 @@ void MainWindow::updateEpisode() {
 
   if(cw_anime->getMyProgress() == cw_anime->getEpisodeCount() && cw_anime->getEpisodeCount() != 0) {
     data.insert("list_status", "completed");
+    cw_anime->setMyStatus("completed");
   }
 
   userListLoaded();
@@ -507,45 +510,6 @@ void MainWindow::eventTick() {
   ui->lblUptime->setText(format);
 }
 
-void MainWindow::showAbout() {
-  About *about = new About(this);
-  about->show();
-}
-
-void MainWindow::resetAPI() {
-  API::sharedAPI()->sharedAniListAPI()->setAuthorizationCode("");
-  API::sharedAPI()->sharedAniListAPI()->setAuthorizationPin("");
-
-  settings->setValue(Settings::AniListAccess, "");
-  settings->setValue(Settings::AniListExpires, QDateTime::currentDateTimeUtc());
-  settings->setValue(Settings::AniListRefresh, "");
-
-  QProcess::startDetached(QApplication::applicationFilePath());
-  exit(0);
-}
-
-void MainWindow::moveUp() {
- if(ui->orderListWidget->selectedItems().count() == 1) {
-   int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
-   if(row != 0) {
-     ui->orderListWidget->insertItem(row - 1, ui->orderListWidget->takeItem(row)->text());
-     ui->orderListWidget->setCurrentRow(row - 1);
-     this->settingsChanged();
-   }
- }
-}
-
-void MainWindow::moveDown() {
-  if(ui->orderListWidget->selectedItems().count() == 1) {
-    int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
-    if(row != ui->orderListWidget->count()) {
-      ui->orderListWidget->insertItem(row + 1, ui->orderListWidget->takeItem(row)->text());
-      ui->orderListWidget->setCurrentRow(row + 1);
-      this->settingsChanged();
-    }
-  }
-}
-
 void MainWindow::exportListJSON() {
   if(!this->hasUser) return;
 
@@ -564,4 +528,11 @@ void MainWindow::exportListJSON() {
 
     f.close();
   }
+}
+
+
+void MainWindow::showSearch() {
+  SearchPanel *sp = new SearchPanel(this);
+  sp->setSearch(ui->listFilterLineEdit->text());
+  sp->show();
 }

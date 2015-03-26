@@ -136,8 +136,6 @@ private slots:
   void showAiringTab();
   void showStatisticsTab();
 
-  void showAbout();
-
   void showAnimePanel(int, int);
   void showAnimePanel(int, int, QTableWidget *);
 
@@ -181,6 +179,7 @@ private slots:
 
   void filterList(int);
   void filterList(QString);
+  void showSearch();
 
   void loadSelectedSeason();
 
