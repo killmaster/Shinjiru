@@ -62,6 +62,9 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     currentYear--;
   }
 
+  ui->browseTabs->tabBar()->setVisible(false);
+  ui->browseTabs->setCurrentIndex(0);
+
   QWidget *container = new QWidget(ui->scrollArea);
   layout = new FlowLayout(container);
   ui->scrollArea->setWidget(container);
@@ -109,7 +112,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->animeButton,      SIGNAL(clicked()),   SLOT(showAnimeTab()));
   connect(ui->airingButton,     SIGNAL(clicked()),   SLOT(showAiringTab()));
   connect(ui->torrentsButton,   SIGNAL(clicked()),   SLOT(showTorrentsTab()));
-  connect(ui->seasonsButton,    SIGNAL(clicked()),   SLOT(showSeasonsTab()));
+  connect(ui->seasonsButton,    SIGNAL(clicked()),   SLOT(showBrowseTab()));
   connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettingsTab()));
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
@@ -173,6 +176,12 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->listFilterLineEdit, SIGNAL(textChanged(QString)), SLOT(filterList(QString)));
   connect(ui->listFilterLineEdit, SIGNAL(returnPressed()), SLOT(showSearch()));
   connect(ui->listTabs, SIGNAL(currentChanged(int)), SLOT(filterList(int)));
+
+  connect(ui->airingButton_2,  SIGNAL(clicked()), SLOT(loadAiringBrowser()));
+  connect(ui->seasonsButton_2, SIGNAL(clicked()), SLOT(loadSeasonBrowser()));
+  connect(ui->upcomingButton,  SIGNAL(clicked()), SLOT(loadUpcomingBrowser()));
+  connect(ui->recentButton,    SIGNAL(clicked()), SLOT(loadRecentBrowser()));
+  connect(ui->browseButton,    SIGNAL(clicked()), SLOT(loadBrowserData()));
 
   this->show();
   createActions();
@@ -312,7 +321,7 @@ void MainWindow::showAiringTab()     { ui->tabWidget->setCurrentIndex(3);
                                        }
                                        layout->setContentsMargins((width-cwidth)/2, 0, 0, 0); }
 void MainWindow::showStatisticsTab() { ui->tabWidget->setCurrentIndex(4); }
-void MainWindow::showSeasonsTab() { ui->tabWidget->setCurrentIndex(5);
+void MainWindow::showBrowseTab()     { ui->tabWidget->setCurrentIndex(5);
                                     int width = layout2->geometry().width();
                                     int cwidth = layout2->contentsWidth();
 

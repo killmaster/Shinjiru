@@ -1,5 +1,5 @@
-#ifndef SEASONANIME_H
-#define SEASONANIME_H
+#ifndef BrowseAnime_H
+#define BrowseAnime_H
 
 #include <QWidget>
 #include <QPaintEvent>
@@ -9,16 +9,16 @@
 #include "scrolltext.h"
 
 namespace Ui {
-class SeasonAnime;
+class BrowseAnime;
 }
 
-class SeasonAnime : public QWidget
+class BrowseAnime : public QWidget
 {
   Q_OBJECT
 
 public:
-  explicit SeasonAnime(QWidget *parent = 0, int scoreType = 0);
-  ~SeasonAnime();
+  explicit BrowseAnime(QWidget *parent = 0, int scoreType = 0);
+  ~BrowseAnime();
   void setAnime(Anime *anime);
   Anime* getAnime();
 
@@ -27,10 +27,10 @@ protected:
   void mouseDoubleClickEvent(QMouseEvent *);
 
 private:
-  Ui::SeasonAnime *ui;
+  Ui::BrowseAnime *ui;
   Anime *anime;
   ScrollText *text;
   int scoreType;
 };
 
-#endif // SEASONANIME_H
+#endif // BrowseAnime_H

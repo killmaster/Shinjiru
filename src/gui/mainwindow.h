@@ -29,7 +29,7 @@
 #include "progresstablewidgetitem.h"
 #include "facetablewidgetitem.h"
 #include "overlay.h"
-#include "seasonanime.h"
+#include "browseanime.h"
 
 namespace Ui {
   class MainWindow;
@@ -132,7 +132,7 @@ private slots:
   void showAnimeTab();
   void showSettingsTab();
   void showTorrentsTab();
-  void showSeasonsTab();
+  void showBrowseTab();
   void showAiringTab();
   void showStatisticsTab();
 
@@ -181,7 +181,12 @@ private slots:
   void filterList(QString);
   void showSearch();
 
-  void loadSelectedSeason();
+  void loadSeasonBrowser();
+  void loadAiringBrowser();
+  void loadUpcomingBrowser();
+  void loadRecentBrowser();
+  void loadBrowserData();
+  QUrl addPage(QUrl url, int page);
 
   void exportListJSON();
 };

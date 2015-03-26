@@ -1,5 +1,5 @@
-#include "SeasonAnime.h"
-#include "ui_SeasonAnime.h"
+#include "browseanime.h"
+#include "ui_browseanime.h"
 
 #include "../api/anime.h"
 #include "scrolltext.h"
@@ -7,7 +7,7 @@
 
 #include <QPainter>
 
-SeasonAnime::SeasonAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(new Ui::SeasonAnime) {
+BrowseAnime::BrowseAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(new Ui::BrowseAnime) {
   ui->setupUi(this);
 
   QFont font = this->font();
@@ -21,11 +21,11 @@ SeasonAnime::SeasonAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(n
   ui->verticalLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
 }
 
-SeasonAnime::~SeasonAnime() {
+BrowseAnime::~BrowseAnime() {
   delete ui;
 }
 
-void SeasonAnime::paintEvent(QPaintEvent *event) {
+void BrowseAnime::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
   QPen pen = p.pen();
@@ -38,13 +38,13 @@ void SeasonAnime::paintEvent(QPaintEvent *event) {
   event->accept();
 }
 
-void SeasonAnime::mouseDoubleClickEvent(QMouseEvent *event) {
+void BrowseAnime::mouseDoubleClickEvent(QMouseEvent *event) {
   AnimePanel *ap = new AnimePanel(this, anime, scoreType);
   ap->show();
   event->accept();
 }
 
-void SeasonAnime::setAnime(Anime *anime) {
+void BrowseAnime::setAnime(Anime *anime) {
   this->anime = anime;
 
   text->setText(anime->getTitle());
@@ -54,6 +54,6 @@ void SeasonAnime::setAnime(Anime *anime) {
   }
 }
 
-Anime* SeasonAnime::getAnime() {
+Anime* BrowseAnime::getAnime() {
   return this->anime;
 }
