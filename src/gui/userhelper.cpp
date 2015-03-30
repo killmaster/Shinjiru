@@ -15,9 +15,9 @@ void MainWindow::loadUser() {
   ui->actionRL->setEnabled(false);
   user_future = QtConcurrent::run([&]() {
     if(this->hasUser) {
-      User::sharedUser()->remake();
+      return User::sharedUser()->remake();
     } else
-      User::sharedUser();
+      return User::sharedUser();
   });
 
   user_future_watcher.setFuture(user_future);
@@ -31,7 +31,8 @@ void MainWindow::userLoaded() {
   repaint();
 
   #ifdef HAS_PREMIUM
-    Premium::sharedPremium()->loadPremium();
+    if(!hasUser)
+      Premium::sharedPremium()->loadPremium();
   #endif
 
   if(!hasUser) {

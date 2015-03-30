@@ -140,9 +140,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(watch_timer,    SIGNAL(timeout()),            SLOT(updateEpisode()));
   connect(event_timer,    SIGNAL(timeout()),            SLOT(eventTick()));
 
-  connect(ui->comboSeason, SIGNAL(currentTextChanged(QString)), SLOT(loadSelectedSeason()));
-  connect(ui->comboYear, SIGNAL(currentTextChanged(QString)), SLOT(loadSelectedSeason()));
-
   connect(ui->torrentTable,      SIGNAL(customContextMenuRequested(QPoint)), SLOT(torrentContextMenu(QPoint)));
   connect(ui->torrentFilter,     SIGNAL(textChanged(QString)),               SLOT(filterTorrents(QString)));
   connect(ui->chkHideUnknown,    SIGNAL(toggled(bool)),                      SLOT(filterTorrents(bool)));

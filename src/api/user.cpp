@@ -53,7 +53,7 @@ bool User::loadProfileImage() {
 
   qDebug() << "Downloading user image" << profileImageURL() << "for" << displayName();
 
-  user_image_control = new FileDownloader(url, this);
+  user_image_control = new FileDownloader(url);
 
   QEventLoop event;
   connect(user_image_control, SIGNAL(downloaded()), &event, SLOT(quit()));
@@ -430,6 +430,7 @@ void User::fetchUpdatedList() {
       if(list.contains(id)) {
         anime_data = list.value(id);
       } else {
+        qDebug() << "Making new entry for id" << id;
         anime_data = new Anime();
       }
 
@@ -501,7 +502,7 @@ void User::fetchUpdatedList() {
       if(list.contains(id)) {
         anime_data = list.value(id);
       } else {
-        qDebug() << "Making new";
+        qDebug() << "Making new entry for id" << id;
         anime_data = new Anime();
       }
 

@@ -12,7 +12,7 @@ win32:LIBS += -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" -lUser
 
 win32-msvc* {
   QMAKE_CFLAGS_RELEASE = -O2 -MD -zi
-  QMAKE_LFLAGS_RELEASE = /INCREMENTAL:NO /DEBUG
+  QMAKE_LFLAGS_RELEASE = /INCREMENTAL:NO /DEBUG /MAP /OPT:REF
 }
 
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)

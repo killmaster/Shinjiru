@@ -74,7 +74,7 @@ void MainWindow::loadBrowserData() {
   // Clear the browser view
   QLayoutItem *item;
 
-  while(item = layout2->takeAt(0)){
+  while((item = layout2->takeAt(0))){
     delete item->widget();
     delete item;
   }

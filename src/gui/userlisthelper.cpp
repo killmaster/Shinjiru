@@ -35,7 +35,7 @@ void MainWindow::userListLoaded() {
     index = ui->listTabs->currentIndex();
   }
 
-  while(item = layout->takeAt(0)){
+  while((item = layout->takeAt(0))){
     delete item->widget();
     delete item;
   }

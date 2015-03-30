@@ -15,6 +15,69 @@
 #include <QCoreApplication>
 #include <QFile>
 
+#ifdef QT_DEBUG
+#include <QMessageBox>
+#include <QThread>
+#include <iostream>
+
+void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &, const QString & str) {
+  const char * msgAsCstring = str.toStdString().c_str();
+
+  QString msg (msgAsCstring);
+  std::cerr << msgAsCstring << std::endl;
+  std::cerr.flush();
+
+  if ((type == QtDebugMsg) && msg.contains("::connect")) {
+    type = QtWarningMsg;
+  }
+
+  if ((type == QtDebugMsg)
+      && msg.contains("QPainter::begin")
+      && msg.contains("Paint device returned engine")) {
+    type = QtWarningMsg;
+  }
+
+  if ((type == QtWarningMsg)
+       && QString(msg).contains("QClipboard::event")
+       && QString(msg).contains("Cowardly refusing")) {
+    type = QtDebugMsg;
+  }
+
+  QCoreApplication * instance = QCoreApplication::instance();
+  const bool isGuiThread = instance && (QThread::currentThread() == instance->thread());
+
+  if (isGuiThread) {
+    QMessageBox messageBox;
+    switch (type) {
+      case QtDebugMsg:
+        return;
+      case QtWarningMsg:
+        messageBox.setIcon(QMessageBox::Warning);
+        messageBox.setInformativeText(msg);
+        messageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        break;
+      case QtCriticalMsg:
+        messageBox.setIcon(QMessageBox::Critical);
+        messageBox.setInformativeText(msg);
+        messageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+        break;
+      case QtFatalMsg:
+        messageBox.setIcon(QMessageBox::Critical);
+        messageBox.setInformativeText(msg);
+        messageBox.setStandardButtons(QMessageBox::Cancel);
+        break;
+    }
+
+    int ret = messageBox.exec();
+    if (ret == QMessageBox::Cancel)
+      abort();
+  } else {
+    if (type != QtDebugMsg)
+      abort();
+  }
+}
+#endif
+
 void messageHandler(QtMsgType type, const QMessageLogContext &, const QString & str) {
   const char *msg = str.toStdString().c_str();
 
@@ -51,10 +114,6 @@ void messageHandler(QtMsgType type, const QMessageLogContext &, const QString & 
 }
 
 int main(int argc, char *argv[]) {
-  #ifndef Q_OS_OSX
-    qInstallMessageHandler(messageHandler);
-  #endif
-
   #ifdef Q_OS_OSX
     QSslConfiguration config = QSslConfiguration::defaultConfiguration();
     config.setProtocol(QSsl::AnyProtocol);
@@ -66,6 +125,14 @@ int main(int argc, char *argv[]) {
   }
 
   QApplication a(argc, argv);
+
+  #ifndef Q_OS_OSX
+    qInstallMessageHandler(messageHandler);
+  #endif
+
+  #ifdef QT_DEBUG
+    qInstallMessageHandler(noisyFailureMsgHandler);
+  #endif
 
   QFile logFile(qApp->applicationDirPath() + "/" + VER_PRODUCTNAME_STR + ".log");
   if(logFile.exists()) logFile.remove();
