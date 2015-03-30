@@ -430,7 +430,6 @@ void User::fetchUpdatedList() {
       if(list.contains(id)) {
         anime_data = list.value(id);
       } else {
-        qDebug() << "Making new entry for id" << id;
         anime_data = new Anime();
       }
 
@@ -491,7 +490,8 @@ void User::fetchUpdatedList() {
   QStringList custom_keys = custom_list_data.keys();
 
   for(int i = 0; i < custom_keys.length(); i++) {
-    QMap<QString, Anime *> list = custom.value(this->customLists().at(custom_keys.at(i).toInt()).toString());
+    QMap<QString, Anime *> list = user_lists.value(this->customLists().at(custom_keys.at(i).toInt()).toString());
+
     for(QJsonValue ary : custom_list_data.value(custom_keys.at(i)).toArray()) {
       QJsonObject anime = ary.toObject();
       QJsonObject inner_anime = anime.value("anime").toObject();
@@ -502,7 +502,6 @@ void User::fetchUpdatedList() {
       if(list.contains(id)) {
         anime_data = list.value(id);
       } else {
-        qDebug() << "Making new entry for id" << id;
         anime_data = new Anime();
       }
 
