@@ -38,7 +38,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   progress_bar         = new QProgressBar(ui->statusBar);
   over                 = new Overlay(this);
   torrent_refresh_time = 0;
-  user_refresh_time    = 15 * 60 * 1000;
+  default_time         = 15 * 60;
+  user_refresh_time    = default_time;
   download_rule        = 0;
   download_count       = 0;
   hasUser              = false;
@@ -452,7 +453,7 @@ void MainWindow::eventTick() {
   }
 
   if(user_refresh_time == 0) {
-    user_refresh_time = 15 * 60 * 1000;
+    user_refresh_time = default_time;
     loadUser();
   }
 

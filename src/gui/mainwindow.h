@@ -100,6 +100,7 @@ private:
   QMenu *trayIconMenu;
 
   int user_refresh_time;
+  int default_time;
 
   QAction *quitAction;
   QAction *restoreAction;
