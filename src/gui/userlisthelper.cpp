@@ -16,6 +16,8 @@ void MainWindow::loadUserList() {
     User::sharedUser()->loadUserList();
   });
 
+  async_registry.append(user_list_future);
+
   user_list_future_watcher.setFuture(user_list_future);
 
 }

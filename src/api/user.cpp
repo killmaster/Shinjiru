@@ -37,6 +37,8 @@ User::User() : QObject(0) {
   this->setCustomLists      (result.value("custom_list_anime").toArray().toVariantList());
   this->setNotificationCount(result.value("notifications")    .toInt());
 
+  this->cancel = false;
+
   this->loadProfileImage();
 }
 
@@ -306,14 +308,15 @@ void User::loadAnimeData(Anime *anime, bool download_cover) {
   queue.push(data);
 
   if(queue_size == 0) {
-    QtConcurrent::run([&] () {
-      loadNext();
-    });
+    async_registry.append(QtConcurrent::run([&] () {
+      return loadNext();
+    }));
   }
 }
 
-void User::loadNext() {
-  if(queue.size() == 0) return;
+int User::loadNext() {
+  if(queue.size() == 0) return 1;
+  if(this->cancel) return 1;
 
   QMap<Anime *, bool> data = queue.front();
   queue.pop();
@@ -372,10 +375,13 @@ void User::loadNext() {
   qDebug() << "Loaded extra data for anime" << anime->getTitle();
 
   if(queue.size() > 0) {
-    QtConcurrent::run([&]() {
+    async_registry.append(QtConcurrent::run([&]() {
       loadNext();
-    });
+      return 1;
+    }));
   }
+
+  return 1;
 }
 
 User* User::remake() {

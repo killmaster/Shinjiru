@@ -113,6 +113,8 @@ private:
 
   QString showFunc;
 
+  QList<QFuture<void>> async_registry;
+
 private slots:
   void loadUser();
   void userLoaded();

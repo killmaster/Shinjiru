@@ -52,12 +52,26 @@ public slots:
   void loadUserList();
   void loadAnimeData(Anime *, bool);
 
-  void loadNext();
+  int loadNext();
+
+  void quit() {
+    this->cancel = true;
+
+    for(QFuture<int> f :this->async_registry) {
+      if(f.isRunning()) {
+        qApp->processEvents();
+        f.waitForFinished();
+      }
+    }
+
+    emit quitFinished();
+  }
 
   QByteArray listJson();
 
 signals:
   void new_image();
+  void quitFinished();
 
 private:
   User();
@@ -78,8 +92,11 @@ private:
   int anime_time;
   QVariantList custom_lists;
   int notifications;
+  bool cancel;
 
   std::queue<QMap<Anime *, bool>> queue;
+
+  QList<QFuture<int>> async_registry;
 
   FileDownloader *user_image_control;
 

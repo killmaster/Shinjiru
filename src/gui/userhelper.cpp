@@ -15,10 +15,12 @@ void MainWindow::loadUser() {
   ui->actionRL->setEnabled(false);
   user_future = QtConcurrent::run([&]() {
     if(this->hasUser) {
-      return User::sharedUser()->remake();
+      User::sharedUser()->remake();
     } else
-      return User::sharedUser();
+      User::sharedUser();
   });
+
+  async_registry.append(user_future);
 
   user_future_watcher.setFuture(user_future);
 }
