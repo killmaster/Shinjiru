@@ -17,7 +17,14 @@ win32-msvc* {
 
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
-include(lib/fervor/fervor.pri)
+
+exists(lib/fervor-autoupdate/Fervor.pri) {
+  include(lib/fervor-autoupdate/Fervor.pri)
+  CONFIG += fervor_gui
+  DEFINES += FV_GUI
+} else {
+  //include(lib/fervor/fervor.pri)
+}
 
 win32-msvc* {
 
