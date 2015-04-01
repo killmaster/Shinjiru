@@ -40,7 +40,19 @@ void MainWindow::createActions() {
     s.setValue("mainWindowGeometry", saveGeometry());
     s.setValue("mainWindowState", saveState());
 
-    qApp->quit();
+    for(QFuture<void> f : this->async_registry) {
+      if(f.isRunning()) {
+        qApp->processEvents();
+        f.waitForFinished();
+      }
+    }
+
+    if(this->hasUser) {
+      connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
+      User::sharedUser()->quit();
+    } else {
+      qApp->quit();
+    }
   });
 
   animeRecognitionAction = new QAction(tr("&Anime Recognition"), this);

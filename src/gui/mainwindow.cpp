@@ -237,6 +237,21 @@ void MainWindow::closeEvent(QCloseEvent *event) {
   if(trayIcon->isVisible() && close_to_tray) {
     hide();
     event->ignore();
+  } else {
+    event->ignore();
+    for(QFuture<void> f : this->async_registry) {
+      if(f.isRunning()) {
+        qApp->processEvents();
+        f.waitForFinished();
+      }
+    }
+
+    if(this->hasUser) {
+      connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
+      User::sharedUser()->quit();
+    } else {
+      qApp->quit();
+    }
   }
 }
 
