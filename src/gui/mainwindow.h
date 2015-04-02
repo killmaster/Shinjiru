@@ -153,6 +153,8 @@ private slots:
 
   void resetAPI();
 
+  void elegantClose();
+
   void filterTorrents(QString, bool);
   void filterTorrents(bool);
   void filterTorrents(QString);

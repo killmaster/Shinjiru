@@ -133,7 +133,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>5</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -1474,7 +1474,6 @@
                   <height>356</height>
                  </rect>
                 </property>
-                <zorder>browseTabs</zorder>
                </widget>
               </widget>
              </item>

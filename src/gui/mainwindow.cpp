@@ -118,23 +118,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
   connect(ui->actionExit,   &QAction::triggered,                             [&]() {
-    QSettings s;
-    s.setValue("mainWindowGeometry", saveGeometry());
-    s.setValue("mainWindowState", saveState());
-
-    for(QFuture<void> f : this->async_registry) {
-      if(f.isRunning()) {
-        qApp->processEvents();
-        f.waitForFinished();
-      }
-    }
-
-    if(this->hasUser) {
-      connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
-      User::sharedUser()->quit();
-    } else {
-      qApp->quit();
-    }
+    this->elegantClose();
   });
   connect(ui->actionAbout,  &QAction::triggered,                             [&]() {About *about = new About(this); about->show();});
   connect(ui->actionHelp,   &QAction::triggered,                             [&]() {QDesktopServices::openUrl(QUrl("http://app.shinjiru.me/support.php"));});
@@ -239,19 +223,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     event->ignore();
   } else {
     event->ignore();
-    for(QFuture<void> f : this->async_registry) {
-      if(f.isRunning()) {
-        qApp->processEvents();
-        f.waitForFinished();
-      }
-    }
 
-    if(this->hasUser) {
-      connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
-      User::sharedUser()->quit();
-    } else {
-      qApp->quit();
-    }
+    this->elegantClose();
   }
 }
 
@@ -569,4 +542,32 @@ void MainWindow::showSearch() {
   SearchPanel *sp = new SearchPanel(this);
   sp->setSearch(ui->listFilterLineEdit->text());
   sp->show();
+}
+
+void MainWindow::elegantClose() {
+  QSettings s;
+  s.setValue("mainWindowGeometry", saveGeometry());
+  s.setValue("mainWindowState", saveState());
+
+  for(int i = 0; i < ui->listTabs->count(); i++) {
+    QTableWidget *t = static_cast<QTableWidget *>(ui->listTabs->widget(i)->layout()->itemAt(0)->widget());
+
+    QString key = ui->listTabs->tabText(i).replace(QRegExp("[ ]+"), "").replace(QRegExp("\\([0-9]+\\)"), "") + "State";
+
+    s.setValue(key, t->horizontalHeader()->saveState());
+  }
+
+  for(QFuture<void> f : this->async_registry) {
+    if(f.isRunning()) {
+      qApp->processEvents();
+      f.waitForFinished();
+    }
+  }
+
+  if(this->hasUser) {
+    connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
+    User::sharedUser()->quit();
+  } else {
+    qApp->quit();
+  }
 }

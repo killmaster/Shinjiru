@@ -165,6 +165,17 @@ void MainWindow::userListLoaded() {
     table->resizeColumnToContents(1);
     table->resizeColumnToContents(2);
     table->sortByColumn(0, Qt::SortOrder::AscendingOrder);
+
+    QString key = tab_title + "State";
+    key.replace(QRegExp("[ ]+"), "");
+    key.replace(QRegExp("\\([0-9]+\\)"), "");
+
+    QSettings s;
+    QByteArray state = s.value(key).toByteArray();
+
+    if(state != QByteArray()) {
+      table->horizontalHeader()->restoreState(state);
+    }
   }
 
   QTabBar *tb = ui->listTabs->tabBar();

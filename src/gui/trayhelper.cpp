@@ -36,23 +36,7 @@ void MainWindow::createActions() {
 
   quitAction = new QAction(tr("&Quit"), this);
   connect(quitAction, &QAction::triggered, [&]() {
-    QSettings s;
-    s.setValue("mainWindowGeometry", saveGeometry());
-    s.setValue("mainWindowState", saveState());
-
-    for(QFuture<void> f : this->async_registry) {
-      if(f.isRunning()) {
-        qApp->processEvents();
-        f.waitForFinished();
-      }
-    }
-
-    if(this->hasUser) {
-      connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
-      User::sharedUser()->quit();
-    } else {
-      qApp->quit();
-    }
+    this->elegantClose();
   });
 
   animeRecognitionAction = new QAction(tr("&Anime Recognition"), this);
