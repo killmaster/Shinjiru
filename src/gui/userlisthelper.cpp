@@ -223,6 +223,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
   table->verticalHeader()->setDefaultSectionSize(19);
   table->horizontalHeader()->setStretchLastSection(true);
   table->setSortingEnabled(true);
+  table->horizontalHeader()->setHighlightSections(false);
 
   connect(table, &QWidget::customContextMenuRequested, [=](QPoint pos) {
     QTableWidgetItem *item = table->itemAt(pos);

@@ -133,7 +133,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -687,6 +687,9 @@
           <attribute name="horizontalHeaderDefaultSectionSize">
            <number>200</number>
           </attribute>
+          <attribute name="horizontalHeaderHighlightSections">
+           <bool>false</bool>
+          </attribute>
           <attribute name="horizontalHeaderStretchLastSection">
            <bool>true</bool>
           </attribute>
@@ -695,6 +698,9 @@
           </attribute>
           <attribute name="verticalHeaderDefaultSectionSize">
            <number>19</number>
+          </attribute>
+          <attribute name="verticalHeaderHighlightSections">
+           <bool>false</bool>
           </attribute>
           <column>
            <property name="text">
@@ -757,8 +763,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>892</width>
-             <height>377</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
           </widget>
@@ -1470,8 +1476,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>888</width>
-                  <height>356</height>
+                  <width>98</width>
+                  <height>28</height>
                  </rect>
                 </property>
                </widget>
