@@ -67,7 +67,12 @@ void MainWindow::applySettings() {
   if(sob) {
     #ifdef Q_OS_WIN
       QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
-      reg.setValue("Shinjiru", qApp->applicationFilePath());
+      reg.setValue("Shinjiru", "\"" + qApp->applicationFilePath().replace("/", "\\") + "\"");
+    #endif
+  } else {
+    #ifdef Q_OS_WIN
+      QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
+      reg.remove("Shinjiru");
     #endif
   }
 
