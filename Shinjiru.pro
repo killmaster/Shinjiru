@@ -1,7 +1,7 @@
 QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 1.4.0
+VERSION = 1.4.2
 TEMPLATE = app
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -18,13 +18,9 @@ win32-msvc* {
 include(lib/QtAwesome/QtAwesome/QtAwesome.pri)
 include(lib/AniListAPI/AniListAPI.pri)
 
-exists(lib/fervor-autoupdate/Fervor.pri) {
-  include(lib/fervor-autoupdate/Fervor.pri)
-  CONFIG += fervor_gui
-  DEFINES += FV_GUI
-} else {
-  include(lib/fervor/fervor.pri)
-}
+include(lib/fervor/Fervor.pri)
+CONFIG += fervor_gui
+DEFINES += FV_GUI
 
 win32-msvc* {
 
