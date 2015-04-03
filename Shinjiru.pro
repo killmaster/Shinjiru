@@ -23,7 +23,7 @@ exists(lib/fervor-autoupdate/Fervor.pri) {
   CONFIG += fervor_gui
   DEFINES += FV_GUI
 } else {
-  //include(lib/fervor/fervor.pri)
+  include(lib/fervor/fervor.pri)
 }
 
 win32-msvc* {
