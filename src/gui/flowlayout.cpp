@@ -6,6 +6,8 @@
 FlowLayout::FlowLayout(QWidget *parent) : QLayout(parent) {
   m_hSpace = -1;
   m_vSpace = -1;
+
+  sort = true;
 }
 
 FlowLayout::~FlowLayout() {
@@ -19,13 +21,14 @@ bool layoutItemLessThan(QLayoutItem* &v1, QLayoutItem* &v2) {
   QWidget *w2 = v2->widget();
   AiringAnime *a1 = static_cast<AiringAnime *>(w1);
   AiringAnime *a2 = static_cast<AiringAnime *>(w2);
-  return a1->getAnime()->getTitle() < a2->getAnime()->getTitle();
+  return a1->getAnime()->getTitle().compare(a2->getAnime()->getTitle());
 }
 
 void FlowLayout::addItem(QLayoutItem *item) {
   itemList.append(item);
 
-  qSort(itemList.begin(), itemList.end(), layoutItemLessThan);
+  if(sort)
+    qSort(itemList.begin(), itemList.end(), layoutItemLessThan);
 }
 
 int FlowLayout::horizontalSpacing() const {

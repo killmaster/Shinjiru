@@ -332,10 +332,7 @@ int User::loadNext() {
   anime->setCoverURL(          QUrl(result.value("image_url_lge")   .toString()));
 
   if(download_cover) {
-    QEventLoop evt;
-    connect(anime, SIGNAL(new_image()), &evt, SLOT(quit()));
     anime->downloadCover();
-    evt.exec();
   }
 
   QString description = result.value("description").toString();

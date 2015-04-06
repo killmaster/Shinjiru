@@ -70,6 +70,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
   QWidget *container2 = new QWidget(ui->scrollArea_2);
   layout2 = new FlowLayout(container2);
+  layout2->disableSort();
   ui->scrollArea_2->setWidget(container2);
   container2->setLayout(layout2);
 

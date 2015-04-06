@@ -26,6 +26,10 @@ public:
   QLayoutItem *takeAt(int index);
   int contentsWidth();
 
+  void disableSort() {
+    sort = false;
+  }
+
  private:
   int doLayout(const QRect &rect, bool testOnly) const;
   int smartSpacing(QStyle::PixelMetric pm) const;
@@ -33,6 +37,8 @@ public:
   QList<QLayoutItem *> itemList;
   int m_hSpace;
   int m_vSpace;
+
+  bool sort;
  };
 
  #endif
