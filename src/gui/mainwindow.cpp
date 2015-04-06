@@ -63,9 +63,6 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
     currentYear--;
   }
 
-  ui->browseTabs->tabBar()->setVisible(false);
-  ui->browseTabs->setCurrentIndex(0);
-
   QWidget *container = new QWidget(ui->scrollArea);
   layout = new FlowLayout(container);
   ui->scrollArea->setWidget(container);
@@ -166,15 +163,22 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
       this->filterList(3);
     }
   });
+  QString genrelist = "Action, Adult, Adventure, Cars, Comedy, Dementia, Demons, Doujinshi, Drama, Ecchi, Fantasy, Game, Gender Bender, Harem, Hentai, Historical, Horror, Josei, Kids, Magic, Martial Arts, Mature, Mecha, Military, Motion Comic, Music, Mystery, Mythological , Parody, Police, Psychological, Romance, Samurai, School, Sci-Fi, Seinen, Shoujo, Shoujo Ai, Shounen, Shounen Ai, Slice of Life, Space, Sports, Super Power, Supernatural, Thriller, Tragedy, Vampire, Yaoi, Yuri";
+  QStringList genres = genrelist.split(", ");
+
+  for(QString genre: genres) {
+    QCheckBox *chk = new QCheckBox();
+
+    chk->setText(genre);
+    chk->setTristate(true);
+
+    ui->genreList->addWidget(chk);
+  }
 
   connect(ui->listFilterLineEdit, SIGNAL(textChanged(QString)), SLOT(filterList(QString)));
   connect(ui->listFilterLineEdit, SIGNAL(returnPressed()), SLOT(showSearch()));
   connect(ui->listTabs, SIGNAL(currentChanged(int)), SLOT(filterList(int)));
 
-  connect(ui->airingButton_2,  SIGNAL(clicked()), SLOT(loadAiringBrowser()));
-  connect(ui->seasonsButton_2, SIGNAL(clicked()), SLOT(loadSeasonBrowser()));
-  connect(ui->upcomingButton,  SIGNAL(clicked()), SLOT(loadUpcomingBrowser()));
-  connect(ui->recentButton,    SIGNAL(clicked()), SLOT(loadRecentBrowser()));
   connect(ui->browseButton,    SIGNAL(clicked()), SLOT(loadBrowserData()));
 
   this->show();

@@ -3,26 +3,8 @@
 
 #include "browseanime.h"
 
-void MainWindow::loadSeasonBrowser() {
-  ui->browseTabs->setCurrentIndex(0);
-}
-
-void MainWindow::loadAiringBrowser() {
-  ui->browseTabs->setCurrentIndex(1);
-}
-
-void MainWindow::loadUpcomingBrowser() {
-  ui->browseTabs->setCurrentIndex(2);
-}
-
-void MainWindow::loadRecentBrowser() {
-  ui->browseTabs->setCurrentIndex(3);
-}
-
 QUrl MainWindow::addPage(QUrl url, int page) {
   QString url_s = url.toDisplayString();
-
-  qDebug() << url_s;
 
   if(url.hasQuery()) {
     if(url_s.contains("page=[0-9]")) {
@@ -33,43 +15,28 @@ QUrl MainWindow::addPage(QUrl url, int page) {
     url_s += "?page=" + QString::number(page);
   }
 
-  qDebug() << url_s;
+  return QUrl(url_s);
+}
+
+QUrl MainWindow::addQuery(QUrl url, QString key, QString value) {
+  QString url_s = url.toDisplayString();
+
+  if(url.hasQuery()) {
+    url_s += "&" + key + "=" + value;
+  } else {
+    url_s += "?" + key + "=" + value;
+  }
 
   return QUrl(url_s);
 }
 
 void MainWindow::loadBrowserData() {
-  // Get browser data
-  QString type = "";
-  int ci = ui->browseTabs->currentIndex();
-  switch(ui->browseTabs->currentIndex()) {
-    case 0:
-      type = "season";
-      break;
-    case 1:
-      type = "airing";
-      break;
-    case 2:
-      type = "upcoming";
-      break;
-    case 3:
-      type = "recent";
-      break;
-  }
+  QUrl url = API::sharedAPI()->sharedAniListAPI()->API_BROWSE;
 
-  QUrl url;
-
-  QString season;
-  QString year;
-
-  if(type != "season") {
-    url = API::sharedAPI()->sharedAniListAPI()->API_BROWSE(type);
-  } else {
-    season = ui->comboSeason->currentText();
-    year = ui->comboYear->currentText();
-
-    url = API::sharedAPI()->sharedAniListAPI()->API_SEASON(season, year);
-  }
+  QString season = ui->comboSeason->currentText();
+  QString year   = ui->comboYear->currentText();
+  QString type   = ui->comboType->currentText();
+  QString status = ui->comboStatus->currentText();
 
   // Clear the browser view
   QLayoutItem *item;
@@ -79,55 +46,94 @@ void MainWindow::loadBrowserData() {
     delete item;
   }
 
+  if(!season.isEmpty()) {
+    url = addQuery(url, "season", season);
+  }
+
+  if(!year.isEmpty()) {
+    url = addQuery(url, "year", year);
+  }
+
+  if(!type.isEmpty()) {
+    url = addQuery(url, "type", type);
+  }
+
+  if(!status.isEmpty()) {
+    url = addQuery(url, "status", status);
+  }
+
+  QStringList genres;
+  QStringList exclude;
+
+  for(int i = 0; i < ui->genreList->count(); i++) {
+    QCheckBox *w = static_cast<QCheckBox *>(dynamic_cast<QWidgetItem *>(ui->genreList->itemAt(i))->widget());
+
+    if(w->checkState() == Qt::PartiallyChecked) {
+      exclude.append(w->text());
+    } else if(w->checkState() == Qt::Checked) {
+      genres.append(w->text());
+    }
+  }
+
+  if(!genres.isEmpty()) {
+    url = addQuery(url, "genres", genres.join(","));
+  }
+
+  if(!exclude.isEmpty()) {
+    url = addQuery(url, "genres_exclude", exclude.join(","));
+  }
+
   // Load the results for the requested type
-  QJsonObject browse_results = API::sharedAPI()->sharedAniListAPI()->get(url).object();
+  QJsonArray browse_results = API::sharedAPI()->sharedAniListAPI()->get(url).array();
 
-  for(int i = 1; i <= browse_results.value("last_page").toInt(1); i++) {
-    if(i != 1) {
-      browse_results = API::sharedAPI()->sharedAniListAPI()->get(addPage(url, i)).object();
+  for(int i = 0; i <= browse_results.size(); i++) {
+    QJsonObject anime = browse_results.at(i).toObject();
+
+    Anime *a = User::sharedUser()->getAnimeByTitle(anime.value("title_romaji").toString());
+
+    if(a == 0) {
+      a = new Anime();
+      a->setID(QString::number(anime.value("id").toInt()));
+      a->setMyProgress(0);
+      a->setMyNotes("");
+      a->setMyRewatch(0);
+
+      if(a->getID() == "0") {
+        delete a;
+        continue;
+      }
     }
 
-    for(QJsonValue val : browse_results.value("data").toArray()) {
-      QJsonObject anime = val.toObject();
+    BrowseAnime *s = new BrowseAnime(this, User::sharedUser()->scoreType());
 
-      Anime *a = User::sharedUser()->getAnimeByTitle(anime.value("title_romaji").toString());
+    if(a->needsLoad() || a->needsCover()) {
+      User::sharedUser()->loadAnimeData(a, true);
 
-      if(a == 0) {
-        a = new Anime();
-        a->setID(QString::number(anime.value("id").toInt()));
-        a->setMyProgress(0);
-        a->setMyNotes("");
-        a->setMyRewatch(0);
-      }
-
-      if(a->needsLoad() || a->needsCover()) {
-        User::sharedUser()->loadAnimeData(a, true);
-
-        QEventLoop evt;
-        connect(a, SIGNAL(finishedReloading()), &evt, SLOT(quit()));
-        evt.exec();
-      }
-
-      // Do we need to keep loading?
-      if(ui->browseTabs->currentIndex() != ci ||
-        (ci == 0 && season != ui->comboSeason->currentText() && year != ui->comboYear->currentText())) {
-        return;
-      }
-
-      BrowseAnime *s = new BrowseAnime(this, User::sharedUser()->scoreType());
-      s->setAnime(a);
-
-      layout2->addWidget(s);
-
-      int width = layout2->geometry().width();
-      int cwidth = layout2->contentsWidth();
-
-      if(cwidth < 0) {
-        width = this->width() - 2;
-        cwidth = this->width() - (this->width() % 200);
-      }
-
-      layout2->setContentsMargins((width-cwidth)/2, 0, 0, 0);
+      QEventLoop evt;
+      connect(a, SIGNAL(finishedReloading()), &evt, SLOT(quit()));
+      evt.exec();
     }
+
+    s->setAnime(a);
+
+    layout2->addWidget(s);
+
+    // Do we need to keep loading?
+    if(season != ui->comboSeason->currentText() ||
+       year != ui->comboYear->currentText() ||
+       type != ui->comboType->currentText() ||
+       status != ui->comboStatus->currentText()) {
+      return;
+    }
+
+    int width = layout2->geometry().width();
+    int cwidth = layout2->contentsWidth();
+
+    if(cwidth < 0) {
+      width = this->width() - 2;
+      cwidth = this->width() - (this->width() % 200);
+    }
+
+    layout2->setContentsMargins((width-cwidth)/2, 0, 0, 0);
   }
 }

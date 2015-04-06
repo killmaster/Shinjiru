@@ -49,6 +49,9 @@ protected:
   void changeEvent(QEvent *);
   void mouseDoubleClickEvent(QMouseEvent *);
 
+signals:
+  void genres_loaded();
+
 private:
   Ui::MainWindow *ui;
   QtAwesome *awesome;
@@ -112,6 +115,8 @@ private:
   bool close_to_tray;
 
   QString showFunc;
+
+  QList<std::shared_ptr<QCheckBox>> genres;
 
   QList<QFuture<void>> async_registry;
 
@@ -186,12 +191,9 @@ private slots:
   void filterList(QString);
   void showSearch();
 
-  void loadSeasonBrowser();
-  void loadAiringBrowser();
-  void loadUpcomingBrowser();
-  void loadRecentBrowser();
   void loadBrowserData();
-  QUrl addPage(QUrl url, int page);
+  QUrl addPage(QUrl, int);
+  QUrl addQuery(QUrl, QString, QString);
 
   void exportListJSON();
 };

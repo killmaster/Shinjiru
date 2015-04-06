@@ -69,6 +69,7 @@ int FlowLayout::contentsWidth() {
   if(itemList.count() == 0) return 0;
 
   int cwidth = itemList.at(0)->widget()->width();
+
   int spacing = this->smartSpacing(QStyle::PM_LayoutHorizontalSpacing);
 
   int temp = 0;

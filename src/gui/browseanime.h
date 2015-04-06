@@ -22,6 +22,9 @@ public:
   void setAnime(Anime *anime);
   Anime* getAnime();
 
+public slots:
+  void reload();
+
 protected:
   void paintEvent(QPaintEvent *);
   void mouseDoubleClickEvent(QMouseEvent *);

@@ -3,6 +3,7 @@
 
 #include <QHeaderView>
 #include <QtConcurrent>
+#include <QCheckBox>
 
 #ifdef HAS_PREMIUM
   #include "../premium.h"
@@ -166,12 +167,12 @@ void MainWindow::userListLoaded() {
     table->resizeColumnToContents(2);
     table->sortByColumn(0, Qt::SortOrder::AscendingOrder);
 
-    QString key = tab_title + "State";
-    key.replace(QRegExp("[ ]+"), "");
-    key.replace(QRegExp("\\([0-9]+\\)"), "");
+    QString rkey = tab_title + "State";
+    rkey.replace(QRegExp("[ ]+"), "");
+    rkey.replace(QRegExp("\\([0-9]+\\)"), "");
 
     QSettings s;
-    QByteArray state = s.value(key).toByteArray();
+    QByteArray state = s.value(rkey).toByteArray();
 
     if(state != QByteArray()) {
       table->horizontalHeader()->restoreState(state);

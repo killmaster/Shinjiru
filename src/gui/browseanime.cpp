@@ -25,6 +25,12 @@ BrowseAnime::~BrowseAnime() {
   delete ui;
 }
 
+
+void BrowseAnime::reload() {
+  this->setAnime(this->anime);
+  this->show();
+}
+
 void BrowseAnime::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
@@ -48,10 +54,6 @@ void BrowseAnime::setAnime(Anime *anime) {
   this->anime = anime;
 
   text->setText(anime->getTitle());
-
-  if(anime->needsLoad()) {
-    connect(anime, SIGNAL(new_image()), SLOT(repaint()));
-  }
 }
 
 Anime* BrowseAnime::getAnime() {
