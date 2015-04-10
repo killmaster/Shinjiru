@@ -29,6 +29,8 @@ void MainWindow::userLoaded() {
   progress_bar->setValue(20);
   progress_bar->setFormat(tr("User Loaded"));
 
+  connect(User::sharedUser(), SIGNAL(reloadRequested()), SLOT(loadUserList()));
+
   connect(User::sharedUser(), SIGNAL(new_image()), SLOT(repaint()));
   repaint();
 

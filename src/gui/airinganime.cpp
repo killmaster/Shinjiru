@@ -64,6 +64,11 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
 void AiringAnime::mouseDoubleClickEvent(QMouseEvent *event) {
   AnimePanel *ap = new AnimePanel(this, anime, scoreType);
   ap->show();
+
+  connect(ap, &AnimePanel::accepted, this, [&]() {
+    User::sharedUser()->animeChanged();
+  });
+
   event->accept();
 }
 

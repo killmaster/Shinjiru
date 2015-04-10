@@ -54,6 +54,10 @@ public slots:
 
   int loadNext();
 
+  void animeChanged() {
+    emit reloadRequested();
+  }
+
   void quit() {
     this->cancel = true;
 
@@ -72,6 +76,7 @@ public slots:
 signals:
   void new_image();
   void quitFinished();
+  void reloadRequested();
 
 private:
   User();

@@ -54,7 +54,7 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
     ui->webView->page()->setLinkDelegationPolicy(QWebPage::DelegateAllLinks);
   });
 
-  connect(ui->webView, &QWebView::linkClicked, [](const QUrl &url) {
+  connect(ui->webView, &QWebView::linkClicked, [&](const QUrl &url) {
     QString url_s = url.toDisplayString().replace("http://localhost/", "");
 
     QStringList comp = url_s.split("#");
@@ -80,6 +80,10 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
 
     AnimePanel *ap = new AnimePanel(0, a, User::sharedUser()->scoreType());
     ap->show();
+
+    connect(ap, &AnimePanel::accepted, this, [&]() {
+      User::sharedUser()->animeChanged();
+    });
   });
 }
 
