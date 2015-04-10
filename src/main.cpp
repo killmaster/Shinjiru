@@ -15,6 +15,8 @@
 #include <QCoreApplication>
 #include <QFile>
 
+#define QT_DEBUG
+
 #ifdef QT_DEBUG
 #include <QMessageBox>
 #include <QThread>

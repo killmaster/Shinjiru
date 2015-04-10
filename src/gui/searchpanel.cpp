@@ -66,14 +66,17 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
     Anime *a = User::sharedUser()->getAnimeByTitle(title);
 
     if(a == 0) {
-      a = new Anime(User::sharedUser());
+      a = new Anime(0);
       a->setID(id);
       a->setMyProgress(0);
       a->setMyNotes("");
       a->setMyRewatch(0);
     }
 
+    QEventLoop evt;
     User::sharedUser()->loadAnimeData(a, false);
+    connect(a, SIGNAL(finishedReloading()), &evt, SLOT(quit()));
+    evt.exec();
 
     AnimePanel *ap = new AnimePanel(0, a, User::sharedUser()->scoreType());
     ap->show();
