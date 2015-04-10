@@ -170,7 +170,7 @@ void AnimePanel::accept() {
 
     if(anime->getMyStatus() != status.toLower()) {
       data.insert("list_status",      status.toLower());
-      anime->setMyStatus(status.toLower());
+      anime->setMyStatus(status);
     }
 
     if(anime->getMyScore() != score) {

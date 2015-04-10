@@ -64,7 +64,7 @@ int         Anime::getMyRewatch()                         { return rewatch_count
 void        Anime::setMyRewatch(int rewatch)              { this ->rewatch_count = rewatch; }
 
 QString     Anime::getMyStatus()                          { return my_status; }
-void        Anime::setMyStatus(QString status)            { this ->my_status = status; }
+void        Anime::setMyStatus(QString status)            { this ->my_status = status.toLower(); }
 
 int         Anime::getDuration()                          { return duration; }
 void        Anime::setDuration(int duration)              { this ->duration = duration; }

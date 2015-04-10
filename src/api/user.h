@@ -55,6 +55,7 @@ public slots:
   int loadNext();
 
   void animeChanged() {
+    this->fetchUpdatedList();
     emit reloadRequested();
   }
 

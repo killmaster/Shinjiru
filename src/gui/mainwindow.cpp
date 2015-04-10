@@ -360,7 +360,7 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   }
 
   connect(ap, &AnimePanel::accepted, [&, source, anime, row, old_status]() {
-    this->userListLoaded();
+    User::sharedUser()->animeChanged();
   });
 
   ap->show();
