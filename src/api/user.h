@@ -47,6 +47,7 @@ public slots:
 
   void fetchUpdatedList();
   void removeFromList(QString list, Anime *anime);
+  void addToList(QString list, Anime *anime);
   void remove(Anime *anime);
 
   void loadUserList();
@@ -55,7 +56,6 @@ public slots:
   int loadNext();
 
   void animeChanged() {
-    this->fetchUpdatedList();
     emit reloadRequested();
   }
 

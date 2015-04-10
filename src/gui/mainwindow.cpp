@@ -360,6 +360,11 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   }
 
   connect(ap, &AnimePanel::accepted, [&, source, anime, row, old_status]() {
+    if(anime->getMyStatus() != old_status) {
+      User::sharedUser()->removeFromList(old_status, anime);
+      User::sharedUser()->addToList(anime->getMyStatus(), anime);
+    }
+
     User::sharedUser()->animeChanged();
   });
 

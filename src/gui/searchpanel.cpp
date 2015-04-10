@@ -78,10 +78,17 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
     connect(a, SIGNAL(finishedReloading()), &evt, SLOT(quit()));
     evt.exec();
 
+    QString old_status = a->getMyStatus();
+
     AnimePanel *ap = new AnimePanel(0, a, User::sharedUser()->scoreType());
     ap->show();
 
-    connect(ap, &AnimePanel::accepted, this, [&]() {
+    connect(ap, &AnimePanel::accepted, this, [&, old_status]() {
+      if(a->getMyStatus() != old_status) {
+        User::sharedUser()->removeFromList(old_status, a);
+        User::sharedUser()->addToList(a->getMyStatus(), a);
+      }
+
       User::sharedUser()->animeChanged();
     });
   });

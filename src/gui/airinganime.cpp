@@ -62,10 +62,16 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
 }
 
 void AiringAnime::mouseDoubleClickEvent(QMouseEvent *event) {
+  QString old_status = anime->getMyStatus();
   AnimePanel *ap = new AnimePanel(this, anime, scoreType);
   ap->show();
 
-  connect(ap, &AnimePanel::accepted, this, [&]() {
+  connect(ap, &AnimePanel::accepted, this, [&, old_status]() {
+    if(anime->getMyStatus() != old_status) {
+      User::sharedUser()->removeFromList(old_status, anime);
+      User::sharedUser()->addToList(anime->getMyStatus(), anime);
+    }
+
     User::sharedUser()->animeChanged();
   });
 

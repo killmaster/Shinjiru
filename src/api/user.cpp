@@ -583,6 +583,18 @@ void User::removeFromList(QString list, Anime *anime) {
   }
 }
 
+void User::addToList(QString list, Anime *anime) {
+  list = list.replace("-", "_");
+  list = list.replace(" ", "_");
+
+  QMap<QString, Anime*> user_list = user_lists.value(list);
+
+  if(!user_list.contains(anime->getID())) {
+    user_list.insert(anime->getID(), anime);
+    user_lists.insert(list, user_list);
+  }
+}
+
 void User::remove(Anime *anime) {
   for(QString key : user_lists.keys()) {
     QMap<QString, Anime*> m = user_lists.value(key);
