@@ -248,11 +248,13 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void MainWindow::changeEvent(QEvent *event) {
   if(event->type() == QEvent::WindowStateChange) {
-    if(isMaximized()) {
-      showFunc = "showMaximized";
-    } else  if(isMinimized() && minimize_to_tray) {
+    if(isMinimized() && minimize_to_tray) {
       this->hide();
       event->ignore();
+    }
+
+    if(isMaximized()) {
+      showFunc = "showMaximized";
     } else {
       showFunc = "showNormal";
     }
