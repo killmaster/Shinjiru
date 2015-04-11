@@ -97,6 +97,7 @@ void MainWindow::loadBrowserData() {
       a->setMyProgress(0);
       a->setMyNotes("");
       a->setMyRewatch(0);
+      a->setMyStatus("");
 
       if(a->getID() == "0") {
         delete a;
