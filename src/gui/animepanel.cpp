@@ -15,7 +15,8 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
   this->anime = anime;
   this->score_type = score_type;
   QString airing_status = anime->getAiringStatus();
-  airing_status = airing_status.at(0).toUpper() + airing_status.right(airing_status.length() - 1);
+  if(!airing_status.isEmpty())
+    airing_status = airing_status.at(0).toUpper() + airing_status.right(airing_status.length() - 1);
 
   QString score = anime->getMyScore();
 
@@ -84,7 +85,9 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
 
   QString my_status = anime->getMyStatus();
 
-  my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
+  if(!my_status.isEmpty())
+    my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
+
   if(my_status == "Plan to watch") my_status = "Plan to Watch";
   ui->comboStatus->setCurrentText(my_status);
 
@@ -164,7 +167,7 @@ void AnimePanel::accept() {
     score = QString::number(d_score);
   }
 
-  if(anime->getMyNotes() != notes || anime->getMyProgress() != eps || anime->getMyScore() != score || anime->getMyStatus() != status || anime->getMyRewatch() != rewatch) {
+  if(anime->getMyNotes() != notes || anime->getMyProgress() != eps || anime->getMyScore() != score || anime->getMyStatus() != status.toLower() || anime->getMyRewatch() != rewatch) {
     QMap<QString, QString> data;
     data.insert("id",                 anime->getID());
 

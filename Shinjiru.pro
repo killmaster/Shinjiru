@@ -1,7 +1,7 @@
 QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 1.5.1
+VERSION = 1.5.2
 TEMPLATE = app
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"

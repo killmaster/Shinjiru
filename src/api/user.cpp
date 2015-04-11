@@ -575,6 +575,8 @@ void User::removeFromList(QString list, Anime *anime) {
   list = list.replace("-", "_");
   list = list.replace(" ", "_");
 
+  if(list == "") return;
+
   QMap<QString, Anime*> user_list = user_lists.value(list);
 
   if(user_list.contains(anime->getID())) {
@@ -592,6 +594,10 @@ void User::addToList(QString list, Anime *anime) {
   if(!user_list.contains(anime->getID())) {
     user_list.insert(anime->getID(), anime);
     user_lists.insert(list, user_list);
+  }
+
+  if(!anime_list.contains(anime)) {
+    anime_list.append(anime);
   }
 }
 

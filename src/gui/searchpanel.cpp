@@ -71,6 +71,7 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
       a->setMyProgress(0);
       a->setMyNotes("");
       a->setMyRewatch(0);
+      a->setMyStatus("");
     }
 
     QEventLoop evt;
@@ -83,7 +84,7 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
     AnimePanel *ap = new AnimePanel(0, a, User::sharedUser()->scoreType());
     ap->show();
 
-    connect(ap, &AnimePanel::accepted, this, [&, old_status]() {
+    connect(ap, &AnimePanel::accepted, this, [&, old_status, a]() {
       if(a->getMyStatus() != old_status) {
         User::sharedUser()->removeFromList(old_status, a);
         User::sharedUser()->addToList(a->getMyStatus(), a);

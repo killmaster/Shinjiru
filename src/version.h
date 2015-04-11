@@ -9,11 +9,11 @@
   #define FALSE (!TRUE)
 #endif
 
-#define VER_FILEVERSION             1,5,1
-#define VER_FILEVERSION_STR         "1.5.1"
+#define VER_FILEVERSION             1,5,2
+#define VER_FILEVERSION_STR         "1.5.2"
 
-#define VER_PRODUCTVERSION          1,5,1
-#define VER_PRODUCTVERSION_STR      "1.5.1"
+#define VER_PRODUCTVERSION          1,5,2
+#define VER_PRODUCTVERSION_STR      "1.5.2"
 
 #define VER_COMPANYNAME_STR         "Kazakuri"
 #define VER_FILEDESCRIPTION_STR     "Shinjiru"

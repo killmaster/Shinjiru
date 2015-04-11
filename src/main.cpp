@@ -15,17 +15,16 @@
 #include <QCoreApplication>
 #include <QFile>
 
-#define QT_DEBUG
-
 #ifdef QT_DEBUG
 #include <QMessageBox>
 #include <QThread>
 #include <iostream>
 
 void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &, const QString & str) {
-  const char * msgAsCstring = str.toStdString().c_str();
+  const char * msgAsCstring = str.toUtf8().toStdString().c_str();
 
   QString msg (msgAsCstring);
+  qDebug() << str.toUtf8();
   std::cerr << msgAsCstring << std::endl;
   std::cerr.flush();
 
