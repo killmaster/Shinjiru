@@ -30,6 +30,7 @@ private:
   Anime *anime;
   int score_type;
   QWidget *score_widget;
+  bool new_entry;
 
 private slots:
   void refreshDisplay();

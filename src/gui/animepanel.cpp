@@ -85,8 +85,12 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
 
   QString my_status = anime->getMyStatus();
 
-  if(!my_status.isEmpty())
+  if(!my_status.isEmpty()) {
     my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
+    new_entry = false;
+  } else {
+    new_entry = true;
+  }
 
   if(my_status == "Plan to watch") my_status = "Plan to Watch";
   ui->comboStatus->setCurrentText(my_status);
@@ -167,7 +171,12 @@ void AnimePanel::accept() {
     score = QString::number(d_score);
   }
 
-  if(anime->getMyNotes() != notes || anime->getMyProgress() != eps || anime->getMyScore() != score || anime->getMyStatus() != status.toLower() || anime->getMyRewatch() != rewatch) {
+  if(anime->getMyNotes() != notes ||
+     anime->getMyProgress() != eps ||
+     anime->getMyScore() != score ||
+     anime->getMyStatus() != status.toLower() ||
+     anime->getMyRewatch() != rewatch &&
+     !new_entry) {
     QMap<QString, QString> data;
     data.insert("id",                 anime->getID());
 
@@ -197,6 +206,20 @@ void AnimePanel::accept() {
     }
 
     API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+  }
+
+  if(new_entry) {
+    QUrl url = API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST;
+    QUrlQuery url_query(url);
+
+    url_query.addQueryItem("id", anime->getID());
+    url_query.addQueryItem("list_status", status.toLower());
+
+    url.setQuery(url_query);
+
+    anime->setMyStatus(status);
+
+    API::sharedAPI()->sharedAniListAPI()->post(url, url_query.query().toLocal8Bit());
   }
 
   done(QDialog::Accepted);
