@@ -119,9 +119,9 @@ void MainWindow::updateStatistics() {
   ui->lblMode           ->setText(QString::number(mode));
   ui->lblScoreDeviation ->setText(QString::number(stddev, 'g', 2));
 
-
   progress_bar->setFormat("");
   progress_bar->reset();
+  progress_bar->setMaximum(100);
 
   /*if(layout2->count() == 0) {
     this->loadSelectedSeason();

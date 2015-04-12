@@ -194,6 +194,14 @@ void MainWindow::userListLoaded() {
 
   progress_bar->reset();
   progress_bar->setFormat("");
+  over->removeDrawing("no anime");
+  ui->listTabs->show();
+  ui->listFilterLineEdit->show();
+
+  if(User::sharedUser()->getAnimeList().count() == 0) {
+    this->addNoAnimePrompt();
+    this->showBrowseTab();
+  }
 
   ui->actionRL->setEnabled(true);
 
@@ -459,6 +467,26 @@ void MainWindow::addSearchPrompt() {
   over->addDrawing("blank_table", pix);
 
   w->setAttribute(Qt::WA_TransparentForMouseEvents);
+}
+
+void MainWindow::addNoAnimePrompt() {
+  QTabWidget *w = static_cast<QTabWidget *>(ui->tabWidget);
+
+  ui->listTabs->hide();
+  ui->listFilterLineEdit->hide();
+
+  QPoint location = w->mapTo(this, QPoint(0,0));
+  QPixmap *pix = new QPixmap(width(), height());
+  pix->fill(Qt::transparent);
+  QPainter p(pix);
+  QRect r(location.x()+1, location.y()+34, w->width()-2, w->height()-35);
+  p.setPen(QColor(0,0,0));
+  QFont f = p.font();
+  f.setPixelSize(20);
+  p.setFont(f);
+  p.drawText(r, Qt::AlignCenter, tr("Anime list empty, add some using the anime browse tab!"));
+  over->addDrawing("no anime", pix);
+  over->removeDrawing("blank_table");
 }
 
 void MainWindow::updateStatus(int row, QTableWidget *table, QString status) {

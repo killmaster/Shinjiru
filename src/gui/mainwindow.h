@@ -186,6 +186,7 @@ private slots:
   void moveDown();
 
   void addSearchPrompt();
+  void addNoAnimePrompt();
 
   void filterList(int);
   void filterList(QString);

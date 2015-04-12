@@ -160,8 +160,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   connect(ui->tabWidget, &QTabWidget::currentChanged, [&](int tab) {
     if(tab != 0) {
       this->over->removeDrawing("blank_table");
+      this->over->removeDrawing("no anime");
+      ui->listTabs->show();
+      ui->listFilterLineEdit->show();
     } else {
       this->filterList(3);
+      if(hasUser && User::sharedUser()->getAnimeList().count() == 0) {
+        this->addNoAnimePrompt();
+      }
     }
   });
   QString genrelist = "Action, Adult, Adventure, Cars, Comedy, Dementia, Demons, Doujinshi, Drama, Ecchi, Fantasy, Game, Gender Bender, Harem, Hentai, Historical, Horror, Josei, Kids, Magic, Martial Arts, Mature, Mecha, Military, Motion Comic, Music, Mystery, Mythological , Parody, Police, Psychological, Romance, Samurai, School, Sci-Fi, Seinen, Shoujo, Shoujo Ai, Shounen, Shounen Ai, Slice of Life, Space, Sports, Super Power, Supernatural, Thriller, Tragedy, Vampire, Yaoi, Yuri";
@@ -266,6 +272,9 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 
   if(over->containsDrawing("blank_table"))
     this->addSearchPrompt();
+
+  if(over->containsDrawing("no anime"))
+    this->addNoAnimePrompt();
 
   event->accept();
   int width = layout->geometry().width();
