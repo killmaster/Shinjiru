@@ -85,7 +85,7 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
 
   QString my_status = anime->getMyStatus();
 
-  if(!my_status.isEmpty()) {
+  if(User::sharedUser()->getAnimeList().contains(anime)) {
     my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
     new_entry = false;
   } else {
@@ -171,11 +171,11 @@ void AnimePanel::accept() {
     score = QString::number(d_score);
   }
 
-  if(anime->getMyNotes() != notes ||
+  if((anime->getMyNotes() != notes ||
      anime->getMyProgress() != eps ||
      anime->getMyScore() != score ||
      anime->getMyStatus() != status.toLower() ||
-     anime->getMyRewatch() != rewatch &&
+     anime->getMyRewatch() != rewatch) &&
      !new_entry) {
     QMap<QString, QString> data;
     data.insert("id",                 anime->getID());
@@ -213,11 +213,31 @@ void AnimePanel::accept() {
     QUrlQuery url_query(url);
 
     url_query.addQueryItem("id", anime->getID());
+
     url_query.addQueryItem("list_status", status.toLower());
+    anime->setMyStatus(status);
+
+    if("0" != score && "0.0" != score) {
+      url_query.addQueryItem("score",            score);
+      anime->setMyScore(score);
+    }
+
+    if(0 != eps) {
+      url_query.addQueryItem("episodes_watched", QString::number(eps));
+      anime->setMyProgress(eps);
+    }
+
+    if(anime->getMyRewatch() != rewatch) {
+      url_query.addQueryItem("rewatched",        QString::number(rewatch));
+      anime->setMyRewatch(rewatch);
+    }
+
+    if(anime->getMyNotes() != notes) {
+      url_query.addQueryItem("notes",            notes);
+      anime->setMyNotes(notes);
+    }
 
     url.setQuery(url_query);
-
-    anime->setMyStatus(status);
 
     API::sharedAPI()->sharedAniListAPI()->post(url, url_query.query().toLocal8Bit());
   }
