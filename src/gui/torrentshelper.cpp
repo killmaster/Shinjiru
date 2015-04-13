@@ -1,21 +1,22 @@
 /* Copyright 2015 Kazakuri */
 
-#include "./mainwindow.h"
-#include "./ui_mainwindow.h"
-
 #include <QDesktopServices>
-#include <regex> //NOLINT
 #include <QFile>
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
 
+#include <regex> //NOLINT
+
+#include "./mainwindow.h"
+#include "./ui_mainwindow.h"
 #include "../lib/torrentrss.h"
 #include "./rulewizard.h"
 #include "./rulemanager.h"
 
 void MainWindow::refreshTorrentListing() {
-  qDebug() << "Refreshing torrent listing..." << "(" + QString::number(torrent_refresh_time) + ")";
+  qDebug() << "Refreshing torrent listing..."
+           << "(" + QString::number(torrent_refresh_time) + ")";
 
   ui->refreshButton->setText("Refresh (0)");
   torrent_refresh_time = torrent_interval;
@@ -78,7 +79,7 @@ void MainWindow::refreshTorrentListing() {
     ui->torrentTable->setItem(i - offset, 5, linkItem);
   }
 
-  while(offset > 0) {
+  while (offset > 0) {
     ui->torrentTable->removeRow(ui->torrentTable->rowCount() - 1);
     offset--;
   }
@@ -96,8 +97,8 @@ void MainWindow::torrentContextMenu(QPoint pos) {
 
   int row = item->row();
   pos.setY(pos.y() + 120);
-  QAction *pDownloadAction = new QAction("Download",ui->torrentTable);
-  QAction *pRuleAction = new QAction("Create rule",ui->torrentTable);
+  QAction *pDownloadAction = new QAction("Download", ui->torrentTable);
+  QAction *pRuleAction = new QAction("Create rule", ui->torrentTable);
 
   QSignalMapper *signalMapper1 = new QSignalMapper(this);
   QSignalMapper *signalMapper2 = new QSignalMapper(this);
@@ -105,10 +106,10 @@ void MainWindow::torrentContextMenu(QPoint pos) {
   signalMapper1->setMapping(pDownloadAction, row);
   signalMapper2->setMapping(pRuleAction, row);
 
-  connect(pDownloadAction, SIGNAL(triggered()), signalMapper1, SLOT (map()));
+  connect(pDownloadAction, SIGNAL(triggered()), signalMapper1, SLOT(map()));
   connect(signalMapper1, SIGNAL(mapped(int)), this, SLOT(download(int)));
 
-  connect(pRuleAction, SIGNAL(triggered()), signalMapper2, SLOT (map()));
+  connect(pRuleAction, SIGNAL(triggered()), signalMapper2, SLOT(map()));
   connect(signalMapper2, SIGNAL(mapped(int)), this, SLOT(createRule(int)));
 
   QMenu *pContextMenu = new QMenu( this);
@@ -147,7 +148,8 @@ void MainWindow::filterTorrents(QString text, bool checked) {
   for (int i = 0; i < ui->torrentTable->rowCount(); i++)
     ui->torrentTable->hideRow(i);
 
-  QList<QTableWidgetItem *> items = ui->torrentTable->findItems(text, Qt::MatchContains);
+  QList<QTableWidgetItem *> items =
+      ui->torrentTable->findItems(text, Qt::MatchContains);
 
   for (int i = 0; i < items.count(); i++) {
     if (items.at(i)->column() != 0 ) continue;
@@ -158,7 +160,8 @@ void MainWindow::filterTorrents(QString text, bool checked) {
       Anime *filter_anime = User::sharedUser()->getAnimeByTitle(f_title);
       if (filter_anime == 0) continue;
       if (filter_anime->getAiringStatus() != "currently airing") show = false;
-      if (filter_anime->getMyStatus() != "watching" && filter_anime->getMyStatus() != "plan to watch") show = false;
+      if (filter_anime->getMyStatus() != "watching" &&
+          filter_anime->getMyStatus() != "plan to watch") show = false;
     }
 
     if (show)
@@ -225,17 +228,23 @@ void MainWindow::checkForMatches() {
     QString file  = ui->torrentTable->item(j, 4)->text();
 
     for (int i = 0; i < basic_rules.length(); i++) {
-      if (QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
+      if (QDate::currentDate().daysTo(
+            QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01")
+                              .toString())) < 0) {
         basic_rules.removeAt(i);
         continue;
       }
-      if (title == basic_rules.at(i).value("anime").toString() && sub == basic_rules.at(i).value("subgroup").toString() && res == basic_rules.at(i).value("resolution").toString()) {
+      if (title == basic_rules.at(i).value("anime").toString() &&
+          sub == basic_rules.at(i).value("subgroup").toString() &&
+          res == basic_rules.at(i).value("resolution").toString()) {
         verifyAndDownload(j);
       }
     }
 
     for (int i = 0; i < adv_rules.length(); i++) {
-      if (QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
+      if (QDate::currentDate().daysTo
+          (QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01")
+                             .toString())) < 0) {
         adv_rules.removeAt(i);
         continue;
       }

@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef SRC_GUI_MAINWINDOW_H_
+#define SRC_GUI_MAINWINDOW_H_
 
 #include <QMainWindow>
 #include <QFuture>
@@ -24,37 +24,37 @@
 #include "../settings.h"
 #include "../api/user.h"
 #include "../api/anime.h"
-#include "airinganime.h"
-#include "flowlayout.h"
+#include "./airinganime.h"
+#include "./flowlayout.h"
 #include "../anitomy/anitomywrapper.h"
 #include "../lib/windowwatcher.h"
-#include "progresstablewidgetitem.h"
-#include "facetablewidgetitem.h"
-#include "overlay.h"
-#include "browseanime.h"
+#include "./progresstablewidgetitem.h"
+#include "./facetablewidgetitem.h"
+#include "./overlay.h"
+#include "./browseanime.h"
 
 namespace Ui {
-  class MainWindow;
+class MainWindow;
 }
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
-public:
+ public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 
-protected:
-  void closeEvent(QCloseEvent *);
-  void paintEvent(QPaintEvent *);
-  void resizeEvent(QResizeEvent *);
-  void changeEvent(QEvent *);
-  void mouseDoubleClickEvent(QMouseEvent *);
+ protected:
+  void closeEvent(QCloseEvent *e);
+  void paintEvent(QPaintEvent *e);
+  void resizeEvent(QResizeEvent *e);
+  void changeEvent(QEvent *e);
+  void mouseDoubleClickEvent(QMouseEvent *e);
 
-signals:
+ signals:
   void genres_loaded();
 
-private:
+ private:
   Ui::MainWindow *ui;
   QtAwesome *awesome;
   Settings *settings;
@@ -122,7 +122,7 @@ private:
 
   QList<QFuture<void>> async_registry;
 
-private slots:
+ private slots:  // NOLINT
   void loadUser();
   void userLoaded();
 
@@ -137,7 +137,7 @@ private slots:
 
   void refreshTorrentListing();
 
-  void toggleAnimeRecognition(bool);
+  void toggleAnimeRecognition(bool ar);
 
   void showAnimeTab();
   void showSettingsTab();
@@ -146,12 +146,12 @@ private slots:
   void showAiringTab();
   void showStatisticsTab();
 
-  void showAnimePanel(int, int);
-  void showAnimePanel(int, int, QTableWidget *);
+  void showAnimePanel(int row, int col);
+  void showAnimePanel(int row, int col, QTableWidget *source);
 
-  QTableWidget *getListTable(bool);
+  QTableWidget *getListTable(bool custom);
 
-  AiringAnime *addAiring(Anime *);
+  AiringAnime *addAiring(Anime *anime);
 
   void watch(QString);
   void updateEpisode();
@@ -162,15 +162,15 @@ private slots:
 
   void elegantClose();
 
-  void filterTorrents(QString, bool);
-  void filterTorrents(bool);
-  void filterTorrents(QString);
-  void torrentContextMenu(QPoint);
-  void download(int);
-  void createRule(int);
+  void filterTorrents(QString text, bool hide);
+  void filterTorrents(bool hide);
+  void filterTorrents(QString text);
+  void torrentContextMenu(QPoint source);
+  void download(int row);
+  void createRule(int row);
   void reloadRules();
   void checkForMatches();
-  void verifyAndDownload(int);
+  void verifyAndDownload(int row);
   void showRuleManager();
 
   void settingsChanged();
@@ -190,15 +190,15 @@ private slots:
   void addSearchPrompt();
   void addNoAnimePrompt();
 
-  void filterList(int);
-  void filterList(QString);
+  void filterList(int i);
+  void filterList(QString text);
   void showSearch();
 
   void loadBrowserData();
-  QUrl addPage(QUrl, int);
-  QUrl addQuery(QUrl, QString, QString);
+  QUrl addPage(QUrl url, int page);
+  QUrl addQuery(QUrl url, QString key, QString value);
 
   void exportListJSON();
 };
 
-#endif // MAINWINDOW_H
+#endif  // SRC_GUI_MAINWINDOW_H_

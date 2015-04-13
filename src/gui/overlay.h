@@ -1,15 +1,15 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef OVERLAY_H
-#define OVERLAY_H
+#ifndef SRC_GUI_OVERLAY_H_
+#define SRC_GUI_OVERLAY_H_
 
 #include <QWidget>
 #include <QPixmap>
 #include <QMap>
 
 class Overlay : public QWidget {
-public:
-  Overlay(QWidget *parent);
+ public:
+  explicit Overlay(QWidget *parent);
   void addDrawing(QString s, QPixmap *p) {
     drawList.insert(s, p);
     update();
@@ -25,11 +25,11 @@ public:
     return drawList.contains(s);
   }
 
-protected:
+ protected:
   void paintEvent(QPaintEvent *event);
 
-private:
+ private:
   QMap<QString, QPixmap*> drawList;
 };
 
-#endif
+#endif  // SRC_GUI_OVERLAY_H_

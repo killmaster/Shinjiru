@@ -26,9 +26,9 @@ void MainWindow::updateStatistics() {
 
   QList<double> scores;
 
-  for (Anime *anime: animes) {
+  for (Anime *anime : animes) {
     progress_bar->setValue(progress_bar->value() + 1);
-    if (anime->getMyRewatch() > 0){
+    if (anime->getMyRewatch() > 0) {
       episodes_watched += anime->getMyProgress() * anime->getMyRewatch();
     }
     episodes_watched += anime->getMyProgress();
@@ -72,7 +72,7 @@ void MainWindow::updateStatistics() {
   }
 
   if (scores.count() > 0) {
-    mean = sum / (double)scores.count();
+    mean = sum / static_cast<double>(scores.count());
     median = scores.at(scores.count() / 2);
     qSort(scores);
 
@@ -105,7 +105,9 @@ void MainWindow::updateStatistics() {
   int days_watched = (minutes_watched / 60.0) / 24;
   minutes_watched %= 60;
 
-  QString time_watched = tr("%1 days, %2 hours, and %3 minutes").arg(days_watched).arg(hours_watched).arg(minutes_watched);
+  QString time_watched = tr("%1 days, %2 hours, and %3 minutes")
+                         .arg(days_watched).arg(hours_watched)
+                         .arg(minutes_watched);
 
 
   ui->lblWatching       ->setText(QString::number(watching));

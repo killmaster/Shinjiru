@@ -1,15 +1,17 @@
 /* Copyright 2015 Kazakuri */
 
 #include "./browseanime.h"
-#include "./ui_browseanime.h"
 
+#include <QPainter>
+
+#include "./ui_browseanime.h"
 #include "../api/anime.h"
 #include "./scrolltext.h"
 #include "./animepanel.h"
 
-#include <QPainter>
 
-BrowseAnime::BrowseAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(new Ui::BrowseAnime) {
+BrowseAnime::BrowseAnime(QWidget *parent, int scoreType) :
+  QWidget(parent), ui(new Ui::BrowseAnime) {
   ui->setupUi(this);
 
   QFont font = this->font();
@@ -20,7 +22,9 @@ BrowseAnime::BrowseAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(n
 
   text = new ScrollText(this);
   ui->verticalLayout->addWidget(text);
-  ui->verticalLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
+  QSpacerItem *spacer =
+      new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+  ui->verticalLayout->addSpacerItem(spacer);
 }
 
 BrowseAnime::~BrowseAnime() {
@@ -37,11 +41,11 @@ void BrowseAnime::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
   QPen pen = p.pen();
-  pen.setBrush(QBrush(QColor(255,255,255)));
+  pen.setBrush(QBrush(QColor(255, 255, 255)));
   p.setPen(pen);
 
   p.drawPixmap(0, 0, width(), height(), anime->getCoverImage());
-  p.fillRect  (0, 0, width(), 30, QBrush(QColor(0,0,0, 200)));
+  p.fillRect(0, 0, width(), 30, QBrush(QColor(0, 0, 0, 200)));
 
   event->accept();
 }

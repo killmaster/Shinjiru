@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef FLOWLAYOUT_H
-#define FLOWLAYOUT_H
+#ifndef SRC_GUI_FLOWLAYOUT_H_
+#define SRC_GUI_FLOWLAYOUT_H_
 
 #include <QLayout>
 #include <QRect>
@@ -10,8 +10,8 @@
 #include <QWidget>
 
 class FlowLayout : public QLayout {
-public:
-  FlowLayout(QWidget *parent);
+ public:
+  explicit FlowLayout(QWidget *parent);
   ~FlowLayout();
 
   void addItem(QLayoutItem *item);
@@ -19,7 +19,7 @@ public:
   int verticalSpacing() const;
   Qt::Orientations expandingDirections() const;
   bool hasHeightForWidth() const;
-  int heightForWidth(int) const;
+  int heightForWidth(int width) const;
   int count() const;
   QLayoutItem *itemAt(int index) const;
   QSize minimumSize() const;
@@ -41,6 +41,6 @@ public:
   int m_vSpace;
 
   bool sort;
- };
+};
 
- #endif
+#endif  // SRC_GUI_FLOWLAYOUT_H_

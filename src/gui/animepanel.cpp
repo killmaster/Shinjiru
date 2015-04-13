@@ -1,14 +1,16 @@
 /* Copyright 2015 Kazakuri */
 
 #include "./animepanel.h"
-#include "./ui_animepanel.h"
-#include "./mainwindow.h"
 
 #include <QDebug>
 #include <QJsonDocument>
 #include <limits>
 
-AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(parent), ui(new Ui::AnimePanel) {
+#include "./ui_animepanel.h"
+#include "./mainwindow.h"
+
+AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) :
+  QDialog(parent), ui(new Ui::AnimePanel) {
   qDebug() << "Loading anime panel for anime" << anime->getTitle();
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
@@ -16,16 +18,21 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
 
   this->anime = anime;
   this->score_type = score_type;
+
   QString airing_status = anime->getAiringStatus();
-  if (!airing_status.isEmpty())
-    airing_status = airing_status.at(0).toUpper() + airing_status.right(airing_status.length() - 1);
+
+  if (!airing_status.isEmpty()) {
+    airing_status = airing_status.at(0).toUpper() +
+                    airing_status.right(airing_status.length() - 1);
+  }
 
   QString score = anime->getMyScore();
 
   if (score_type == 0 || score_type == 1) {
     QSpinBox *score_container = new QSpinBox(this);
 
-    score_container->setMaximum(score_type == 0 ? 10 : score_type == 1 ? 100 : 5);
+    score_container->setMaximum(score_type == 0 ?
+                                10 : score_type == 1 ? 100 : 5);
     score_container->setMinimum(score_type == 2 ? 1 : 0);
     score_container->setValue(score.split(" ").at(0).toInt());
 
@@ -88,7 +95,8 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
   QString my_status = anime->getMyStatus();
 
   if (User::sharedUser()->getAnimeList().contains(anime)) {
-    my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
+    my_status = my_status.at(0).toUpper() +
+                my_status.right(my_status.length() - 1);
     new_entry = false;
   } else {
     new_entry = true;
@@ -127,7 +135,7 @@ void AnimePanel::paintEvent(QPaintEvent *event) {
   ui->lblSynonyms->setContentsMargins(m);
 
   p.drawPixmap(width() - 235, 10, cover.width(), cover.height(), cover);
-  p.drawRect  (width() - 235, 10, cover.width(), cover.height());
+  p.drawRect(width() - 235, 10, cover.width(), cover.height());
 
   event->accept();
 }
@@ -180,15 +188,15 @@ void AnimePanel::accept() {
      anime->getMyRewatch() != rewatch) &&
      !new_entry) {
     QMap<QString, QString> data;
-    data.insert("id",                 anime->getID());
+    data.insert("id", anime->getID());
 
     if (anime->getMyStatus() != status.toLower()) {
-      data.insert("list_status",      status.toLower());
+      data.insert("list_status", status.toLower());
       anime->setMyStatus(status);
     }
 
     if (anime->getMyScore() != score) {
-      data.insert("score",            score);
+      data.insert("score", score);
       anime->setMyScore(score);
     }
 
@@ -198,16 +206,17 @@ void AnimePanel::accept() {
     }
 
     if (anime->getMyRewatch() != rewatch) {
-      data.insert("rewatched",        QString::number(rewatch));
+      data.insert("rewatched", QString::number(rewatch));
       anime->setMyRewatch(rewatch);
     }
 
     if (anime->getMyNotes() != notes) {
-      data.insert("notes",            notes);
+      data.insert("notes", notes);
       anime->setMyNotes(notes);
     }
 
-    API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+    API::sharedAPI()->sharedAniListAPI()->put(
+          API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
   }
 
   if (new_entry) {
@@ -220,7 +229,7 @@ void AnimePanel::accept() {
     anime->setMyStatus(status);
 
     if ("0" != score && "0.0" != score) {
-      url_query.addQueryItem("score",            score);
+      url_query.addQueryItem("score", score);
       anime->setMyScore(score);
     }
 
@@ -230,18 +239,19 @@ void AnimePanel::accept() {
     }
 
     if (anime->getMyRewatch() != rewatch) {
-      url_query.addQueryItem("rewatched",        QString::number(rewatch));
+      url_query.addQueryItem("rewatched", QString::number(rewatch));
       anime->setMyRewatch(rewatch);
     }
 
     if (anime->getMyNotes() != notes) {
-      url_query.addQueryItem("notes",            notes);
+      url_query.addQueryItem("notes", notes);
       anime->setMyNotes(notes);
     }
 
     url.setQuery(url_query);
 
-    API::sharedAPI()->sharedAniListAPI()->post(url, url_query.query().toLocal8Bit());
+    API::sharedAPI()->sharedAniListAPI()->post(
+          url, url_query.query().toLocal8Bit());
   }
 
   done(QDialog::Accepted);

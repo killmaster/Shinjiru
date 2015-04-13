@@ -1,16 +1,17 @@
 /* Copyright 2015 Kazakuri */
 
 #include "./airinganime.h"
-#include "./ui_airinganime.h"
 
+#include <QPainter>
+
+#include "./ui_airinganime.h"
 #include "../api/anime.h"
 #include "./scrolltext.h"
 #include "./animepanel.h"
 #include "../api/user.h"
 
-#include <QPainter>
-
-AiringAnime::AiringAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(new Ui::AiringAnime) {
+AiringAnime::AiringAnime(QWidget *parent, int scoreType) :
+  QWidget(parent), ui(new Ui::AiringAnime) {
   ui->setupUi(this);
 
   QFont font = this->font();
@@ -21,7 +22,9 @@ AiringAnime::AiringAnime(QWidget *parent, int scoreType) : QWidget(parent), ui(n
 
   text = new ScrollText(this);
   ui->verticalLayout->addWidget(text);
-  ui->verticalLayout->addSpacerItem(new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding));
+  QSpacerItem *spacer =
+      new QSpacerItem(10, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
+  ui->verticalLayout->addSpacerItem(spacer);
 }
 
 AiringAnime::~AiringAnime() {
@@ -33,27 +36,31 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
   QPainter p(this);
 
   QPen pen = p.pen();
-  pen.setBrush(QBrush(QColor(255,255,255)));
+  pen.setBrush(QBrush(QColor(255, 255, 255)));
   p.setPen(pen);
 
   p.drawPixmap(0, 0, width(), height(), anime->getCoverImage());
-  p.fillRect  (0, 0, width(), 30, QBrush(QColor(0,0,0, 200)));
+  p.fillRect(0, 0, width(), 30, QBrush(QColor(0, 0, 0, 200)));
 
-  p.fillRect(0, height() - 20, width(), 20, QBrush(QColor(0,0,0, 200)));
-  QString next = anime->getNextEpisode() == 0 ? "?" : QString::number(anime->getNextEpisode());
-  p.drawText(QRect(5, height() - 20, width() - 5, 20), Qt::AlignLeft, "Ep. " + next);
+  p.fillRect(0, height() - 20, width(), 20, QBrush(QColor(0, 0, 0, 200)));
+  QString next = anime->getNextEpisode() == 0 ?
+        "?" : QString::number(anime->getNextEpisode());
+  p.drawText(QRect(5, height() - 20, width() - 5, 20), Qt::AlignLeft,
+             "Ep. " + next);
 
   QString cd = "";
 
   int countdown = anime->getCountdown();
-  countdown /= 3600; //convert to hours
+  countdown /= 3600;  // Convert to hours
 
   if (countdown > 24) {
-    countdown /= 24; //convert to days
+    countdown /= 24;  // Convert to days
     cd = QString::number(countdown) + " day" + (countdown != 1 ? "s" : "");
   } else {
-    if (countdown == 0) cd = "<1 hour";
-    else cd = QString::number(countdown) + " hour" + (countdown != 1 ? "s" : "");
+    if (countdown == 0)
+      cd = "<1 hour";
+    else
+      cd = QString::number(countdown) + " hour" +(countdown != 1 ? "s" : "");
   }
 
   if (!anime->hasAiringSchedule()) cd = "? hours";
@@ -68,7 +75,7 @@ void AiringAnime::mouseDoubleClickEvent(QMouseEvent *event) {
   AnimePanel *ap = new AnimePanel(this, anime, scoreType);
   ap->show();
 
-  connect(ap, &AnimePanel::accepted, this, [&, old_status]() {
+  connect(ap, &AnimePanel::accepted, this, [&, old_status]() {  // NOLINT
     if (anime->getMyStatus() != old_status) {
       User::sharedUser()->removeFromList(old_status, anime);
       User::sharedUser()->addToList(anime->getMyStatus(), anime);

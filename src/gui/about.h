@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef ABOUT_H
-#define ABOUT_H
+#ifndef SRC_GUI_ABOUT_H_
+#define SRC_GUI_ABOUT_H_
 
 #include <QDialog>
 #include <QPixmap>
@@ -10,20 +10,19 @@ namespace Ui {
 class About;
 }
 
-class About : public QDialog
-{
-    Q_OBJECT
+class About : public QDialog {
+  Q_OBJECT
 
-public:
-    explicit About(QWidget *parent = 0);
-    ~About();
+ public:
+  explicit About(QWidget *parent = 0);
+  ~About();
 
-protected:
-    void paintEvent(QPaintEvent *);
+ protected:
+  void paintEvent(QPaintEvent *e);
 
-private:
-    Ui::About *ui;
-    QPixmap mascot;
+ private:
+  Ui::About *ui;
+  QPixmap mascot;
 };
 
-#endif // ABOUT_H
+#endif  // SRC_GUI_ABOUT_H_

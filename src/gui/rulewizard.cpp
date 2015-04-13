@@ -1,7 +1,6 @@
 /* Copyright 2015 Kazakuri */
 
 #include "./rulewizard.h"
-#include "./ui_rulewizard.h"
 
 #include <QInputDialog>
 #include <QJsonObject>
@@ -11,7 +10,12 @@
 #include <QDebug>
 #include <QDate>
 
-RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file, QString default_rule) : QDialog(parent), ui(new Ui::RuleWizard) {
+#include "./ui_rulewizard.h"
+
+RuleWizard::RuleWizard(QWidget *parent, QString title,
+                       QString sub, QString res, QString file,
+                       QString default_rule) :
+  QDialog(parent), ui(new Ui::RuleWizard) {
   qDebug() << "Launching rule wizard";
   ui->setupUi(this);
   setAttribute(Qt::WA_DeleteOnClose);
@@ -38,7 +42,8 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
   connect(ui->groupBox_2, SIGNAL(toggled(bool)), SLOT(group2Toggle(bool)));
 }
 
-RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new Ui::RuleWizard) {
+RuleWizard::RuleWizard(QWidget *parent, QString file) :
+  QDialog(parent), ui(new Ui::RuleWizard) {
   if (file == "basic" || file == "advanced") {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -122,7 +127,11 @@ void RuleWizard::accept() {
 
   if (!edit_mode){
     bool ok;
-    file_name = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Rule Name"), tr("Enter a name for the new rule:"), QLineEdit::Normal, "", &ok);
+    file_name =
+        QInputDialog::getText(static_cast<QWidget *>(this->parent()),
+                              tr("Rule Name"),
+                              tr("Enter a name for the new rule:"),
+                              QLineEdit::Normal, "", &ok);
   }
 
   qDebug() << "Creating rule" << file_name + ".str";
@@ -146,7 +155,8 @@ void RuleWizard::accept() {
 
   int expires = ui->lineEdit->text().toInt();
 
-  QDate date = expires < 0 ? QDate::currentDate().addYears(999) : QDate::currentDate().addDays(7 * expires);
+  QDate date = expires < 0 ? QDate::currentDate().addYears(999) :
+                             QDate::currentDate().addDays(7 * expires);
 
 
   rule_json["expires"] = date.toString();

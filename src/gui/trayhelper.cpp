@@ -17,10 +17,16 @@ void MainWindow::initTray() {
   trayIcon->setIcon(windowIcon());
   trayIcon->setToolTip("Shinjiru " + qApp->applicationVersion());
 
-  connect(trayIcon, &QSystemTrayIcon::activated, [&] (QSystemTrayIcon::ActivationReason reason) {
+  connect(trayIcon, &QSystemTrayIcon::activated,
+          [&] (QSystemTrayIcon::ActivationReason reason) {  // NOLINT
     if (reason == QSystemTrayIcon::DoubleClick) {
-      if (showFunc.isEmpty()) showNormal();
-      else QMetaObject::invokeMethod(this, showFunc.toLocal8Bit().data(),Qt::DirectConnection);
+      if (showFunc.isEmpty()) {
+        showNormal();
+      } else {
+        QMetaObject::invokeMethod(this, showFunc.toLocal8Bit().data(),
+                                  Qt::DirectConnection);
+      }
+
       qApp->setActiveWindow(this);
     }
 
@@ -31,25 +37,24 @@ void MainWindow::initTray() {
   });
 }
 
-
 void MainWindow::createActions() {
   restoreAction = new QAction(tr("&Restore"), this);
   connect(restoreAction, SIGNAL(triggered()), this, SLOT(showNormal()));
 
   quitAction = new QAction(tr("&Quit"), this);
-  connect(quitAction, &QAction::triggered, [&]() {
+  connect(quitAction, &QAction::triggered, [&]() {  // NOLINT
     this->elegantClose();
   });
 
   animeRecognitionAction = new QAction(tr("&Anime Recognition"), this);
   animeRecognitionAction->setCheckable(true);
-  connect(animeRecognitionAction, &QAction::triggered, [&]() {
+  connect(animeRecognitionAction, &QAction::triggered, [&]() {  // NOLINT
     this->toggleAnimeRecognition(animeRecognitionAction->isChecked());
   });
 
   cancelUpdateAction = new QAction(tr("&Cancel Update"), this);
   cancelUpdateAction->setEnabled(false);
-  connect(cancelUpdateAction, &QAction::triggered, [&]() {
+  connect(cancelUpdateAction, &QAction::triggered, [&]() {  // NOLINT
     watch_timer->stop();
   });
 }

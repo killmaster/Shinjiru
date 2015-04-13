@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef RULEWIZARD_H
-#define RULEWIZARD_H
+#ifndef SRC_GUI_RULEWIZARD_H_
+#define SRC_GUI_RULEWIZARD_H_
 
 #include <QDialog>
 
@@ -9,12 +9,13 @@ namespace Ui {
 class RuleWizard;
 }
 
-class RuleWizard : public QDialog
-{
+class RuleWizard : public QDialog {
   Q_OBJECT
 
-public:
-  explicit RuleWizard(QWidget *parent, QString title, QString sub, QString res, QString file, QString default_rule);
+ public:
+  explicit RuleWizard(QWidget *parent, QString title,
+                      QString sub, QString res, QString file,
+                      QString default_rule);
   RuleWizard(QWidget *parent, QString file);
   ~RuleWizard();
 
@@ -22,15 +23,15 @@ public:
     return file_name;
   }
 
-private:
+ private:
   Ui::RuleWizard *ui;
   bool edit_mode;
   QString file_name;
 
-private slots:
-  void groupToggle(bool);
-  void group2Toggle(bool);
+ private slots:  // NOLINT
+  void groupToggle(bool on);
+  void group2Toggle(bool on);
   void accept();
 };
 
-#endif // RULEWIZARD_H
+#endif  // SRC_GUI_RULEWIZARD_H_

@@ -1,16 +1,16 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef PROGRESSTABLEWIDGETITEM_H
-#define PROGRESSTABLEWIDGETITEM_H
+#ifndef SRC_GUI_PROGRESSTABLEWIDGETITEM_H_
+#define SRC_GUI_PROGRESSTABLEWIDGETITEM_H_
 
 #include <QTableWidgetItem>
 
-class ProgressTableWidgetItem : public QTableWidgetItem
-{
-public:
+class ProgressTableWidgetItem : public QTableWidgetItem {
+ public:
   bool operator <(const QTableWidgetItem & other) const {
-    return text().split(" ").at(0).toInt() < other.text().split(" ").at(0).toInt();
+    return text().split(" ").at(0).toInt() <
+           other.text().split(" ").at(0).toInt();
   }
 };
 
-#endif // PROGRESSTABLEWIDGETITEM_H
+#endif  // SRC_GUI_PROGRESSTABLEWIDGETITEM_H_

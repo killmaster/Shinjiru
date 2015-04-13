@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef SEARCHPANEL_H
-#define SEARCHPANEL_H
+#ifndef SRC_GUI_SEARCHPANEL_H_
+#define SRC_GUI_SEARCHPANEL_H_
 
 #include <QDialog>
 
@@ -9,19 +9,17 @@ namespace Ui {
 class SearchPanel;
 }
 
-class SearchPanel : public QDialog
-{
+class SearchPanel : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit SearchPanel(QWidget *parent = 0);
   ~SearchPanel();
 
   void setSearch(QString text);
 
-private:
+ private:
   Ui::SearchPanel *ui;
-
 };
 
-#endif // SEARCHPANEL_H
+#endif  // SRC_GUI_SEARCHPANEL_H_

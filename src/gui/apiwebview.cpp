@@ -1,14 +1,15 @@
 /* Copyright 2015 Kazakuri */
 
 #include "./apiwebview.h"
-#include "./ui_apiwebview.h"
 
 #include <QMessageBox>
 
+#include "./ui_apiwebview.h"
 #include "../api/api.h"
 #include "../version.h"
 
-APIWebView::APIWebView(QWidget *parent) : QDialog(parent), ui(new Ui::APIWebView) {
+APIWebView::APIWebView(QWidget *parent) :
+  QDialog(parent), ui(new Ui::APIWebView) {
   qDebug() << "Launching web view for authentication";
   ui->setupUi(this);
 
@@ -17,13 +18,11 @@ APIWebView::APIWebView(QWidget *parent) : QDialog(parent), ui(new Ui::APIWebView
 
   connect(ui->webView, SIGNAL(urlChanged(QUrl)), SLOT(webURLChanged()));
   connect(ui->webView->page()->networkAccessManager(),
-          SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> & )),
-          SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> & ))
-         );
+          SIGNAL(sslErrors(QNetworkReply*, const QList<QSslError> &)),
+          SLOT(sslErrorHandler(QNetworkReply*, const QList<QSslError> &)));
 }
 
-APIWebView::~APIWebView()
-{
+APIWebView::~APIWebView() {
   delete ui;
 }
 
@@ -38,8 +37,9 @@ void APIWebView::webURLChanged() {
   }
 }
 
-void APIWebView::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
-  for (QSslError e: errlist) {
+void APIWebView::sslErrorHandler(QNetworkReply* qnr,
+                                 const QList<QSslError> & errlist) {
+  for (QSslError e : errlist) {
     qWarning() << e.errorString();
   }
 

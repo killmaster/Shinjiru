@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef RULEMANAGER_H
-#define RULEMANAGER_H
+#ifndef SRC_GUI_RULEMANAGER_H_
+#define SRC_GUI_RULEMANAGER_H_
 
 #include <QDialog>
 
@@ -9,17 +9,16 @@ namespace Ui {
 class RuleManager;
 }
 
-class RuleManager : public QDialog
-{
+class RuleManager : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit RuleManager(QWidget *parent = 0, QString default_rule = "basic");
   ~RuleManager();
 
-private:
+ private:
   Ui::RuleManager *ui;
   void reloadList();
 };
 
-#endif // RULEMANAGER_H
+#endif  // SRC_GUI_RULEMANAGER_H_

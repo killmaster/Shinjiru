@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef BrowseAnime_H
-#define BrowseAnime_H
+#ifndef SRC_GUI_BROWSEANIME_H_
+#define SRC_GUI_BROWSEANIME_H_
 
 #include <QWidget>
 #include <QPaintEvent>
@@ -14,28 +14,27 @@ namespace Ui {
 class BrowseAnime;
 }
 
-class BrowseAnime : public QWidget
-{
+class BrowseAnime : public QWidget {
   Q_OBJECT
 
-public:
+ public:
   explicit BrowseAnime(QWidget *parent = 0, int scoreType = 0);
   ~BrowseAnime();
   void setAnime(Anime *anime);
   Anime* getAnime();
 
-public slots:
+ public slots:  // NOLINT
   void reload();
 
-protected:
-  void paintEvent(QPaintEvent *);
-  void mouseDoubleClickEvent(QMouseEvent *);
+ protected:
+  void paintEvent(QPaintEvent *e);
+  void mouseDoubleClickEvent(QMouseEvent *e);
 
-private:
+ private:
   Ui::BrowseAnime *ui;
   Anime *anime;
   ScrollText *text;
   int scoreType;
 };
 
-#endif // BrowseAnime_H
+#endif  // SRC_GUI_BROWSEANIME_H_

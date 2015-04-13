@@ -3,7 +3,7 @@
 #include "./mainwindow.h"
 #include "./ui_mainwindow.h"
 
-#include "browseanime.h"
+#include "./browseanime.h"
 
 QUrl MainWindow::addPage(QUrl url, int page) {
   QString url_s = url.toDisplayString();
@@ -11,8 +11,9 @@ QUrl MainWindow::addPage(QUrl url, int page) {
   if (url.hasQuery()) {
     if (url_s.contains("page=[0-9]")) {
       url_s.replace("page=[0-9]", "page=" + QString::number(page));
-    } else
+    } else {
       url_s += "&page=" + QString::number(page);
+    }
   } else {
     url_s += "?page=" + QString::number(page);
   }
@@ -43,7 +44,7 @@ void MainWindow::loadBrowserData() {
   // Clear the browser view
   QLayoutItem *item;
 
-  while((item = layout2->takeAt(0))){
+  while ((item = layout2->takeAt(0))) {
     delete item->widget();
     delete item;
   }
@@ -68,7 +69,8 @@ void MainWindow::loadBrowserData() {
   QStringList exclude;
 
   for (int i = 0; i < ui->genreList->count(); i++) {
-    QCheckBox *w = static_cast<QCheckBox *>(dynamic_cast<QWidgetItem *>(ui->genreList->itemAt(i))->widget());
+    QCheckBox *w = static_cast<QCheckBox *>
+        (dynamic_cast<QWidgetItem *>(ui->genreList->itemAt(i))->widget());
 
     if (w->checkState() == Qt::PartiallyChecked) {
       exclude.append(w->text());
@@ -86,12 +88,14 @@ void MainWindow::loadBrowserData() {
   }
 
   // Load the results for the requested type
-  QJsonArray browse_results = API::sharedAPI()->sharedAniListAPI()->get(url).array();
+  QJsonArray browse_results =
+      API::sharedAPI()->sharedAniListAPI()->get(url).array();
 
   for (int i = 0; i <= browse_results.size(); i++) {
     QJsonObject anime = browse_results.at(i).toObject();
 
-    Anime *a = User::sharedUser()->getAnimeByTitle(anime.value("title_romaji").toString());
+    Anime *a = User::sharedUser()->getAnimeByTitle(
+          anime.value("title_romaji").toString());
 
     if (a == 0) {
       a = new Anime();

@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef APIWEBVIEW_H
-#define APIWEBVIEW_H
+#ifndef SRC_GUI_APIWEBVIEW_H_
+#define SRC_GUI_APIWEBVIEW_H_
 
 #include <QDialog>
 #include <QUrl>
@@ -11,20 +11,19 @@ namespace Ui {
 class APIWebView;
 }
 
-class APIWebView : public QDialog
-{
+class APIWebView : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit APIWebView(QWidget *parent = 0);
   ~APIWebView();
 
-private:
+ private:
   Ui::APIWebView *ui;
 
-private slots:
+ private slots:  // NOLINT
   void webURLChanged();
   void sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist);
 };
 
-#endif // APIWEBVIEW_H
+#endif  // SRC_GUI_APIWEBVIEW_H_

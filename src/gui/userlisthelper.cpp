@@ -416,7 +416,9 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
   return newPanel;
 }
 
-void MainWindow::filterList(int) {
+void MainWindow::filterList(int i) {
+  Q_UNUSED(i)
+
   filterList(ui->listFilterLineEdit->text());
 }
 
