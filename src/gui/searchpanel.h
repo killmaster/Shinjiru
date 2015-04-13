@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef SEARCHPANEL_H
 #define SEARCHPANEL_H
 

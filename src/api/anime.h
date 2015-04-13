@@ -1,5 +1,7 @@
-#ifndef ANIME_H
-#define ANIME_H
+/* Copyright 2015 Kazakuri */
+
+#ifndef SRC_API_ANIME_H_
+#define SRC_API_ANIME_H_
 
 #include <QString>
 #include <QStringList>
@@ -7,13 +9,13 @@
 #include <QPixmap>
 
 #include "../lib/filedownloader.h"
-#include "api.h"
+#include "./api.h"
 
 class Anime : public QObject {
   Q_OBJECT
 
-public:
-  Anime(QObject *parent = 0);
+ public:
+  explicit Anime(QObject *parent = 0);
 
   void finishReload();
   bool needsLoad();
@@ -93,11 +95,11 @@ public:
 
   void downloadCover();
 
-signals:
+ signals:
   void finishedReloading();
   void new_image();
 
-private:
+ private:
   QString id;
   QStringList synonyms;
   QString romaji_title;
@@ -131,4 +133,4 @@ private:
   QString my_status;
 };
 
-#endif // ANIME_H
+#endif  // SRC_API_ANIME_H_

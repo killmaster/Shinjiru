@@ -1,13 +1,15 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./mainwindow.h"
+#include "./ui_mainwindow.h"
 
 #include "browseanime.h"
 
 QUrl MainWindow::addPage(QUrl url, int page) {
   QString url_s = url.toDisplayString();
 
-  if(url.hasQuery()) {
-    if(url_s.contains("page=[0-9]")) {
+  if (url.hasQuery()) {
+    if (url_s.contains("page=[0-9]")) {
       url_s.replace("page=[0-9]", "page=" + QString::number(page));
     } else
       url_s += "&page=" + QString::number(page);
@@ -21,7 +23,7 @@ QUrl MainWindow::addPage(QUrl url, int page) {
 QUrl MainWindow::addQuery(QUrl url, QString key, QString value) {
   QString url_s = url.toDisplayString();
 
-  if(url.hasQuery()) {
+  if (url.hasQuery()) {
     url_s += "&" + key + "=" + value;
   } else {
     url_s += "?" + key + "=" + value;
@@ -46,52 +48,52 @@ void MainWindow::loadBrowserData() {
     delete item;
   }
 
-  if(!season.isEmpty()) {
+  if (!season.isEmpty()) {
     url = addQuery(url, "season", season);
   }
 
-  if(!year.isEmpty()) {
+  if (!year.isEmpty()) {
     url = addQuery(url, "year", year);
   }
 
-  if(!type.isEmpty()) {
+  if (!type.isEmpty()) {
     url = addQuery(url, "type", type);
   }
 
-  if(!status.isEmpty()) {
+  if (!status.isEmpty()) {
     url = addQuery(url, "status", status);
   }
 
   QStringList genres;
   QStringList exclude;
 
-  for(int i = 0; i < ui->genreList->count(); i++) {
+  for (int i = 0; i < ui->genreList->count(); i++) {
     QCheckBox *w = static_cast<QCheckBox *>(dynamic_cast<QWidgetItem *>(ui->genreList->itemAt(i))->widget());
 
-    if(w->checkState() == Qt::PartiallyChecked) {
+    if (w->checkState() == Qt::PartiallyChecked) {
       exclude.append(w->text());
-    } else if(w->checkState() == Qt::Checked) {
+    } else if (w->checkState() == Qt::Checked) {
       genres.append(w->text());
     }
   }
 
-  if(!genres.isEmpty()) {
+  if (!genres.isEmpty()) {
     url = addQuery(url, "genres", genres.join(","));
   }
 
-  if(!exclude.isEmpty()) {
+  if (!exclude.isEmpty()) {
     url = addQuery(url, "genres_exclude", exclude.join(","));
   }
 
   // Load the results for the requested type
   QJsonArray browse_results = API::sharedAPI()->sharedAniListAPI()->get(url).array();
 
-  for(int i = 0; i <= browse_results.size(); i++) {
+  for (int i = 0; i <= browse_results.size(); i++) {
     QJsonObject anime = browse_results.at(i).toObject();
 
     Anime *a = User::sharedUser()->getAnimeByTitle(anime.value("title_romaji").toString());
 
-    if(a == 0) {
+    if (a == 0) {
       a = new Anime();
       a->setID(QString::number(anime.value("id").toInt()));
       a->setMyProgress(0);
@@ -99,7 +101,7 @@ void MainWindow::loadBrowserData() {
       a->setMyRewatch(0);
       a->setMyStatus("");
 
-      if(a->getID() == "0") {
+      if (a->getID() == "0") {
         delete a;
         continue;
       }
@@ -107,7 +109,7 @@ void MainWindow::loadBrowserData() {
 
     BrowseAnime *s = new BrowseAnime(this, User::sharedUser()->scoreType());
 
-    if(a->needsLoad() || a->needsCover()) {
+    if (a->needsLoad() || a->needsCover()) {
       User::sharedUser()->loadAnimeData(a, true);
 
       QEventLoop evt;
@@ -120,7 +122,7 @@ void MainWindow::loadBrowserData() {
     layout2->addWidget(s);
 
     // Do we need to keep loading?
-    if(season != ui->comboSeason->currentText() ||
+    if (season != ui->comboSeason->currentText() ||
        year != ui->comboYear->currentText() ||
        type != ui->comboType->currentText() ||
        status != ui->comboStatus->currentText()) {
@@ -130,7 +132,7 @@ void MainWindow::loadBrowserData() {
     int width = layout2->geometry().width();
     int cwidth = layout2->contentsWidth();
 
-    if(cwidth < 0) {
+    if (cwidth < 0) {
       width = this->width() - 2;
       cwidth = this->width() - (this->width() % 200);
     }

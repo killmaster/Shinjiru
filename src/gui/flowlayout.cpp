@@ -1,5 +1,7 @@
-#include "flowlayout.h"
-#include "airinganime.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./flowlayout.h"
+#include "./airinganime.h"
 
 #include <QDebug>
 
@@ -27,7 +29,7 @@ bool layoutItemLessThan(QLayoutItem* &v1, QLayoutItem* &v2) {
 void FlowLayout::addItem(QLayoutItem *item) {
   itemList.append(item);
 
-  if(sort)
+  if (sort)
     qSort(itemList.begin(), itemList.end(), layoutItemLessThan);
 }
 
@@ -69,7 +71,7 @@ bool FlowLayout::hasHeightForWidth() const {
 }
 
 int FlowLayout::contentsWidth() {
-  if(itemList.count() == 0) return 0;
+  if (itemList.count() == 0) return 0;
 
   int cwidth = itemList.at(0)->widget()->width();
 
@@ -78,14 +80,14 @@ int FlowLayout::contentsWidth() {
   int temp = 0;
 
   while(true) {
-    if(temp + cwidth >= this->geometry().width()) {
+    if (temp + cwidth >= this->geometry().width()) {
       temp -= spacing;
       break;
     }
 
     temp += cwidth + spacing;
 
-    if(temp > this->geometry().width()) {
+    if (temp > this->geometry().width()) {
       temp -= spacing;
       break;
     }
@@ -160,13 +162,13 @@ int FlowLayout::doLayout(const QRect &rect, bool testOnly) const {
 }
 
 int FlowLayout::smartSpacing(QStyle::PixelMetric pm) const {
-  if(pm == QStyle::PM_LayoutHorizontalSpacing && itemList.count() > 0 && this->geometry().width() > 0) {
+  if (pm == QStyle::PM_LayoutHorizontalSpacing && itemList.count() > 0 && this->geometry().width() > 0) {
     /*int ourWidth = this->geometry().width();
     int oneContentWidth = itemList.at(0)->widget()->width() + 10;
     if (oneContentWidth == 0) return 0;
     int numberOfContent = ourWidth / oneContentWidth;
 
-    if(numberOfContent == 0) numberOfContent = 1;
+    if (numberOfContent == 0) numberOfContent = 1;
 
     return (ourWidth - (oneContentWidth * numberOfContent)) / numberOfContent;*/
 

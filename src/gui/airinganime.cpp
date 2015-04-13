@@ -1,9 +1,11 @@
-#include "airinganime.h"
-#include "ui_airinganime.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./airinganime.h"
+#include "./ui_airinganime.h"
 
 #include "../api/anime.h"
-#include "scrolltext.h"
-#include "animepanel.h"
+#include "./scrolltext.h"
+#include "./animepanel.h"
 #include "../api/user.h"
 
 #include <QPainter>
@@ -46,15 +48,15 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
   int countdown = anime->getCountdown();
   countdown /= 3600; //convert to hours
 
-  if(countdown > 24) {
+  if (countdown > 24) {
     countdown /= 24; //convert to days
     cd = QString::number(countdown) + " day" + (countdown != 1 ? "s" : "");
   } else {
-    if(countdown == 0) cd = "<1 hour";
+    if (countdown == 0) cd = "<1 hour";
     else cd = QString::number(countdown) + " hour" + (countdown != 1 ? "s" : "");
   }
 
-  if(!anime->hasAiringSchedule()) cd = "? hours";
+  if (!anime->hasAiringSchedule()) cd = "? hours";
 
   p.drawText(QRect(0, height() - 20, width() - 5, 20), Qt::AlignRight, cd);
 
@@ -67,7 +69,7 @@ void AiringAnime::mouseDoubleClickEvent(QMouseEvent *event) {
   ap->show();
 
   connect(ap, &AnimePanel::accepted, this, [&, old_status]() {
-    if(anime->getMyStatus() != old_status) {
+    if (anime->getMyStatus() != old_status) {
       User::sharedUser()->removeFromList(old_status, anime);
       User::sharedUser()->addToList(anime->getMyStatus(), anime);
     }
@@ -83,7 +85,7 @@ void AiringAnime::setAnime(Anime *anime) {
 
   text->setText(anime->getTitle());
 
-  if(anime->needsLoad()) {
+  if (anime->needsLoad()) {
     connect(anime, SIGNAL(new_image()), SLOT(repaint()));
   }
 }
@@ -93,12 +95,12 @@ Anime* AiringAnime::getAnime() {
 }
 
 void AiringAnime::tick() {
-  if(!anime->hasAiringSchedule()) {
+  if (!anime->hasAiringSchedule()) {
     return;
   }
 
   int c = anime->getCountdown();
-  if(c == 0) {
+  if (c == 0) {
     c = 604801;
     anime->setNextEpisode(anime->getNextEpisode() + 1);
     User::sharedUser()->loadAnimeData(anime, false);

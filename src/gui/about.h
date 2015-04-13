@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef ABOUT_H
 #define ABOUT_H
 

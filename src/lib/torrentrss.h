@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef TORRENT_RSS_H
 #define TORRENT_RSS_H
 

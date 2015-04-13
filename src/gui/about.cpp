@@ -1,5 +1,7 @@
-#include "about.h"
-#include "ui_about.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./about.h"
+#include "./ui_about.h"
 #include "../lib/skinmanager.h"
 
 #include <QFile>

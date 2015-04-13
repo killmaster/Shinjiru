@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef AIRINGANIME_H
 #define AIRINGANIME_H
 
@@ -6,7 +8,7 @@
 #include <QMouseEvent>
 
 #include "../api/anime.h"
-#include "scrolltext.h"
+#include "./scrolltext.h"
 
 namespace Ui {
 class AiringAnime;

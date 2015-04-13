@@ -1,6 +1,8 @@
-#include "rulemanager.h"
-#include "ui_rulemanager.h"
-#include "rulewizard.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./rulemanager.h"
+#include "./ui_rulemanager.h"
+#include "./rulewizard.h"
 
 #include <QDir>
 #include <QDebug>
@@ -16,7 +18,7 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
 
   QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
   rule_dir.setFilter(QDir::NoDotAndDotDot);
-  if(!rule_dir.exists()) rule_dir.mkdir(".");
+  if (!rule_dir.exists()) rule_dir.mkdir(".");
 
   QDirIterator dit(rule_dir.absolutePath(), QStringList() << "*.str", QDir::Files, QDirIterator::Subdirectories);
 
@@ -32,7 +34,7 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
   });
 
   connect(ui->deleteButton, &QPushButton::clicked, [&, rule_dir]() {
-    if(ui->listWidget->selectedItems().length() == 0) return;
+    if (ui->listWidget->selectedItems().length() == 0) return;
 
     qDebug() << "Deleted rule" << ui->listWidget->selectedItems().at(0)->text();
     QFile file(rule_dir.absolutePath() + "/" + ui->listWidget->selectedItems().at(0)->text());
@@ -51,7 +53,7 @@ RuleManager::RuleManager(QWidget *parent, QString default_rule) : QDialog(parent
   });
 
   connect(ui->editButton, &QPushButton::clicked, [&, rule_dir]() {
-    if(ui->listWidget->selectedItems().length() == 0) return;
+    if (ui->listWidget->selectedItems().length() == 0) return;
     RuleWizard *rw = new RuleWizard(this, ui->listWidget->selectedItems().at(0)->text());
     rw->show();
   });
@@ -66,7 +68,7 @@ void RuleManager::reloadList() {
 
   QDir rd(QCoreApplication::applicationDirPath() + "/rules/");
   rd.setFilter(QDir::NoDotAndDotDot);
-  if(!rd.exists()) rd.mkdir(".");
+  if (!rd.exists()) rd.mkdir(".");
 
   QDirIterator dit(rd.absolutePath(), QStringList() << "*.str", QDir::Files, QDirIterator::Subdirectories);
 

@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef FILEDOWNLOADER_H
 #define FILEDOWNLOADER_H
 

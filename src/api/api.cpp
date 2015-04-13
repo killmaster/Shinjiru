@@ -1,13 +1,14 @@
-#include "api.h"
-#include "../version.h"
-#include "../app.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./api.h"
 
 #include <QMutex>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QInputDialog>
 
-
+#include "../version.h"
+#include "../app.h"
 #include "../lib/filedownloader.h"
 #include "../gui/apiwebview.h"
 
@@ -15,10 +16,10 @@ API* API::m_Instance = 0;
 
 API* API::sharedAPI() {
   static QMutex mutex;
-  if(! m_Instance) {
+  if (!m_Instance) {
     mutex.lock();
 
-    if(!m_Instance) {
+    if (!m_Instance) {
       m_Instance = new API;
     }
 
@@ -37,15 +38,14 @@ API::API() : QObject(0) {
 }
 
 API::~API() {
-
 }
 
 int API::verify() {
   qDebug() << "Verifying API client with AniList...";
 
-  if(!m_API->hasAuthorizationCode()) {
+  if (!m_API->hasAuthorizationCode()) {
     qDebug() << "No authorization code found, prompting user for access";
-    if(VER_USEWEBVIEW_BOOL == TRUE) {
+    if (VER_USEWEBVIEW_BOOL == TRUE) {
       APIWebView *wv = new APIWebView;
       wv->show();
 
@@ -58,8 +58,12 @@ int API::verify() {
       bool ok;
       QDesktopServices::openUrl(QUrl(VER_AUTHPINURL_STR));
 
+      // NOLINTNEXTLINE
       QString message = "Authorization pin:                                                                                    ";
-      QString text = QInputDialog::getText(0, tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
+      QString text =
+          QInputDialog::getText(0, tr("Authorization Pin Request"),
+                                tr(message.toUtf8().data()), QLineEdit::Normal,
+                                "", &ok);
 
       if (ok && !text.isEmpty()) {
         m_API->setAuthorizationPin(text);
@@ -69,7 +73,7 @@ int API::verify() {
     }
   }
 
-  if(VER_USEWEBVIEW_BOOL == TRUE) return m_API->init("code");
+  if (VER_USEWEBVIEW_BOOL == TRUE) return m_API->init("code");
 
   return m_API->init("pin");
 }

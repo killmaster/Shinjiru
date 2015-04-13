@@ -1,5 +1,7 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./mainwindow.h"
+#include "./ui_mainwindow.h"
 
 #include <QDesktopServices>
 #include <QIcon>
@@ -7,11 +9,11 @@
 
 #include "../app.h"
 #include "../api/api.h"
-#include "animepanel.h"
-#include "fvupdater.h"
-#include "about.h"
-#include "overlay.h"
-#include "searchpanel.h"
+#include "./animepanel.h"
+#include "./fvupdater.h"
+#include "./about.h"
+#include "./overlay.h"
+#include "./searchpanel.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -158,14 +160,14 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   });
 
   connect(ui->tabWidget, &QTabWidget::currentChanged, [&](int tab) {
-    if(tab != 0) {
+    if (tab != 0) {
       this->over->removeDrawing("blank_table");
       this->over->removeDrawing("no anime");
       ui->listTabs->show();
       ui->listFilterLineEdit->show();
     } else {
       this->filterList(3);
-      if(hasUser && User::sharedUser()->getAnimeList().count() == 0) {
+      if (hasUser && User::sharedUser()->getAnimeList().count() == 0) {
         this->addNoAnimePrompt();
       }
     }
@@ -173,7 +175,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
   QString genrelist = "Action, Adult, Adventure, Cars, Comedy, Dementia, Demons, Doujinshi, Drama, Ecchi, Fantasy, Game, Gender Bender, Harem, Hentai, Historical, Horror, Josei, Kids, Magic, Martial Arts, Mature, Mecha, Military, Motion Comic, Music, Mystery, Mythological , Parody, Police, Psychological, Romance, Samurai, School, Sci-Fi, Seinen, Shoujo, Shoujo Ai, Shounen, Shounen Ai, Slice of Life, Space, Sports, Super Power, Supernatural, Thriller, Tragedy, Vampire, Yaoi, Yuri";
   QStringList genres = genrelist.split(", ");
 
-  for(QString genre: genres) {
+  for (QString genre: genres) {
     QCheckBox *chk = new QCheckBox();
 
     chk->setText(genre);
@@ -195,7 +197,7 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent), ui(new Ui::MainWin
 
   int result = API::sharedAPI()->verify();
 
-  if(result == AniListAPI::OK) {
+  if (result == AniListAPI::OK) {
     connect(API::sharedAPI()->sharedAniListAPI(), &AniListAPI::access_granted, [&]() {
       progress_bar->setValue(10);
       progress_bar->setFormat("Access granted");
@@ -229,7 +231,7 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  if(trayIcon->isVisible() && close_to_tray) {
+  if (trayIcon->isVisible() && close_to_tray) {
     hide();
     event->ignore();
   } else {
@@ -240,12 +242,12 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event) {
-  if(over->containsDrawing("blank_table")) {
+  if (over->containsDrawing("blank_table")) {
     QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
     QPoint location = w->mapTo(this, QPoint(0,0));
     QRect r(location.x()+1, location.y()+24, w->width()-2, w->height()-25);
 
-    if(r.contains(event->x(), event->y())) {
+    if (r.contains(event->x(), event->y())) {
       SearchPanel *sp = new SearchPanel(this);
       sp->show();
     }
@@ -253,13 +255,13 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event) {
 }
 
 void MainWindow::changeEvent(QEvent *event) {
-  if(event->type() == QEvent::WindowStateChange) {
-    if(isMinimized() && minimize_to_tray) {
+  if (event->type() == QEvent::WindowStateChange) {
+    if (isMinimized() && minimize_to_tray) {
       this->hide();
       event->ignore();
     }
 
-    if(isMaximized()) {
+    if (isMaximized()) {
       showFunc = "showMaximized";
     } else {
       showFunc = "showNormal";
@@ -270,10 +272,10 @@ void MainWindow::changeEvent(QEvent *event) {
 void MainWindow::resizeEvent(QResizeEvent *event) {
   over->resize(event->size());
 
-  if(over->containsDrawing("blank_table"))
+  if (over->containsDrawing("blank_table"))
     this->addSearchPrompt();
 
-  if(over->containsDrawing("no anime"))
+  if (over->containsDrawing("no anime"))
     this->addNoAnimePrompt();
 
   event->accept();
@@ -297,14 +299,14 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 
   int notification_count = 0;
 
-  if(this->hasUser) {
+  if (this->hasUser) {
     p.drawPixmap(width() - 52, 24, 42, 42, User::sharedUser()->userImage());
     notification_count = User::sharedUser()->notificationCount();
   }
 
   p.drawRect(width() - 52, 24, 42, 42);
 
-  if(notification_count > 0) p.setBrush(QColor(255,120,120));
+  if (notification_count > 0) p.setBrush(QColor(255,120,120));
   else p.setBrush(QColor(255,255,255));
 
   p.drawEllipse(width() - 20.0f, 57.0f, 17.0f, 17.0f);
@@ -315,7 +317,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   font.setPointSize(12);
   p.setFont(font);
 
-  if(this->hasUser) {
+  if (this->hasUser) {
     p.drawText(0, 25, width() - 57, 40, Qt::AlignRight, User::sharedUser()->displayName());
   }
 
@@ -329,7 +331,7 @@ void MainWindow::showAiringTab()     { ui->tabWidget->setCurrentIndex(3);
                                        int width = layout->geometry().width();
                                        int cwidth = layout->contentsWidth();
 
-                                       if(cwidth < 0) {
+                                       if (cwidth < 0) {
                                          width = this->width() - 2;
                                          cwidth = this->width() - (this->width() % 200);
                                        }
@@ -339,7 +341,7 @@ void MainWindow::showBrowseTab()     { ui->tabWidget->setCurrentIndex(5);
                                     int width = layout2->geometry().width();
                                     int cwidth = layout2->contentsWidth();
 
-                                    if(cwidth < 0) {
+                                    if (cwidth < 0) {
                                       width = this->width() - 2;
                                       cwidth = this->width() - (this->width() % 200);
                                     }
@@ -356,7 +358,7 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
   Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
   QString old_status = anime->getMyStatus();
 
-  if(anime == nullptr) {
+  if (anime == nullptr) {
     QMessageBox::critical(this, "Shinjiru", tr("Unknown anime."));
     return;
   }
@@ -364,12 +366,12 @@ void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
 
   AnimePanel *ap = new AnimePanel(this, anime, User::sharedUser()->scoreType());
 
-  if(anime->needsLoad() || anime->needsCover()) {
+  if (anime->needsLoad() || anime->needsCover()) {
     User::sharedUser()->loadAnimeData(anime, true);
   }
 
   connect(ap, &AnimePanel::accepted, [&, source, anime, row, old_status]() {
-    if(anime->getMyStatus() != old_status) {
+    if (anime->getMyStatus() != old_status) {
       User::sharedUser()->removeFromList(old_status, anime);
       User::sharedUser()->addToList(anime->getMyStatus(), anime);
     }
@@ -393,7 +395,7 @@ void MainWindow::viewProfile()   { QDesktopServices::openUrl(QString("http://ani
 void MainWindow::viewAnimeList() { QDesktopServices::openUrl(QString("http://anilist.co/animelist/") + User::sharedUser()->displayName()); }
 
 void MainWindow::toggleAnimeRecognition(bool checked) {
-  if(checked) {
+  if (checked) {
     window_watcher->enable();
   } else {
     window_watcher->disable();
@@ -404,7 +406,7 @@ void MainWindow::toggleAnimeRecognition(bool checked) {
 }
 
 void MainWindow::watch(QString title) {
-  if(this->currently_watching != title) {
+  if (this->currently_watching != title) {
     this->currently_watching = title;
     this->watch_timer->stop();
 
@@ -414,23 +416,23 @@ void MainWindow::watch(QString title) {
     this->cw_episode = results.value("episode");
     cw_episode = cw_episode.remove(QRegExp("^[0]*"));
 
-    if(cw_episode.isEmpty() || cw_title.isEmpty()) {
+    if (cw_episode.isEmpty() || cw_title.isEmpty()) {
         return;
     }
 
     cw_anime = User::sharedUser()->getAnimeByTitle(cw_title);
 
-    if(cw_anime == 0 || cw_anime->getTitle().isEmpty()) {
+    if (cw_anime == 0 || cw_anime->getTitle().isEmpty()) {
       QJsonObject results = API::sharedAPI()->sharedAniListAPI()->get(API::sharedAPI()->sharedAniListAPI()->API_ANIME_SEARCH(cw_title)).array().at(0).toObject();
       cw_anime = User::sharedUser()->getAnimeByTitle(results.value("title_romaji").toString());
-      if(cw_anime == 0) return;
+      if (cw_anime == 0) return;
     }
 
-    if(cw_anime->getMyProgress() >= cw_episode.toInt()) {
+    if (cw_anime->getMyProgress() >= cw_episode.toInt()) {
       return;
     }
 
-    if(cw_anime->getMyStatus() != "watching" && cw_anime->getMyStatus() != "plan to watch") {
+    if (cw_anime->getMyStatus() != "watching" && cw_anime->getMyStatus() != "plan to watch") {
       return;
     }
 
@@ -447,7 +449,7 @@ void MainWindow::updateEpisode() {
 
   cw_anime->setMyProgress(cw_episode.toInt());
 
-  if(cw_anime->getMyProgress() == cw_anime->getEpisodeCount() && cw_anime->getEpisodeCount() != 0) {
+  if (cw_anime->getMyProgress() == cw_anime->getEpisodeCount() && cw_anime->getEpisodeCount() != 0) {
     data.insert("list_status", "completed");
     cw_anime->setMyStatus("completed");
   }
@@ -456,9 +458,9 @@ void MainWindow::updateEpisode() {
 
   QJsonObject response = API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data).object();
 
-  if(response != QJsonObject()) {
+  if (response != QJsonObject()) {
     trayIcon->showMessage("Shinjiru", tr("%1 updated to episode %2").arg(cw_anime->getTitle()).arg(cw_episode));
-    if(data.value("list_status") == "completed") {
+    if (data.value("list_status") == "completed") {
       trayIcon->showMessage("Shinjiru", tr("%1 marked as completed").arg(cw_anime->getTitle()));
     }
   }
@@ -468,20 +470,20 @@ void MainWindow::updateEpisode() {
 }
 
 void MainWindow::eventTick() {
-  if(torrent_refresh_time == 0) {
+  if (torrent_refresh_time == 0) {
     torrent_refresh_time = torrent_interval;
     refreshTorrentListing();
   }
 
-  if(user_refresh_time == 0) {
+  if (user_refresh_time == 0) {
     user_refresh_time = default_time;
     loadUser();
   }
 
-  for(int i = 0; i < airing_anime.count(); i++) {
+  for (int i = 0; i < airing_anime.count(); i++) {
       AiringAnime *aa = airing_anime.at(i);
 
-      if(!aa->getAnime()->needsLoad())
+      if (!aa->getAnime()->needsLoad())
         aa->tick();
   }
 
@@ -501,34 +503,34 @@ void MainWindow::eventTick() {
   QString format = "";
   QString comma = "";
 
-  if(days > 1) {
+  if (days > 1) {
     format += QString::number(days) + tr(" days");
   } else if (days > 0) {
     format += QString::number(days) +tr( " day");
   }
 
-  if(days > 0) comma = ", ";
+  if (days > 0) comma = ", ";
 
-  if(hours > 1) {
+  if (hours > 1) {
     format += comma + QString::number(hours) + tr(" hours");
   } else if (hours > 0) {
     format += comma + QString::number(hours) + tr(" hour");
   }
 
-  if(hours > 0) comma = ", ";
+  if (hours > 0) comma = ", ";
 
-  if(days == 0) {
-    if(minutes > 1) {
+  if (days == 0) {
+    if (minutes > 1) {
       format += comma + QString::number(minutes) + tr(" minutes");
     } else if (minutes > 0) {
       format += comma + QString::number(minutes) + tr(" minute");
     }
   }
 
-  if(minutes > 0) comma = ", ";
+  if (minutes > 0) comma = ", ";
 
-  if(hours == 0) {
-    if(seconds == 1) {
+  if (hours == 0) {
+    if (seconds == 1) {
       format += comma + QString::number(seconds) + tr(" second");
     } else {
       format += comma + QString::number(seconds) + tr(" seconds");
@@ -539,18 +541,18 @@ void MainWindow::eventTick() {
 }
 
 void MainWindow::exportListJSON() {
-  if(!this->hasUser) return;
+  if (!this->hasUser) return;
 
   QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"), qApp->applicationDirPath(),tr("Json File (*.json)"));
 
-  if(fileName.isEmpty()) return;
+  if (fileName.isEmpty()) return;
   QFile f(fileName);
   f.open(QFile::WriteOnly);
-  if(f.isOpen()) {
+  if (f.isOpen()) {
     QByteArray data = User::sharedUser()->listJson();
     int bytes = f.write(data);
 
-    if(bytes != data.length() || bytes == -1) {
+    if (bytes != data.length() || bytes == -1) {
       QMessageBox::information(this, "Shinjiru", tr("Error %d: File could not be written to").arg(bytes));
     }
 
@@ -570,7 +572,7 @@ void MainWindow::elegantClose() {
   s.setValue("mainWindowGeometry", saveGeometry());
   s.setValue("mainWindowState", saveState());
 
-  for(int i = 0; i < ui->listTabs->count(); i++) {
+  for (int i = 0; i < ui->listTabs->count(); i++) {
     QTableWidget *t = static_cast<QTableWidget *>(ui->listTabs->widget(i)->layout()->itemAt(0)->widget());
 
     QString key = ui->listTabs->tabText(i).replace(QRegExp("[ ]+"), "").replace(QRegExp("\\([0-9]+\\)"), "") + "State";
@@ -578,14 +580,14 @@ void MainWindow::elegantClose() {
     s.setValue(key, t->horizontalHeader()->saveState());
   }
 
-  for(QFuture<void> f : this->async_registry) {
-    if(f.isRunning()) {
+  for (QFuture<void> f : this->async_registry) {
+    if (f.isRunning()) {
       qApp->processEvents();
       f.waitForFinished();
     }
   }
 
-  if(this->hasUser) {
+  if (this->hasUser) {
     connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
     User::sharedUser()->quit();
   } else {

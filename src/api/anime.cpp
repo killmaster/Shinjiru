@@ -24,7 +24,7 @@ QString Anime::getRomajiTitle()              { return romaji_title; }
 void    Anime::setRomajiTitle(QString title) { this ->romaji_title = title; }
 
 QString Anime::getJapaneseTitle()              { return japanese_title; }
-void    Anime::setJapaneseTitle(QString title) { this ->japanese_title=title; }
+void    Anime::setJapaneseTitle(QString title) { this->japanese_title = title; }
 
 QString Anime::getEnglishTitle()              { return english_title; }
 void    Anime::setEnglishTitle(QString title) { this ->english_title = title; }

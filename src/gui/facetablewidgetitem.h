@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef FACETABLEWIDGETITEM_H
 #define FACETABLEWIDGETITEM_H
 

@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef WINDOWWATCHER_H
 #define WINDOWWATCHER_H
 

@@ -1,5 +1,7 @@
-#include "apiwebview.h"
-#include "ui_apiwebview.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./apiwebview.h"
+#include "./ui_apiwebview.h"
 
 #include <QMessageBox>
 
@@ -27,7 +29,7 @@ APIWebView::~APIWebView()
 
 void APIWebView::webURLChanged() {
   QString s_url = ui->webView->url().toDisplayString();
-  if(s_url.startsWith(VER_AUTHURL_STR) && s_url.contains("code")) {
+  if (s_url.startsWith(VER_AUTHURL_STR) && s_url.contains("code")) {
     s_url = s_url.right(s_url.length() - s_url.indexOf("code") - 5);
     s_url = s_url.replace("&state=", "");
 
@@ -37,7 +39,7 @@ void APIWebView::webURLChanged() {
 }
 
 void APIWebView::sslErrorHandler(QNetworkReply* qnr, const QList<QSslError> & errlist) {
-  for(QSslError e: errlist) {
+  for (QSslError e: errlist) {
     qWarning() << e.errorString();
   }
 

@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef APIWEBVIEW_H
 #define APIWEBVIEW_H
 

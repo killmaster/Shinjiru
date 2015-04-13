@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef SCROLLTEXT_H
 #define SCROLLTEXT_H
 

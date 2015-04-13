@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef FLOWLAYOUT_H
 #define FLOWLAYOUT_H
 

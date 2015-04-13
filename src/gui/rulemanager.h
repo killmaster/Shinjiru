@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef RULEMANAGER_H
 #define RULEMANAGER_H
 

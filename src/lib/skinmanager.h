@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef SKINMANAGER_H
 #define SKINMANAGER_H
 

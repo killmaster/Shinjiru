@@ -1,13 +1,11 @@
-#include "ui_mainwindow.h"
-#include "mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./ui_mainwindow.h"
+#include "./mainwindow.h"
 
 #include <QHeaderView>
 #include <QtConcurrent>
 #include <QCheckBox>
-
-#ifdef HAS_PREMIUM
-  #include "../premium.h"
-#endif
 
 void MainWindow::loadUserList() {
   progress_bar->setValue(25);
@@ -34,7 +32,7 @@ void MainWindow::userListLoaded() {
 
   int index = 0;
 
-  if(ui->listTabs->count() > 0) {
+  if (ui->listTabs->count() > 0) {
     index = ui->listTabs->currentIndex();
   }
 
@@ -59,14 +57,14 @@ void MainWindow::userListLoaded() {
 
   QMap<QString, QMap<QString, Anime*>> lists = User::sharedUser()->getUserList();
 
-  if(lists.count() > 0)
+  if (lists.count() > 0)
     space_per_list = remaining_space / lists.count();
 
-  for(QString key: lists.keys()) {
-    if(key == "") continue;
+  for (QString key: lists.keys()) {
+    if (key == "") continue;
     bool isCustom = true;
 
-    if(key == "completed" || key == "on-hold" || key == "plan_to_watch" || key == "dropped" || key == "watching") {
+    if (key == "completed" || key == "on-hold" || key == "plan_to_watch" || key == "dropped" || key == "watching") {
       isCustom = false;
     }
 
@@ -77,7 +75,7 @@ void MainWindow::userListLoaded() {
 
     QMap<QString, Anime*> list = lists.value(key);
 
-    for(Anime *anime : list.values()) {
+    for (Anime *anime : list.values()) {
       QTableWidgetItem        *titleData    = new QTableWidgetItem(anime->getTitle());
       ProgressTableWidgetItem *progressData = new ProgressTableWidgetItem;
       QTableWidgetItem        *scoreData    = new QTableWidgetItem();
@@ -85,7 +83,7 @@ void MainWindow::userListLoaded() {
       QTableWidgetItem        *statusData;
       QTableWidgetItem        *typeData     = new QTableWidgetItem(anime->getType());
 
-      if(isCustom) {
+      if (isCustom) {
         QString status = anime->getMyStatus();
         status.replace("plan to watch", "plan to Watch");
         status = status.at(0).toUpper() + status.right(status.length() - 1);
@@ -93,19 +91,19 @@ void MainWindow::userListLoaded() {
         statusData = new QTableWidgetItem(status);
       }
 
-      if(User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
+      if (User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
         scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
-      } else if(User::sharedUser()->scoreType() == 4) {
+      } else if (User::sharedUser()->scoreType() == 4) {
         scoreData->setData(Qt::DisplayRole, anime->getMyScore().toDouble());
-      } else if(User::sharedUser()->scoreType() == 3) {
+      } else if (User::sharedUser()->scoreType() == 3) {
         faceData->setText(anime->getMyScore());
       }
       else {
         scoreData->setText(anime->getMyScore());
       }
 
-      if(anime->getAiringStatus() == "currently airing") {
-        if(!airing.contains(anime->getTitle())) {
+      if (anime->getAiringStatus() == "currently airing") {
+        if (!airing.contains(anime->getTitle())) {
           airing << anime->getTitle();
           layout->addWidget(addAiring(anime));
         }
@@ -118,11 +116,11 @@ void MainWindow::userListLoaded() {
 
       table->setItem(row, 0, titleData);
       table->setItem(row, 1, progressData);
-      if(User::sharedUser()->scoreType() == 3)
+      if (User::sharedUser()->scoreType() == 3)
         table->setItem(row, 2, faceData);
       else
         table->setItem(row, 2, scoreData);
-      if(isCustom) {
+      if (isCustom) {
         table->setItem(row, 3, statusData);
         table->setItem(row, 4, typeData);
       } else {
@@ -148,16 +146,16 @@ void MainWindow::userListLoaded() {
     bool found = false;
     int index = -1;
 
-    for(int i = 0; i < ui->orderListWidget->count(); i++) {
-      if(ui->orderListWidget->item(i)->text() == tab_title) {
+    for (int i = 0; i < ui->orderListWidget->count(); i++) {
+      if (ui->orderListWidget->item(i)->text() == tab_title) {
         found = true;
         index = i;
       }
     }
 
-    if(!found) ui->orderListWidget->addItem(tab_title);
+    if (!found) ui->orderListWidget->addItem(tab_title);
 
-    if(index == -1)
+    if (index == -1)
       ui->listTabs->addTab(page, tab_title + " (" + tab_total + ")");
     else
       ui->listTabs->insertTab(index, page, tab_title + " (" + tab_total + ")");
@@ -174,17 +172,17 @@ void MainWindow::userListLoaded() {
     QSettings s;
     QByteArray state = s.value(rkey).toByteArray();
 
-    if(state != QByteArray()) {
+    if (state != QByteArray()) {
       table->horizontalHeader()->restoreState(state);
     }
   }
 
   QTabBar *tb = ui->listTabs->tabBar();
 
-  for(int i = 0; i < ui->orderListWidget->count(); i++) {
+  for (int i = 0; i < ui->orderListWidget->count(); i++) {
     QString current = ui->orderListWidget->item(i)->text().toLower();
     QStringList tab_texts;
-    for(int j = 0; j < ui->listTabs->count(); j++) {
+    for (int j = 0; j < ui->listTabs->count(); j++) {
       tab_texts << ui->listTabs->tabText(j).toLower();
     }
 
@@ -198,7 +196,7 @@ void MainWindow::userListLoaded() {
   ui->listTabs->show();
   ui->listFilterLineEdit->show();
 
-  if(User::sharedUser()->getAnimeList().count() == 0) {
+  if (User::sharedUser()->getAnimeList().count() == 0) {
     this->addNoAnimePrompt();
     this->showBrowseTab();
   }
@@ -216,7 +214,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
   QStringList default_list_labels;
   default_list_labels << tr("Title") << tr("Episodes") << tr("Score");
 
-  if(custom_list) default_list_labels << tr("Status");
+  if (custom_list) default_list_labels << tr("Status");
 
   default_list_labels << tr("Type");
 
@@ -236,7 +234,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
   connect(table, &QWidget::customContextMenuRequested, [=](QPoint pos) {
     QTableWidgetItem *item = table->itemAt(pos);
-    if(item == 0) return;
+    if (item == 0) return;
     int row = item->row();
     pos.setY(pos.y() + 120);
 
@@ -262,13 +260,13 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
     Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
 
-    for(int i = 0; i < User::sharedUser()->customLists().length(); i++) {
-      if(User::sharedUser()->customLists().at(i).toString().isEmpty()) continue;
+    for (int i = 0; i < User::sharedUser()->customLists().length(); i++) {
+      if (User::sharedUser()->customLists().at(i).toString().isEmpty()) continue;
 
       QAction *temp = new QAction(User::sharedUser()->customLists().at(i).toString(), table);
       temp->setCheckable(true);
 
-      if(anime->getCustomLists().at(i) == 1) {
+      if (anime->getCustomLists().at(i) == 1) {
         temp->setChecked(true);
       } else {
         temp->setChecked(false);
@@ -282,7 +280,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
         QMap<QString, QString> data;
         data.insert("id", anime->getID());
         QString d;
-        for(int i = 0; i < custom.length(); i++) {
+        for (int i = 0; i < custom.length(); i++) {
           d += QString::number(custom.at(i)) + ((i == custom.length() - 1) ? "" : ",");
         }
 
@@ -306,7 +304,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
       data.insert("id", anime->getID());
       data.insert("hidden_default", selected ? "1" : "0");
 
-      if(selected) {
+      if (selected) {
         User::sharedUser()->removeFromList(anime->getMyStatus(), anime);
       }
 
@@ -382,7 +380,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
     pContextMenu->addAction(pAnimePanel);
     pContextMenu->addAction(pEpisodeIncrement);
     pContextMenu->addMenu(pStatusUpdate);
-    if(User::sharedUser()->customLists().length() > 0) {
+    if (User::sharedUser()->customLists().length() > 0) {
       pContextMenu->addMenu(pCustomLists);
     } else {
       delete pCustomLists;
@@ -399,7 +397,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 }
 
 AiringAnime *MainWindow::addAiring(Anime *anime) {
-  if(anime->needsLoad() || anime->needsCover()) {
+  if (anime->needsLoad() || anime->needsCover()) {
     User::sharedUser()->loadAnimeData(anime, true);
   }
 
@@ -410,7 +408,7 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
   int width = layout->geometry().width();
   int cwidth = layout->contentsWidth();
 
-  if(ui->tabWidget->currentIndex() == 3)
+  if (ui->tabWidget->currentIndex() == 3)
     layout->setContentsMargins((width-cwidth)/2, 0, 0, 0);
 
   airing_anime.append(newPanel);
@@ -423,29 +421,29 @@ void MainWindow::filterList(int) {
 }
 
 void MainWindow::filterList(QString filter) {
-  if(ui->listTabs->currentWidget() == 0) return;
-  if(ui->listTabs->currentWidget()->layout() == 0) return;
-  if(ui->listTabs->currentWidget()->layout()->count() == 0) return;
+  if (ui->listTabs->currentWidget() == 0) return;
+  if (ui->listTabs->currentWidget()->layout() == 0) return;
+  if (ui->listTabs->currentWidget()->layout()->count() == 0) return;
 
   int visibleRows = 0;
 
   QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
 
-  if(w == 0) return;
+  if (w == 0) return;
 
-  for(int i = 0; i < w->rowCount(); i++)
+  for (int i = 0; i < w->rowCount(); i++)
     w->hideRow(i);
 
   QList<QTableWidgetItem *> items = w->findItems(filter, Qt::MatchContains);
 
-  for(int i = 0; i < items.count(); i++) {
-    if(items.at(i) == 0) continue;
-    if(items.at(i)->column() != 0 ) continue;
+  for (int i = 0; i < items.count(); i++) {
+    if (items.at(i) == 0) continue;
+    if (items.at(i)->column() != 0 ) continue;
 
     w->showRow(items.at(i)->row());
     visibleRows++;
   }
-  if(visibleRows == 0) {
+  if (visibleRows == 0) {
     addSearchPrompt();
   } else {
     over->removeDrawing("blank_table");
@@ -506,7 +504,7 @@ void MainWindow::updateStatus(int row, QTableWidget *table, QString status) {
 
   API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
 
-  if(old_status != status) {
+  if (old_status != status) {
     User::sharedUser()->removeFromList(old_status, anime);
     this->userListLoaded();
   }

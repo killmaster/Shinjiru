@@ -1,16 +1,18 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./mainwindow.h"
+#include "./ui_mainwindow.h"
 
 #include <QDesktopServices>
-#include <regex>
+#include <regex> //NOLINT
 #include <QFile>
 #include <QDir>
 #include <QJsonDocument>
 #include <QJsonObject>
 
 #include "../lib/torrentrss.h"
-#include "rulewizard.h"
-#include "rulemanager.h"
+#include "./rulewizard.h"
+#include "./rulemanager.h"
 
 void MainWindow::refreshTorrentListing() {
   qDebug() << "Refreshing torrent listing..." << "(" + QString::number(torrent_refresh_time) + ")";
@@ -30,8 +32,8 @@ void MainWindow::refreshTorrentListing() {
 
   delete torrents;
 
-  for(int i = 0; i < titles.length(); i++) {
-    if(ui->torrentTable->rowCount() <= i)
+  for (int i = 0; i < titles.length(); i++) {
+    if (ui->torrentTable->rowCount() <= i)
       ui->torrentTable->insertRow(i);
 
     QMap<QString, QString> result;
@@ -58,12 +60,12 @@ void MainWindow::refreshTorrentListing() {
     QTableWidgetItem *fileNameItem = new QTableWidgetItem(titles.at(i));
     QTableWidgetItem *linkItem = new QTableWidgetItem(links.at(i));
 
-    if(episodeNumber == "") {
+    if (episodeNumber == "") {
       offset++;
       continue;
     }
 
-    if(links.at(i) == "") {
+    if (links.at(i) == "") {
       offset++;
       continue;
     }
@@ -90,7 +92,7 @@ void MainWindow::refreshTorrentListing() {
 
 void MainWindow::torrentContextMenu(QPoint pos) {
   QTableWidgetItem *item = ui->torrentTable->itemAt(pos);
-  if(item == 0) return;
+  if (item == 0) return;
 
   int row = item->row();
   pos.setY(pos.y() + 120);
@@ -142,24 +144,24 @@ void MainWindow::createRule(int row) {
 
 
 void MainWindow::filterTorrents(QString text, bool checked) {
-  for(int i = 0; i < ui->torrentTable->rowCount(); i++)
+  for (int i = 0; i < ui->torrentTable->rowCount(); i++)
     ui->torrentTable->hideRow(i);
 
   QList<QTableWidgetItem *> items = ui->torrentTable->findItems(text, Qt::MatchContains);
 
-  for(int i = 0; i < items.count(); i++) {
-    if(items.at(i)->column() != 0 ) continue;
+  for (int i = 0; i < items.count(); i++) {
+    if (items.at(i)->column() != 0 ) continue;
     bool show = true;
 
-    if(checked) {
+    if (checked) {
       QString f_title = items.at(i)->text();
       Anime *filter_anime = User::sharedUser()->getAnimeByTitle(f_title);
-      if(filter_anime == 0) continue;
-      if(filter_anime->getAiringStatus() != "currently airing") show = false;
-      if(filter_anime->getMyStatus() != "watching" && filter_anime->getMyStatus() != "plan to watch") show = false;
+      if (filter_anime == 0) continue;
+      if (filter_anime->getAiringStatus() != "currently airing") show = false;
+      if (filter_anime->getMyStatus() != "watching" && filter_anime->getMyStatus() != "plan to watch") show = false;
     }
 
-    if(show)
+    if (show)
       ui->torrentTable->showRow(items.at(i)->row());
   }
 }
@@ -179,7 +181,7 @@ void MainWindow::reloadRules() {
   QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
   rule_dir.mkdir(".");
   rule_dir.setFilter(QDir::Files);
-  for(int i = 0; i < rule_dir.entryList().count(); i++) {
+  for (int i = 0; i < rule_dir.entryList().count(); i++) {
     QString file_name = rule_dir.entryList().at(i);
     QFile file(rule_dir.absoluteFilePath(file_name));
     file.open(QFile::ReadOnly);
@@ -188,12 +190,12 @@ void MainWindow::reloadRules() {
     QDate expires = QDate::currentDate();
     expires = expires.addDays(7 * json["expires"].toInt());
 
-    if(QDate::currentDate().daysTo(expires) < 0) {
+    if (QDate::currentDate().daysTo(expires) < 0) {
       file.remove();
       continue;
     }
 
-    if(json["rule_type"] == "advanced") {
+    if (json["rule_type"] == "advanced") {
       QMap<QString, QVariant> values;
       values.insert("regexp", QRegExp(json["file_regex"].toString()));
       values.insert("expires", expires);
@@ -216,29 +218,29 @@ void MainWindow::reloadRules() {
 void MainWindow::checkForMatches() {
   reloadRules();
 
-  for(int j = 0; j < ui->torrentTable->rowCount(); j++) {
+  for (int j = 0; j < ui->torrentTable->rowCount(); j++) {
     QString title = ui->torrentTable->item(j, 0)->text();
     QString sub   = ui->torrentTable->item(j, 2)->text();
     QString res   = ui->torrentTable->item(j, 3)->text();
     QString file  = ui->torrentTable->item(j, 4)->text();
 
-    for(int i = 0; i < basic_rules.length(); i++) {
-      if(QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
+    for (int i = 0; i < basic_rules.length(); i++) {
+      if (QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
         basic_rules.removeAt(i);
         continue;
       }
-      if(title == basic_rules.at(i).value("anime").toString() && sub == basic_rules.at(i).value("subgroup").toString() && res == basic_rules.at(i).value("resolution").toString()) {
+      if (title == basic_rules.at(i).value("anime").toString() && sub == basic_rules.at(i).value("subgroup").toString() && res == basic_rules.at(i).value("resolution").toString()) {
         verifyAndDownload(j);
       }
     }
 
-    for(int i = 0; i < adv_rules.length(); i++) {
-      if(QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
+    for (int i = 0; i < adv_rules.length(); i++) {
+      if (QDate::currentDate().daysTo(QDate::fromString(basic_rules.at(i).value("expires", "2420-01-01").toString())) < 0) {
         adv_rules.removeAt(i);
         continue;
       }
 
-      if(adv_rules.at(i).value("regexp").toRegExp().exactMatch(file)) {
+      if (adv_rules.at(i).value("regexp").toRegExp().exactMatch(file)) {
         verifyAndDownload(j);
       }
     }
@@ -251,7 +253,7 @@ void MainWindow::verifyAndDownload(int row) {
   QDir history_dir(QCoreApplication::applicationDirPath() + "/history/");
   history_dir.mkdir(".");
   QFile f(history_dir.absoluteFilePath(file));
-  if(!f.exists()) {
+  if (!f.exists()) {
     qDebug() << "Downloading" << title << "from torrent rule";
     download(row);
     download_rule++;

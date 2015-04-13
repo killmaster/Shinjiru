@@ -1,5 +1,7 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./mainwindow.h"
+#include "./ui_mainwindow.h"
 
 void MainWindow::initTray() {
   trayIconMenu = new QMenu(this);
@@ -16,13 +18,13 @@ void MainWindow::initTray() {
   trayIcon->setToolTip("Shinjiru " + qApp->applicationVersion());
 
   connect(trayIcon, &QSystemTrayIcon::activated, [&] (QSystemTrayIcon::ActivationReason reason) {
-    if(reason == QSystemTrayIcon::DoubleClick) {
-      if(showFunc.isEmpty()) showNormal();
+    if (reason == QSystemTrayIcon::DoubleClick) {
+      if (showFunc.isEmpty()) showNormal();
       else QMetaObject::invokeMethod(this, showFunc.toLocal8Bit().data(),Qt::DirectConnection);
       qApp->setActiveWindow(this);
     }
 
-    if(reason == QSystemTrayIcon::Context) {
+    if (reason == QSystemTrayIcon::Context) {
       animeRecognitionAction->setChecked(ui->actionEAR->isChecked());
       cancelUpdateAction->setEnabled(watch_timer->isActive());
     }

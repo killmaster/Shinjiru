@@ -20,7 +20,7 @@
 #define VER_COMPANYNAME_STR         "Kazakuri"
 #define VER_FILEDESCRIPTION_STR     "Shinjiru"
 #define VER_INTERNALNAME_STR        "Shinjiru"
-#define VER_LEGALCOPYRIGHT_STR      "Copyright © 2014-2015 Kazakuri"
+#define VER_LEGALCopyright_STR      "Copyright © 2014-2015 Kazakuri"
 #define VER_LEGALTRADEMARKS1_STR    "All Rights Reserved"
 #define VER_LEGALTRADEMARKS2_STR    VER_LEGALTRADEMARKS1_STR
 #define VER_ORIGINALFILENAME_STR    "Shinjiru.exe"

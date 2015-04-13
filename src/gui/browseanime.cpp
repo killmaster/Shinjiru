@@ -1,9 +1,11 @@
-#include "browseanime.h"
-#include "ui_browseanime.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./browseanime.h"
+#include "./ui_browseanime.h"
 
 #include "../api/anime.h"
-#include "scrolltext.h"
-#include "animepanel.h"
+#include "./scrolltext.h"
+#include "./animepanel.h"
 
 #include <QPainter>
 

@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 

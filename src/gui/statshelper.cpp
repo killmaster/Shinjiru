@@ -1,5 +1,7 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./mainwindow.h"
+#include "./ui_mainwindow.h"
 
 void MainWindow::updateStatistics() {
   progress_bar->setFormat(tr("Updating statistics"));
@@ -24,9 +26,9 @@ void MainWindow::updateStatistics() {
 
   QList<double> scores;
 
-  for(Anime *anime: animes) {
+  for (Anime *anime: animes) {
     progress_bar->setValue(progress_bar->value() + 1);
-    if(anime->getMyRewatch() > 0){
+    if (anime->getMyRewatch() > 0){
       episodes_watched += anime->getMyProgress() * anime->getMyRewatch();
     }
     episodes_watched += anime->getMyProgress();
@@ -34,7 +36,7 @@ void MainWindow::updateStatistics() {
     QString status = anime->getMyStatus();
     QString s_score = anime->getMyScore();
 
-    if(User::sharedUser()->scoreType() != 4) {
+    if (User::sharedUser()->scoreType() != 4) {
       int score = 0;
       s_score = s_score.replace(" Star", "");
       s_score = s_score.replace("-", "0");
@@ -43,7 +45,7 @@ void MainWindow::updateStatistics() {
       s_score = s_score.replace(":)", "99");
       score = s_score.toInt();
 
-      if(score > 0) {
+      if (score > 0) {
         scores.append(score);
         sum += score;
       }
@@ -51,25 +53,25 @@ void MainWindow::updateStatistics() {
       double score = 0.0;
       score = s_score.toDouble();
 
-      if(score > 0.0) {
+      if (score > 0.0) {
         scores.append(score);
         sum += score;
       }
     }
 
-    if(status == "watching")
+    if (status == "watching")
       watching++;
-    else if(status == "completed")
+    else if (status == "completed")
       completed++;
-    else if(status == "on-hold")
+    else if (status == "on-hold")
       on_hold++;
-    else if(status == "dropped")
+    else if (status == "dropped")
       dropped++;
-    else if(status == "plan to watch")
+    else if (status == "plan to watch")
       plan_to_watch++;
   }
 
-  if(scores.count() > 0) {
+  if (scores.count() > 0) {
     mean = sum / (double)scores.count();
     median = scores.at(scores.count() / 2);
     qSort(scores);
@@ -79,7 +81,7 @@ void MainWindow::updateStatistics() {
     int count = 1;
     int countMode = 1;
 
-    for(int i = 1; i < scores.count(); i++) {
+    for (int i = 1; i < scores.count(); i++) {
       stddev += scores.at(i) - mean;
       if (scores.at(i) == number) {
         count++;
@@ -123,7 +125,7 @@ void MainWindow::updateStatistics() {
   progress_bar->reset();
   progress_bar->setMaximum(100);
 
-  /*if(layout2->count() == 0) {
+  /*if (layout2->count() == 0) {
     this->loadSelectedSeason();
   }*/
 }

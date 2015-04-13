@@ -1,5 +1,7 @@
-#include "rulewizard.h"
-#include "ui_rulewizard.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./rulewizard.h"
+#include "./ui_rulewizard.h"
 
 #include <QInputDialog>
 #include <QJsonObject>
@@ -17,7 +19,7 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
 
   ui->lineEdit->setValidator(new QIntValidator(0, 999, this));
 
-  if(default_rule == "basic") {
+  if (default_rule == "basic") {
       ui->groupBox->setChecked(false);
       ui->groupBox_2->setChecked(true);
   } else {
@@ -37,13 +39,13 @@ RuleWizard::RuleWizard(QWidget *parent, QString title, QString sub, QString res,
 }
 
 RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new Ui::RuleWizard) {
-  if(file == "basic" || file == "advanced") {
+  if (file == "basic" || file == "advanced") {
     ui->setupUi(this);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
     ui->lineEdit->setValidator(new QIntValidator(0, 999, this));
 
-    if(file == "basic") {
+    if (file == "basic") {
         ui->groupBox->setChecked(false);
         ui->groupBox_2->setChecked(true);
     } else {
@@ -70,7 +72,7 @@ RuleWizard::RuleWizard(QWidget *parent, QString file) : QDialog(parent), ui(new 
   edit_mode = true;
   file_name = file.split("/").last().split(".").first();
 
-  if(type == "basic") {
+  if (type == "basic") {
     ui->setupUi(this);
     setAttribute(Qt::WA_DeleteOnClose);
     setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
@@ -114,11 +116,11 @@ void RuleWizard::group2Toggle(bool status) {
 }
 
 void RuleWizard::accept() {
-  if(ui->lineEdit->text().isEmpty()) {
+  if (ui->lineEdit->text().isEmpty()) {
     ui->lineEdit->setText("-1");
   }
 
-  if(!edit_mode){
+  if (!edit_mode){
     bool ok;
     file_name = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Rule Name"), tr("Enter a name for the new rule:"), QLineEdit::Normal, "", &ok);
   }
@@ -126,11 +128,11 @@ void RuleWizard::accept() {
   qDebug() << "Creating rule" << file_name + ".str";
 
   QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
-  if(!rule_dir.exists()) rule_dir.mkdir(".");
+  if (!rule_dir.exists()) rule_dir.mkdir(".");
   QFile file(rule_dir.absolutePath() + "/" + file_name + ".str");
   QJsonObject rule_json;
 
-  if(ui->groupBox->isChecked()) {
+  if (ui->groupBox->isChecked()) {
     // Advanced group box
     rule_json["rule_type"]  = "advanced";
     rule_json["file_regex"] = ui->fileRegexLineEdit->text();

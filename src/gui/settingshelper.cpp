@@ -1,5 +1,7 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./mainwindow.h"
+#include "./ui_mainwindow.h"
 
 void MainWindow::loadSettings() {
   torrent_interval = settings->getValue(Settings::TorrentRefreshTime, 900).toInt();
@@ -16,11 +18,11 @@ void MainWindow::loadSettings() {
 
   release_stream = release_stream == tr("Beta") ? "Nightly" : "Stable";
 
-  if(sob) {
+  if (sob) {
     #ifdef Q_OS_WIN
       QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
       QString path = reg.value("Shinjiru", QString("")).toString();
-      if(path.isEmpty()) sob = false;
+      if (path.isEmpty()) sob = false;
     #endif
   }
 
@@ -36,7 +38,7 @@ void MainWindow::loadSettings() {
   ui->updateStreamComboBox->setCurrentText(release_stream);
   toggleAnimeRecognition(ear);
 
-  for(QString key : list_order) {
+  for (QString key : list_order) {
     ui->orderListWidget->addItem(key);
   }
 }
@@ -51,20 +53,20 @@ void MainWindow::applyEAR() {
 
 void MainWindow::applySettings() {
   QString ti = ui->torrentRefreshIntervalLineEdit->text();
-  if(ti.toInt() <= 0) ti = "900";
+  if (ti.toInt() <= 0) ti = "900";
 
   QString aud = ui->autoUpdateDelayLineEdit->text();
-  if(aud.toInt() <= 0) aud = "120";
+  if (aud.toInt() <= 0) aud = "120";
 
   bool sob = ui->startOnBootCheckBox->isChecked();
 
   QStringList list_order;
 
-  for(int i = 0; i < ui->orderListWidget->count(); i++) {
+  for (int i = 0; i < ui->orderListWidget->count(); i++) {
     list_order << ui->orderListWidget->item(i)->text();
   }
 
-  if(sob) {
+  if (sob) {
     #ifdef Q_OS_WIN
       QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run", QSettings::NativeFormat);
       reg.setValue("Shinjiru", "\"" + qApp->applicationFilePath().replace("/", "\\") + "\"");
@@ -93,7 +95,7 @@ void MainWindow::applySettings() {
 }
 
 void MainWindow::defaultSettings() {
-  if(QMessageBox::Yes == QMessageBox::question(this, "Shinjiru", tr("Are you sure you want to reset the settings to their default value?"), QMessageBox::Yes|QMessageBox::No)) {
+  if (QMessageBox::Yes == QMessageBox::question(this, "Shinjiru", tr("Are you sure you want to reset the settings to their default value?"), QMessageBox::Yes|QMessageBox::No)) {
     settings->setValue(Settings::TorrentRefreshTime,      900);
     settings->setValue(Settings::AnimeRecognitionEnabled, false);
     settings->setValue(Settings::DefaultRuleType,         "basic");
@@ -121,9 +123,9 @@ void MainWindow::resetAPI() {
 }
 
 void MainWindow::moveUp() {
- if(ui->orderListWidget->selectedItems().count() == 1) {
+ if (ui->orderListWidget->selectedItems().count() == 1) {
    int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
-   if(row != 0) {
+   if (row != 0) {
      ui->orderListWidget->insertItem(row - 1, ui->orderListWidget->takeItem(row)->text());
      ui->orderListWidget->setCurrentRow(row - 1);
      this->settingsChanged();
@@ -132,9 +134,9 @@ void MainWindow::moveUp() {
 }
 
 void MainWindow::moveDown() {
-  if(ui->orderListWidget->selectedItems().count() == 1) {
+  if (ui->orderListWidget->selectedItems().count() == 1) {
     int row = ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
-    if(row != ui->orderListWidget->count()) {
+    if (row != ui->orderListWidget->count()) {
       ui->orderListWidget->insertItem(row + 1, ui->orderListWidget->takeItem(row)->text());
       ui->orderListWidget->setCurrentRow(row + 1);
       this->settingsChanged();

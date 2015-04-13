@@ -1,5 +1,7 @@
-#include "searchpanel.h"
-#include "ui_searchpanel.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./searchpanel.h"
+#include "./ui_searchpanel.h"
 
 #include <QJsonArray>
 #include <QJsonObject>
@@ -8,7 +10,7 @@
 
 #include "../api/api.h"
 #include "../api/user.h"
-#include "animepanel.h"
+#include "./animepanel.h"
 #include "../api/anime.h"
 
 const QString RESULT_TEMPLATE =
@@ -36,7 +38,7 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
 
     QString html = h.readAll();
 
-    for(QJsonValue v : results) {
+    for (QJsonValue v : results) {
       QJsonObject anime = v.toObject();
       QString title = anime.value("title_romaji").toString();
       QString image_url = anime.value("image_url_med").toString();
@@ -65,7 +67,7 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
 
     Anime *a = User::sharedUser()->getAnimeByTitle(title);
 
-    if(a == 0) {
+    if (a == 0) {
       a = new Anime(0);
       a->setID(id);
       a->setMyProgress(0);
@@ -85,7 +87,7 @@ SearchPanel::SearchPanel(QWidget *parent) : QDialog(parent), ui(new Ui::SearchPa
     ap->show();
 
     connect(ap, &AnimePanel::accepted, this, [&, old_status, a]() {
-      if(a->getMyStatus() != old_status) {
+      if (a->getMyStatus() != old_status) {
         User::sharedUser()->removeFromList(old_status, a);
         User::sharedUser()->addToList(a->getMyStatus(), a);
       }

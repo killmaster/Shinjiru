@@ -1,6 +1,8 @@
-#include "animepanel.h"
-#include "ui_animepanel.h"
-#include "mainwindow.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./animepanel.h"
+#include "./ui_animepanel.h"
+#include "./mainwindow.h"
 
 #include <QDebug>
 #include <QJsonDocument>
@@ -15,12 +17,12 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
   this->anime = anime;
   this->score_type = score_type;
   QString airing_status = anime->getAiringStatus();
-  if(!airing_status.isEmpty())
+  if (!airing_status.isEmpty())
     airing_status = airing_status.at(0).toUpper() + airing_status.right(airing_status.length() - 1);
 
   QString score = anime->getMyScore();
 
-  if(score_type == 0 || score_type == 1) {
+  if (score_type == 0 || score_type == 1) {
     QSpinBox *score_container = new QSpinBox(this);
 
     score_container->setMaximum(score_type == 0 ? 10 : score_type == 1 ? 100 : 5);
@@ -76,7 +78,7 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
   ui->txtAiring->setText(airing_status);
 
   int max_ep = anime->getEpisodeCount();
-  if(max_ep == 0) max_ep = std::numeric_limits<int>::max();
+  if (max_ep == 0) max_ep = std::numeric_limits<int>::max();
 
   ui->spinEps->setMaximum(max_ep);
   ui->spinEps->setValue(anime->getMyProgress());
@@ -85,23 +87,23 @@ AnimePanel::AnimePanel(QWidget *parent, Anime *anime, int score_type) : QDialog(
 
   QString my_status = anime->getMyStatus();
 
-  if(User::sharedUser()->getAnimeList().contains(anime)) {
+  if (User::sharedUser()->getAnimeList().contains(anime)) {
     my_status = my_status.at(0).toUpper() + my_status.right(my_status.length() - 1);
     new_entry = false;
   } else {
     new_entry = true;
   }
 
-  if(my_status == "Plan to watch") my_status = "Plan to Watch";
+  if (my_status == "Plan to watch") my_status = "Plan to Watch";
   ui->comboStatus->setCurrentText(my_status);
 
-  if(anime->needsLoad() || anime->needsCover()) {
+  if (anime->needsLoad() || anime->needsCover()) {
     connect(anime, SIGNAL(finishedReloading()), SLOT(refreshDisplay()));
     connect(anime, SIGNAL(new_image()), SLOT(repaint()));
 
     User::sharedUser()->loadAnimeData(anime, false);
 
-    if(anime->needsCover())
+    if (anime->needsCover())
       anime->downloadCover();
   } else {
     refreshDisplay();
@@ -133,18 +135,18 @@ void AnimePanel::paintEvent(QPaintEvent *event) {
 void AnimePanel::refreshDisplay() {
   QStringList synonyms = anime->getSynonyms();
 
-  if(anime->getTitle() != anime->getEnglishTitle()) {
-    if(!synonyms.contains(anime->getEnglishTitle()))
+  if (anime->getTitle() != anime->getEnglishTitle()) {
+    if (!synonyms.contains(anime->getEnglishTitle()))
       synonyms.append(anime->getEnglishTitle());
   }
 
-  if(anime->getTitle() != anime->getRomajiTitle()) {
-    if(!synonyms.contains(anime->getRomajiTitle()))
+  if (anime->getTitle() != anime->getRomajiTitle()) {
+    if (!synonyms.contains(anime->getRomajiTitle()))
       synonyms.append(anime->getRomajiTitle());
   }
 
-  if(anime->getTitle() != anime->getJapaneseTitle()) {
-    if(!synonyms.contains(anime->getJapaneseTitle()))
+  if (anime->getTitle() != anime->getJapaneseTitle()) {
+    if (!synonyms.contains(anime->getJapaneseTitle()))
       synonyms.append(anime->getJapaneseTitle());
   }
 
@@ -161,7 +163,7 @@ void AnimePanel::accept() {
   QString status = ui->comboStatus->currentText();
   int rewatch = ui->spinRewatch->value();
 
-  if(score_type == 0 || score_type == 1) {
+  if (score_type == 0 || score_type == 1) {
     i_score = static_cast<QSpinBox *>(score_widget)->value();
     score = QString::number(i_score);
   } else if (score_type == 3 || score_type == 2) {
@@ -171,7 +173,7 @@ void AnimePanel::accept() {
     score = QString::number(d_score);
   }
 
-  if((anime->getMyNotes() != notes ||
+  if ((anime->getMyNotes() != notes ||
      anime->getMyProgress() != eps ||
      anime->getMyScore() != score ||
      anime->getMyStatus() != status.toLower() ||
@@ -180,27 +182,27 @@ void AnimePanel::accept() {
     QMap<QString, QString> data;
     data.insert("id",                 anime->getID());
 
-    if(anime->getMyStatus() != status.toLower()) {
+    if (anime->getMyStatus() != status.toLower()) {
       data.insert("list_status",      status.toLower());
       anime->setMyStatus(status);
     }
 
-    if(anime->getMyScore() != score) {
+    if (anime->getMyScore() != score) {
       data.insert("score",            score);
       anime->setMyScore(score);
     }
 
-    if(anime->getMyProgress() != eps) {
+    if (anime->getMyProgress() != eps) {
       data.insert("episodes_watched", QString::number(eps));
       anime->setMyProgress(eps);
     }
 
-    if(anime->getMyRewatch() != rewatch) {
+    if (anime->getMyRewatch() != rewatch) {
       data.insert("rewatched",        QString::number(rewatch));
       anime->setMyRewatch(rewatch);
     }
 
-    if(anime->getMyNotes() != notes) {
+    if (anime->getMyNotes() != notes) {
       data.insert("notes",            notes);
       anime->setMyNotes(notes);
     }
@@ -208,7 +210,7 @@ void AnimePanel::accept() {
     API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
   }
 
-  if(new_entry) {
+  if (new_entry) {
     QUrl url = API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST;
     QUrlQuery url_query(url);
 
@@ -217,22 +219,22 @@ void AnimePanel::accept() {
     url_query.addQueryItem("list_status", status.toLower());
     anime->setMyStatus(status);
 
-    if("0" != score && "0.0" != score) {
+    if ("0" != score && "0.0" != score) {
       url_query.addQueryItem("score",            score);
       anime->setMyScore(score);
     }
 
-    if(0 != eps) {
+    if (0 != eps) {
       url_query.addQueryItem("episodes_watched", QString::number(eps));
       anime->setMyProgress(eps);
     }
 
-    if(anime->getMyRewatch() != rewatch) {
+    if (anime->getMyRewatch() != rewatch) {
       url_query.addQueryItem("rewatched",        QString::number(rewatch));
       anime->setMyRewatch(rewatch);
     }
 
-    if(anime->getMyNotes() != notes) {
+    if (anime->getMyNotes() != notes) {
       url_query.addQueryItem("notes",            notes);
       anime->setMyNotes(notes);
     }

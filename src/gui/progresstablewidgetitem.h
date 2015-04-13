@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef PROGRESSTABLEWIDGETITEM_H
 #define PROGRESSTABLEWIDGETITEM_H
 

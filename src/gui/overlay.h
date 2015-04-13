@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef OVERLAY_H
 #define OVERLAY_H
 
@@ -13,7 +15,7 @@ public:
     update();
   }
   void removeDrawing(QString s) {
-    if(drawList.contains(s))
+    if (drawList.contains(s))
       delete drawList.take(s);
 
     update();

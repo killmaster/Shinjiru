@@ -1,6 +1,9 @@
+/* Copyright 2015 Kazakuri */
+
 #include <QPainter>
 #include <QPen>
-#include "overlay.h"
+
+#include "./overlay.h"
 
 Overlay::Overlay(QWidget *parent) : QWidget(parent) {
   setPalette(Qt::transparent);
@@ -13,7 +16,7 @@ void Overlay::paintEvent(QPaintEvent *event) {
   QPainter painter(this);
   painter.setRenderHint(QPainter::HighQualityAntialiasing);
 
-  for(QPixmap *p : drawList.values()) {
+  for (QPixmap *p : drawList.values()) {
     painter.drawPixmap(0, 0, *p);
   }
 }

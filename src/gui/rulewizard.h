@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef RULEWIZARD_H
 #define RULEWIZARD_H
 

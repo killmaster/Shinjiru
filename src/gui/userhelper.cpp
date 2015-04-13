@@ -1,20 +1,18 @@
-#include "ui_mainwindow.h"
-#include "mainwindow.h"
+/* Copyright 2015 Kazakuri */
 
-#ifdef HAS_PREMIUM
-  #include "../premium.h"
-#endif
+#include "./ui_mainwindow.h"
+#include "./mainwindow.h"
 
 #include <QtConcurrent>
 
 void MainWindow::loadUser() {
-  if(!ui->actionRL->isEnabled()) return;
+  if (!ui->actionRL->isEnabled()) return;
 
   progress_bar->setFormat(tr("Loading User"));
   progress_bar->setValue(15);
   ui->actionRL->setEnabled(false);
   user_future = QtConcurrent::run([&]() {
-    if(this->hasUser) {
+    if (this->hasUser) {
       User::sharedUser()->remake();
     } else
       User::sharedUser();
@@ -34,12 +32,7 @@ void MainWindow::userLoaded() {
   connect(User::sharedUser(), SIGNAL(new_image()), SLOT(repaint()));
   repaint();
 
-  #ifdef HAS_PREMIUM
-    if(!hasUser)
-      Premium::sharedPremium()->loadPremium();
-  #endif
-
-  if(!hasUser) {
+  if (!hasUser) {
     loadUserList();
   } else {
     userListLoaded();

@@ -1,23 +1,27 @@
-#ifndef API_H
-#define API_H
+/* Copyright 2015 Kazakuri */
+
+#ifndef SRC_API_API_H_
+#define SRC_API_API_H_
 
 #include <QObject>
-#include <anilistapi.h>
-#include <functional>
 #include <QtConcurrent>
+
+#include <anilistapi.h>
+
+#include <functional>
 #include <memory>
 #include <vector>
 
 class API : public QObject {
   Q_OBJECT
 
-public:
+ public:
   static API* sharedAPI();
   AniListAPI* sharedAniListAPI();
 
   int verify();
 
-private:
+ private:
   API();
   ~API();
   API(const API&);
@@ -28,4 +32,4 @@ private:
   bool busy = false;
 };
 
-#endif // API_H
+#endif  // SRC_API_API_H_
