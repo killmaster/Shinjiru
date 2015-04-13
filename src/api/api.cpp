@@ -59,7 +59,7 @@ int API::verify() {
       QDesktopServices::openUrl(QUrl(VER_AUTHPINURL_STR));
 
       QString message = "Authorization pin:                                                                                    ";
-      QString text = QInputDialog::getText(static_cast<QWidget *>(this->parent()), tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
+      QString text = QInputDialog::getText(0, tr("Authorization Pin Request"), tr(message.toUtf8().data()), QLineEdit::Normal, "", &ok);
 
       if (ok && !text.isEmpty()) {
         m_API->setAuthorizationPin(text);

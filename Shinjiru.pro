@@ -22,18 +22,6 @@ include(lib/fervor/Fervor.pri)
 CONFIG += fervor_gui
 DEFINES += FV_GUI
 
-win32-msvc* {
-
-exists(src/premium.cpp) {
-  SOURCES += src/premium.cpp
-  HEADERS += src/premium.h
-  DEFINES += HAS_PREMIUM
-} else {
-  warning("Cannot find premium source files, premium features will be disabled.")
-}
-
-}
-
 win32:include(src/lib/crashhandler/crash_handler.pri)
 linux:include(src/lib/crashhandler/crash_handler.pri)
 

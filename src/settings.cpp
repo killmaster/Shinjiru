@@ -1,4 +1,6 @@
-#include "settings.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./settings.h"
 
 Settings::Settings(QObject *parent): QObject(parent) {
 }
@@ -14,7 +16,7 @@ void Settings::setValue(int setting, QVariant value) {
 }
 
 QString Settings::parseEnum(int setting) {
-  switch(setting) {
+  switch (setting) {
     case AnimeRecognitionEnabled:
       return "recognition";
     case DefaultRuleType:

@@ -1,13 +1,16 @@
-#ifndef SETTINGS_H
-#define SETTINGS_H
+/* Copyright 2015 Kazakuri */
+
+#ifndef SRC_SETTINGS_H_
+#define SRC_SETTINGS_H_
 
 #include <QObject>
 #include <QSettings>
 
 class Settings : public QObject {
   Q_OBJECT
-public:
-  Settings(QObject *parent = 0);
+
+ public:
+  explicit Settings(QObject *parent = 0);
   void setValue(int, QVariant);
   QVariant getValue(int, QVariant);
 
@@ -29,9 +32,9 @@ public:
     ReleaseStream
   };
 
-private:
+ private:
   QSettings settings;
-  QString parseEnum(int);
+  QString parseEnum(int setting);
 };
 
-#endif // SETTINGS_H
+#endif  // SRC_SETTINGS_H_

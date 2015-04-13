@@ -1,7 +1,9 @@
+/* Copyright 2015 Kazakuri */
+
 #include "gui/mainwindow.h"
-#include "version.h"
-#include "app.h"
-#include "fvupdater.h"
+#include "./version.h"
+#include "./app.h"
+#include "./fvupdater.h"
 
 #ifndef Q_OS_OSX
   #include "lib/crashhandler/crash_handler.h"
@@ -20,10 +22,11 @@
 #include <QThread>
 #include <iostream>
 
-void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &, const QString & str) {
+void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &,
+                            const QString & str) {
   const char * msgAsCstring = str.toUtf8().toStdString().c_str();
 
-  QString msg (msgAsCstring);
+  QString msg(msgAsCstring);
   qDebug() << str.toUtf8();
   std::cerr << msgAsCstring << std::endl;
   std::cerr.flush();
@@ -45,7 +48,8 @@ void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &, const QS
   }
 
   QCoreApplication * instance = QCoreApplication::instance();
-  const bool isGuiThread = instance && (QThread::currentThread() == instance->thread());
+  const bool isGuiThread = instance &&
+                           (QThread::currentThread() == instance->thread());
 
   if (isGuiThread) {
     QMessageBox messageBox;
@@ -79,22 +83,25 @@ void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &, const QS
 }
 #endif
 
-void messageHandler(QtMsgType type, const QMessageLogContext &, const QString & str) {
+void messageHandler(QtMsgType type, const QMessageLogContext &,
+                    const QString & str) {
   const char *msg = str.toStdString().c_str();
 
   QString parser(msg);
 
-  if(parser.contains(api_id) || parser.contains(api_secret)) return;
+  if (parser.contains(api_id) || parser.contains(api_secret)) return;
 
   parser.replace(QString::fromWCharArray(L"\u2401"), "");
   parser.replace(QString::fromWCharArray(L"\u2406"), "");
   parser.replace(QString::fromWCharArray(L"\u2404"), "");
   parser.replace(QString::fromWCharArray(L"\u2405"), "");
 
-  QFile logFile(qApp->applicationDirPath() + "/" + VER_PRODUCTNAME_STR + ".log");
+  QFile logFile(qApp->applicationDirPath()+"/"+VER_PRODUCTNAME_STR+".log");
   logFile.open(QFile::WriteOnly | QFile::Append);
 
-  logFile.write(QDateTime::currentDateTimeUtc().toString("[yyyy-MM-dd HH:mm:ss.zzz] ").toUtf8());
+  QString format = "[yyyy-MM-dd HH:mm:ss.zzz] ";
+  QString date = QDateTime::currentDateTimeUtc().toString(format);
+  logFile.write(date.toUtf8());
 
   switch (type) {
     case QtDebugMsg:
@@ -121,7 +128,7 @@ int main(int argc, char *argv[]) {
     QSslConfiguration::setDefaultConfiguration(config);
   #endif
 
-  if(api_id.isEmpty() || api_secret.isEmpty()) {
+  if (api_id.isEmpty() || api_secret.isEmpty()) {
     qFatal("No API key values!");
   }
 
@@ -135,8 +142,8 @@ int main(int argc, char *argv[]) {
     qInstallMessageHandler(noisyFailureMsgHandler);
   #endif
 
-  QFile logFile(qApp->applicationDirPath() + "/" + VER_PRODUCTNAME_STR + ".log");
-  if(logFile.exists()) logFile.remove();
+  QFile logFile(qApp->applicationDirPath()+"/"+VER_PRODUCTNAME_STR+".log");
+  if (logFile.exists()) logFile.remove();
 
   QCoreApplication::setApplicationName(VER_PRODUCTNAME_STR);
   QCoreApplication::setApplicationVersion(VER_PRODUCTVERSION_STR);
@@ -144,11 +151,12 @@ int main(int argc, char *argv[]) {
   QCoreApplication::setOrganizationDomain(VER_COMPANYDOMAIN_STR);
 
   Settings *s = new Settings;
-  QString release_stream = s->getValue(Settings::ReleaseStream, "Release").toString();
+  QString release_stream =
+      s->getValue(Settings::ReleaseStream, "Release").toString();
 
-  if(release_stream == "Release")
+  if (release_stream == "Release")
     FvUpdater::sharedUpdater()->SetFeedURL(VER_UPDATEFEED_STR);
-  else if(release_stream == "Beta")
+  else if (release_stream == "Beta")
     FvUpdater::sharedUpdater()->SetFeedURL(VER_UPDATEFEED_STR_BETA);
   else
     FvUpdater::sharedUpdater()->SetFeedURL(VER_UPDATEFEED_STR);

@@ -1,18 +1,20 @@
-#ifndef VERSION_H
-#define VERSION_H
+/* Copyright 2015 Kazakuri */
+
+#ifndef SRC_VERSION_H_
+#define SRC_VERSION_H_
 
 #ifndef TRUE
-  #define TRUE (1==1)
+  #define TRUE (1 == 1)
 #endif
 
 #ifndef FALSE
   #define FALSE (!TRUE)
 #endif
 
-#define VER_FILEVERSION             1,5,3
+#define VER_FILEVERSION             1, 5, 3
 #define VER_FILEVERSION_STR         "1.5.3"
 
-#define VER_PRODUCTVERSION          1,5,3
+#define VER_PRODUCTVERSION          1, 5, 3
 #define VER_PRODUCTVERSION_STR      "1.5.3"
 
 #define VER_COMPANYNAME_STR         "Kazakuri"
@@ -33,4 +35,4 @@
 
 #define VER_USEWEBVIEW_BOOL         FALSE
 
-#endif // VERSION_H
+#endif  // SRC_VERSION_H_
