@@ -13,13 +13,8 @@
 #include "./animepanel.h"
 #include "../api/anime.h"
 
-const QString RESULT_TEMPLATE =
-"<a href=\"http://localhost/%href%\"> " +
-"<div class=\"result\">" +
-    "<img src=\"%url%\" />" +
-    "%title%" +
-  "</div> " +
-"</a>";
+// NOLINTNEXTLINE
+const QString RESULT_TEMPLATE = "<a href=\"http://localhost/%href%\"><div class=\"result\"><img src=\"%url%\" />%title%</div></a>";
 
 const QString KEYWORD_REPLACE = "<!-- SEARCH RESULTS -->";
 

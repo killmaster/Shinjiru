@@ -11,23 +11,20 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 #include <QStandardPaths>
 #include <QApplication>
 #include <QCoreApplication>
 #include <QFile>
-
-#ifdef QT_DEBUG
 #include <QMessageBox>
 #include <QThread>
-#include <iostream>
 
 void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &,
                             const QString & str) {
   const char * msgAsCstring = str.toUtf8().toStdString().c_str();
 
   QString msg(msgAsCstring);
-  qDebug() << str.toUtf8();
   std::cerr << msgAsCstring << std::endl;
   std::cerr.flush();
 
@@ -81,7 +78,6 @@ void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &,
       abort();
   }
 }
-#endif
 
 void messageHandler(QtMsgType type, const QMessageLogContext &,
                     const QString & str) {

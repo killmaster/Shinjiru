@@ -3,6 +3,11 @@
 #include "./mainwindow.h"
 #include "./ui_mainwindow.h"
 
+#ifdef Q_OS_WIN
+  const QString winkey =
+      "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+#endif
+
 void MainWindow::loadSettings() {
   torrent_interval =
       settings->getValue(Settings::TorrentRefreshTime, 900).toInt();
@@ -28,8 +33,7 @@ void MainWindow::loadSettings() {
 
   if (sob) {
     #ifdef Q_OS_WIN
-      QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\" +
-                    "CurrentVersion\\Run", QSettings::NativeFormat);
+      QSettings reg(winkey, QSettings::NativeFormat);
       QString path = reg.value("Shinjiru", QString("")).toString();
       if (path.isEmpty()) sob = false;
     #endif
@@ -79,15 +83,13 @@ void MainWindow::applySettings() {
 
   if (sob) {
     #ifdef Q_OS_WIN
-      QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\" +
-                    "CurrentVersion\\Run", QSettings::NativeFormat);
+      QSettings reg(winkey, QSettings::NativeFormat);
       reg.setValue("Shinjiru", "\"" +
                    qApp->applicationFilePath().replace("/", "\\") + "\"");
     #endif
   } else {
     #ifdef Q_OS_WIN
-      QSettings reg("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\" +
-                    "CurrentVersion\\Run", QSettings::NativeFormat);
+      QSettings reg(winkey, QSettings::NativeFormat);
       reg.remove("Shinjiru");
     #endif
   }
