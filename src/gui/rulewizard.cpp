@@ -125,7 +125,7 @@ void RuleWizard::accept() {
     ui->lineEdit->setText("-1");
   }
 
-  if (!edit_mode){
+  if (!edit_mode) {
     bool ok;
     file_name =
         QInputDialog::getText(static_cast<QWidget *>(this->parent()),

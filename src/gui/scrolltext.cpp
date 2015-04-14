@@ -64,7 +64,7 @@ void ScrollText::paintEvent(QPaintEvent *e) {
   QPainter p(this);
 
   QPen pen = p.pen();
-  pen.setColor(QColor(255,255,255));
+  pen.setColor(QColor(255, 255, 255));
   p.setPen(pen);
 
   if (scrollEnabled) {

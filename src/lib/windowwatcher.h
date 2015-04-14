@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef WINDOWWATCHER_H
-#define WINDOWWATCHER_H
+#ifndef SRC_LIB_WINDOWWATCHER_H_
+#define SRC_LIB_WINDOWWATCHER_H_
 
 #include <QObject>
 #include <QStringList>
@@ -11,24 +11,24 @@
   #include <qt_windows.h>
 #endif
 
-class WindowWatcher : public QObject
-{
+class WindowWatcher : public QObject {
   Q_OBJECT
-public:
+
+ public:
   explicit WindowWatcher(QObject *parent = 0);
   #ifdef Q_OS_WIN
     BOOL CALLBACK parseWindow(HWND hwnd);
   #endif
 
-signals:
+ signals:
   void title_found(QString);
 
-public slots:
+ public slots:  // NOLINT
   void timeOut();
   void enable();
   void disable();
 
-private:
+ private:
   QTimer *timer;
   QStringList windowList;
   bool isMediaPlayer(QString window_title);
@@ -38,4 +38,4 @@ private:
   QRegExp exceptions;
 };
 
-#endif // WINDOWWATCHER_H
+#endif  // SRC_LIB_WINDOWWATCHER_H_

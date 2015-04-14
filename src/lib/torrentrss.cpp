@@ -1,4 +1,6 @@
-#include "torrentrss.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./torrentrss.h"
 #include "../settings.h"
 
 TorrentRSS::TorrentRSS(QWidget *parent) : QWidget(parent), currentReply(0) {
@@ -22,13 +24,15 @@ void TorrentRSS::get(const QUrl &url) {
   currentReply = manager.get(request);
   connect(currentReply, SIGNAL(readyRead()), SLOT(readyRead()));
   connect(currentReply, SIGNAL(metaDataChanged()), SLOT(metaDataChanged()));
-  connect(currentReply, SIGNAL(error(QNetworkReply::NetworkError)), SLOT(error(QNetworkReply::NetworkError)));
+  connect(currentReply, SIGNAL(error(QNetworkReply::NetworkError)),
+          SLOT(error(QNetworkReply::NetworkError)));
 }
 
 void TorrentRSS::fetch() {
   xml.clear();
   Settings *s = new Settings;
-  //QUrl url(s->getValue(Settings::TorrentRSSURL, "http://tokyotosho.info/rss.php?filter=1&zwnj=0").toString());
+  // QUrl url(s->getValue(Settings::TorrentRSSURL,
+  // "http://tokyotosho.info/rss.php?filter=1&zwnj=0").toString());
   QUrl url("http://tokyotosho.info/rss.php?filter=1&zwnj=0");
   get(url);
 
@@ -77,12 +81,12 @@ void TorrentRSS::parseXml() {
       }
       currentTag = "";
     } else if (xml.isCharacters() && !xml.isWhitespace() && metItem) {
-      if (currentTag == "title")
+      if (currentTag == "title") {
         titleString += xml.text().toString();
-      else if (currentTag == "description") {
+      } else if (currentTag == "description") {
         QString description = xml.text().toString();
         int magnetStart = description.indexOf("magnet:");
-        int length= description.indexOf(">Magnet") - magnetStart - 1;
+        int length = description.indexOf(">Magnet") - magnetStart - 1;
         linkString += description.mid(magnetStart, length);
       }
     }

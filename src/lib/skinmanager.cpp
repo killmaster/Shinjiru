@@ -1,4 +1,6 @@
-#include "skinmanager.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./skinmanager.h"
 
 #include <QMutex>
 #include <QApplication>
@@ -7,10 +9,10 @@ SkinManager* SkinManager::m_Instance = 0;
 
 SkinManager* SkinManager::sharedManager() {
   static QMutex mutex;
-  if (! m_Instance) {
+  if (!m_Instance) {
     mutex.lock();
 
-    if (! m_Instance) {
+    if (!m_Instance) {
       m_Instance = new SkinManager;
     }
 
@@ -21,12 +23,11 @@ SkinManager* SkinManager::sharedManager() {
 }
 
 SkinManager::SkinManager() : QObject(0) {
-  this->element_paths.insert(SkinElements::AboutMascot, "/data/skin/mascot.png");
-
+  this->element_paths.insert(SkinElements::AboutMascot,
+                             "/data/skin/mascot.png");
 }
 
 SkinManager::~SkinManager() {
-
 }
 
 QString SkinManager::get(int id) {

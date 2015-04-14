@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef FILEDOWNLOADER_H
-#define FILEDOWNLOADER_H
+#ifndef SRC_LIB_FILEDOWNLOADER_H_
+#define SRC_LIB_FILEDOWNLOADER_H_
 
 #include <QObject>
 #include <QByteArray>
@@ -9,24 +9,23 @@
 #include <QNetworkRequest>
 #include <QNetworkReply>
 
-class FileDownloader : public QObject
-{
+class FileDownloader : public QObject {
   Q_OBJECT
-public:
+
+ public:
   explicit FileDownloader(QUrl imageUrl, QObject *parent = 0);
   virtual ~FileDownloader();
   QByteArray downloadedData() const;
 
-signals:
+ signals:
   void downloaded();
 
-private slots:
+ private slots:  // NOLINT
   void fileDownloaded(QNetworkReply* pReply);
 
-private:
+ private:
   QNetworkAccessManager m_WebCtrl;
   QByteArray m_DownloadedData;
-
 };
 
-#endif // FILEDOWNLOADER_H
+#endif  // SRC_LIB_FILEDOWNLOADER_H_

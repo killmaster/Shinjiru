@@ -1,24 +1,23 @@
 /* Copyright 2015 Kazakuri */
 
-#include "./ui_mainwindow.h"
-#include "./mainwindow.h"
-
 #include <QHeaderView>
 #include <QtConcurrent>
 #include <QCheckBox>
+
+#include "./ui_mainwindow.h"
+#include "./mainwindow.h"
 
 void MainWindow::loadUserList() {
   progress_bar->setValue(25);
   progress_bar->setFormat(tr("Downloading User List"));
 
-  user_list_future = QtConcurrent::run([&]() {
+  user_list_future = QtConcurrent::run([&]() {  // NOLINT
     User::sharedUser()->loadUserList();
   });
 
   async_registry.append(user_list_future);
 
   user_list_future_watcher.setFuture(user_list_future);
-
 }
 
 void MainWindow::userListLoaded() {
@@ -36,12 +35,12 @@ void MainWindow::userListLoaded() {
     index = ui->listTabs->currentIndex();
   }
 
-  while((item = layout->takeAt(0))){
+  while ((item = layout->takeAt(0))) {
     delete item->widget();
     delete item;
   }
 
-  while((item = ui->scrollArea->widget()->layout()->takeAt(0)))
+  while ((item = ui->scrollArea->widget()->layout()->takeAt(0)))
     delete item;
 
   int starting_value = progress_bar->value();
@@ -49,39 +48,46 @@ void MainWindow::userListLoaded() {
   int space_per_list = remaining_space;
   int current_list = -1;
 
-  while(ui->listTabs->count()) {
+  while (ui->listTabs->count()) {
     delete ui->listTabs->widget(ui->listTabs->currentIndex());
   }
 
   ui->listTabs->clear();
 
-  QMap<QString, QMap<QString, Anime*>> lists = User::sharedUser()->getUserList();
+  QMap<QString, QMap<QString, Anime*>> lists =
+      User::sharedUser()->getUserList();
 
   if (lists.count() > 0)
     space_per_list = remaining_space / lists.count();
 
-  for (QString key: lists.keys()) {
+  for (QString key : lists.keys()) {
     if (key == "") continue;
     bool isCustom = true;
 
-    if (key == "completed" || key == "on-hold" || key == "plan_to_watch" || key == "dropped" || key == "watching") {
+    if (key == "completed" || key == "on-hold" ||
+        key == "plan_to_watch" || key == "dropped" ||
+        key == "watching") {
       isCustom = false;
     }
 
     current_list++;
     QTableWidget *table = getListTable(isCustom);
 
-    connect(table, SIGNAL(cellDoubleClicked(int,int)), SLOT(showAnimePanel(int, int)));
+    connect(table, SIGNAL(cellDoubleClicked(int, int)),
+            SLOT(showAnimePanel(int, int)));
 
     QMap<QString, Anime*> list = lists.value(key);
 
     for (Anime *anime : list.values()) {
-      QTableWidgetItem        *titleData    = new QTableWidgetItem(anime->getTitle());
-      ProgressTableWidgetItem *progressData = new ProgressTableWidgetItem;
-      QTableWidgetItem        *scoreData    = new QTableWidgetItem();
-      FaceTableWidgetItem     *faceData     = new FaceTableWidgetItem;
-      QTableWidgetItem        *statusData;
-      QTableWidgetItem        *typeData     = new QTableWidgetItem(anime->getType());
+      QTableWidgetItem *titleData =
+          new QTableWidgetItem(anime->getTitle());
+      ProgressTableWidgetItem *progressData =
+          new ProgressTableWidgetItem;
+      QTableWidgetItem *scoreData = new QTableWidgetItem();
+      FaceTableWidgetItem *faceData = new FaceTableWidgetItem;
+      QTableWidgetItem *statusData;
+      QTableWidgetItem  *typeData =
+          new QTableWidgetItem(anime->getType());
 
       if (isCustom) {
         QString status = anime->getMyStatus();
@@ -91,14 +97,16 @@ void MainWindow::userListLoaded() {
         statusData = new QTableWidgetItem(status);
       }
 
-      if (User::sharedUser()->scoreType() == 0 || User::sharedUser()->scoreType() == 1) {
-        scoreData->setData(Qt::DisplayRole, anime->getMyScore().toInt());
+      if (User::sharedUser()->scoreType() == 0 ||
+          User::sharedUser()->scoreType() == 1) {
+        scoreData->setData(Qt::DisplayRole,
+                           anime->getMyScore().toInt());
       } else if (User::sharedUser()->scoreType() == 4) {
-        scoreData->setData(Qt::DisplayRole, anime->getMyScore().toDouble());
+        scoreData->setData(Qt::DisplayRole,
+                           anime->getMyScore().toDouble());
       } else if (User::sharedUser()->scoreType() == 3) {
         faceData->setText(anime->getMyScore());
-      }
-      else {
+      } else {
         scoreData->setText(anime->getMyScore());
       }
 
@@ -109,7 +117,9 @@ void MainWindow::userListLoaded() {
         }
       }
 
-      progressData->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
+      progressData->setText(QString::number(anime->getMyProgress()) +
+                            " / " +
+                            QString::number(anime->getEpisodeCount()));
 
       int row = table->rowCount();
       table->insertRow(row);
@@ -127,9 +137,12 @@ void MainWindow::userListLoaded() {
         table->setItem(row, 3, typeData);
       }
 
-      double current_progress = (double)row / list.count() * space_per_list;
+      double current_progress = static_cast<double>(row) / list.count() *
+          space_per_list;
 
-      progress_bar->setValue(starting_value + (current_list * space_per_list) + (int)current_progress);
+      progress_bar->setValue(starting_value +
+                             (current_list * space_per_list) +
+                             static_cast<int>(current_progress));
     }
 
     QString tab_title = key;
@@ -158,7 +171,8 @@ void MainWindow::userListLoaded() {
     if (index == -1)
       ui->listTabs->addTab(page, tab_title + " (" + tab_total + ")");
     else
-      ui->listTabs->insertTab(index, page, tab_title + " (" + tab_total + ")");
+      ui->listTabs->insertTab(index, page,
+                              tab_title + " (" + tab_total + ")");
 
     table->resizeColumnToContents(0);
     table->resizeColumnToContents(1);
@@ -186,7 +200,8 @@ void MainWindow::userListLoaded() {
       tab_texts << ui->listTabs->tabText(j).toLower();
     }
 
-    int from = tab_texts.indexOf(QRegExp(QRegExp::escape(current) + " \\([0-9]+\\)"));
+    int from = tab_texts.indexOf(QRegExp(QRegExp::escape(current) +
+                                         " \\([0-9]+\\)"));
     tb->moveTab(from, i);
   }
 
@@ -218,7 +233,6 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
   default_list_labels << tr("Type");
 
-
   table->setColumnCount(custom_list ? 5 : 4);
   table->setHorizontalHeaderLabels(default_list_labels);
   table->verticalHeader()->hide();
@@ -232,25 +246,29 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
   table->setSortingEnabled(true);
   table->horizontalHeader()->setHighlightSections(false);
 
-  connect(table, &QWidget::customContextMenuRequested, [=](QPoint pos) {
+  connect(table, &QWidget::customContextMenuRequested,
+          [=](QPoint pos) {  // NOLINT
     QTableWidgetItem *item = table->itemAt(pos);
     if (item == 0) return;
     int row = item->row();
     pos.setY(pos.y() + 120);
 
-    QAction *pAnimePanel       = new QAction(tr("Open Anime Panel"), table);
-    QAction *pEpisodeIncrement = new QAction(tr("Increment Progress by 1"), table);
-    QMenu   *pStatusUpdate     = new QMenu(tr("Status"), table);
-    QAction *pDeleteEntry      = new QAction(tr("Delete Entry"), table);
-    QMenu   *pCustomLists      = new QMenu(tr("Custom Lists"), table);
+    QAction *pAnimePanel = new QAction(tr("Open Anime Panel"), table);
+    QAction *pEpisodeIncrement =
+        new QAction(tr("Increment Progress by 1"), table);
+    QMenu   *pStatusUpdate = new QMenu(tr("Status"), table);
+    QAction *pDeleteEntry = new QAction(tr("Delete Entry"), table);
+    QMenu   *pCustomLists = new QMenu(tr("Custom Lists"), table);
 
-    QAction *pWatching         = new QAction(tr("Watching"), pStatusUpdate);
-    QAction *pOnHold           = new QAction(tr("On Hold"), pStatusUpdate);
-    QAction *pPlanToWatch      = new QAction(tr("Plan to Watch"), pStatusUpdate);
-    QAction *pCompleted        = new QAction(tr("Completed"), pStatusUpdate);
-    QAction *pDropped          = new QAction(tr("Dropped"), pStatusUpdate);
+    QAction *pWatching = new QAction(tr("Watching"), pStatusUpdate);
+    QAction *pOnHold = new QAction(tr("On Hold"), pStatusUpdate);
+    QAction *pPlanToWatch =
+        new QAction(tr("Plan to Watch"), pStatusUpdate);
+    QAction *pCompleted = new QAction(tr("Completed"), pStatusUpdate);
+    QAction *pDropped = new QAction(tr("Dropped"), pStatusUpdate);
 
-    QAction *pHideDefault      = new QAction(tr("Hide Default"), pCustomLists);
+    QAction *pHideDefault =
+        new QAction(tr("Hide Default"), pCustomLists);
 
 
     QString title = table->item(row, 0)->text();
@@ -258,12 +276,16 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
     QString score = table->item(row, 2)->text();
     QString type = table->item(row, table->columnCount() - 1)->text();
 
-    Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
+    Anime *anime =
+        User::sharedUser()->getAnimeByData(title, episodes, score, type);
 
     for (int i = 0; i < User::sharedUser()->customLists().length(); i++) {
-      if (User::sharedUser()->customLists().at(i).toString().isEmpty()) continue;
+      if (User::sharedUser()->customLists().at(i).toString().isEmpty())
+        continue;
 
-      QAction *temp = new QAction(User::sharedUser()->customLists().at(i).toString(), table);
+      QAction *temp = new QAction(
+            User::sharedUser()->customLists().at(i).toString(),
+            table);
       temp->setCheckable(true);
 
       if (anime->getCustomLists().at(i) == 1) {
@@ -272,7 +294,7 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
         temp->setChecked(false);
       }
 
-      connect(temp, &QAction::toggled, [&, anime, i](bool selected) {
+      connect(temp, &QAction::toggled, [&, anime, i](bool selected) {  // NOLINT
         QList<int> custom = anime->getCustomLists();
         custom.replace(i, selected ? 1 : 0);
         anime->setCustomLists(custom);
@@ -281,12 +303,14 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
         data.insert("id", anime->getID());
         QString d;
         for (int i = 0; i < custom.length(); i++) {
-          d += QString::number(custom.at(i)) + ((i == custom.length() - 1) ? "" : ",");
+          d += QString::number(custom.at(i)) +
+              ((i == custom.length() - 1) ? "" : ",");
         }
 
         data.insert("custom_lists", d);
 
-        API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+        API::sharedAPI()->sharedAniListAPI()->put(
+              API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
 
         this->userListLoaded();
       });
@@ -299,7 +323,8 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
 
     pCustomLists->addAction(pHideDefault);
 
-    connect(pHideDefault, &QAction::toggled, [&, anime, table](bool selected) {
+    connect(pHideDefault, &QAction::toggled,
+            [&, anime, table](bool selected) {  // NOLINT
       QMap<QString, QString> data;
       data.insert("id", anime->getID());
       data.insert("hidden_default", selected ? "1" : "0");
@@ -308,7 +333,8 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
         User::sharedUser()->removeFromList(anime->getMyStatus(), anime);
       }
 
-      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+      API::sharedAPI()->sharedAniListAPI()->put(
+            API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
 
       this->userListLoaded();
     });
@@ -319,57 +345,65 @@ QTableWidget *MainWindow::getListTable(bool custom_list) {
     pStatusUpdate->addAction(pCompleted);
     pStatusUpdate->addAction(pDropped);
 
-    connect(pAnimePanel, &QAction::triggered, [&, row, table]() {
+    connect(pAnimePanel, &QAction::triggered, [&, row, table]() {  // NOLINT
       this->showAnimePanel(row, 0, table);
     });
 
-    connect(pEpisodeIncrement, &QAction::triggered, [&, row, table]() {
+    connect(pEpisodeIncrement, &QAction::triggered,
+            [&, row, table]() {  // NOLINT
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
       QString type = table->item(row, table->columnCount() - 1)->text();
 
-      Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
+      Anime *anime =
+          User::sharedUser()->getAnimeByData(title, episodes, score, type);
       anime->setMyProgress(anime->getMyProgress() + 1);
 
-      table->item(row, 1)->setText(QString::number(anime->getMyProgress()) + " / " + QString::number(anime->getEpisodeCount()));
+      table->item(row, 1)->setText(QString::number(anime->getMyProgress()) +
+                                   " / " +
+                                   QString::number(anime->getEpisodeCount()));
 
       QMap<QString, QString> data;
       data.insert("id", anime->getID());
       data.insert("episodes_watched", QString::number(anime->getMyProgress()));
 
-      API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+      API::sharedAPI()->sharedAniListAPI()->put(
+            API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
     });
 
-    connect(pWatching, &QAction::triggered, [&, row, table]() {
+    connect(pWatching, &QAction::triggered, [&, row, table]() {  // NOLINT
       updateStatus(row, table, "watching");
     });
 
-    connect(pPlanToWatch, &QAction::triggered, [&, row, table]() {
+    connect(pPlanToWatch, &QAction::triggered, [&, row, table]() {  // NOLINT
       updateStatus(row, table, "plan to watch");
     });
 
-    connect(pOnHold, &QAction::triggered, [&, row, table]() {
+    connect(pOnHold, &QAction::triggered, [&, row, table]() {  // NOLINT
       updateStatus(row, table, "on-hold");
     });
 
-    connect(pDropped, &QAction::triggered, [&, row, table]() {
+    connect(pDropped, &QAction::triggered, [&, row, table]() {  // NOLINT
      updateStatus(row, table, "dropped");
     });
 
-    connect(pCompleted, &QAction::triggered, [&, row, table]() {
+    connect(pCompleted, &QAction::triggered, [&, row, table]() {  // NOLINT
       updateStatus(row, table, "completed");
     });
 
-    connect(pDeleteEntry, &QAction::triggered, [&, row, table]() {
+    connect(pDeleteEntry, &QAction::triggered, [&, row, table]() {  // NOLINT
       QString title = table->item(row, 0)->text();
       QString episodes = table->item(row, 1)->text();
       QString score = table->item(row, 2)->text();
       QString type = table->item(row, table->columnCount() - 1)->text();
 
-      Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
+      Anime *anime =
+          User::sharedUser()->getAnimeByData(title, episodes, score, type);
 
-      API::sharedAPI()->sharedAniListAPI()->deleteResource(API::sharedAPI()->sharedAniListAPI()->API_DELETE_ANIME(anime->getID()));
+      API::sharedAPI()->sharedAniListAPI()->deleteResource(
+            API::sharedAPI()->sharedAniListAPI()->API_DELETE_ANIME(
+              anime->getID()));
 
       User::sharedUser()->remove(anime);
       this->userListLoaded();
@@ -401,7 +435,8 @@ AiringAnime *MainWindow::addAiring(Anime *anime) {
     User::sharedUser()->loadAnimeData(anime, true);
   }
 
-  AiringAnime *newPanel = new AiringAnime(this, User::sharedUser()->scoreType());
+  AiringAnime *newPanel =
+      new AiringAnime(this, User::sharedUser()->scoreType());
   newPanel->setAnime(anime);
 
 
@@ -429,7 +464,8 @@ void MainWindow::filterList(QString filter) {
 
   int visibleRows = 0;
 
-  QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
+  QTableWidget *w = static_cast<QTableWidget *>
+      (ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
 
   if (w == 0) return;
 
@@ -454,16 +490,18 @@ void MainWindow::filterList(QString filter) {
 }
 
 void MainWindow::addSearchPrompt() {
-  QTableWidget *w = static_cast<QTableWidget *>(ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
+  QTableWidget *w = static_cast<QTableWidget *>(
+        ui->listTabs->currentWidget()->layout()->itemAt(0)->widget());
 
-  QPoint location = w->mapTo(this, QPoint(0,0));
+  QPoint location = w->mapTo(this, QPoint(0, 0));
   QPixmap *pix = new QPixmap(width(), height());
   pix->fill(Qt::transparent);
   QPainter p(pix);
   QRect r(location.x()+1, location.y()+24, w->width()-2, w->height()-25);
-  p.fillRect(r, QColor(255,255,255));
-  p.setPen(QColor(0,0,200));
-  p.drawText(r, Qt::AlignCenter, tr("Nothing found, click here to open a search box."));
+  p.fillRect(r, QColor(255, 255, 255));
+  p.setPen(QColor(0, 0, 200));
+  p.drawText(r, Qt::AlignCenter,
+             tr("Nothing found, click here to open a search box."));
   over->addDrawing("blank_table", pix);
 
   w->setAttribute(Qt::WA_TransparentForMouseEvents);
@@ -475,16 +513,17 @@ void MainWindow::addNoAnimePrompt() {
   ui->listTabs->hide();
   ui->listFilterLineEdit->hide();
 
-  QPoint location = w->mapTo(this, QPoint(0,0));
+  QPoint location = w->mapTo(this, QPoint(0, 0));
   QPixmap *pix = new QPixmap(width(), height());
   pix->fill(Qt::transparent);
   QPainter p(pix);
   QRect r(location.x()+1, location.y()+34, w->width()-2, w->height()-35);
-  p.setPen(QColor(0,0,0));
+  p.setPen(QColor(0, 0, 0));
   QFont f = p.font();
   f.setPixelSize(20);
   p.setFont(f);
-  p.drawText(r, Qt::AlignCenter, tr("Anime list empty, add some using the anime browse tab!"));
+  p.drawText(r, Qt::AlignCenter,
+             tr("Anime list empty, add some using the anime browse tab!"));
   over->addDrawing("no anime", pix);
   over->removeDrawing("blank_table");
 }
@@ -495,7 +534,8 @@ void MainWindow::updateStatus(int row, QTableWidget *table, QString status) {
   QString score = table->item(row, 2)->text();
   QString type = table->item(row, table->columnCount() - 1)->text();
 
-  Anime *anime = User::sharedUser()->getAnimeByData(title, episodes, score, type);
+  Anime *anime =
+      User::sharedUser()->getAnimeByData(title, episodes, score, type);
 
   QString old_status = anime->getMyStatus();
   anime->setMyStatus(status);
@@ -504,7 +544,8 @@ void MainWindow::updateStatus(int row, QTableWidget *table, QString status) {
   data.insert("id", anime->getID());
   data.insert("list_status", anime->getMyStatus());
 
-  API::sharedAPI()->sharedAniListAPI()->put(API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
+  API::sharedAPI()->sharedAniListAPI()->put(
+        API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data);
 
   if (old_status != status) {
     User::sharedUser()->removeFromList(old_status, anime);

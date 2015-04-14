@@ -1,7 +1,7 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef TORRENT_RSS_H
-#define TORRENT_RSS_H
+#ifndef SRC_LIB_TORRENTRSS_H_
+#define SRC_LIB_TORRENTRSS_H_
 
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
@@ -11,28 +11,27 @@
 #include <QUrl>
 #include <QList>
 
-class TorrentRSS : public QWidget
-{
+class TorrentRSS : public QWidget {
   Q_OBJECT
 
-public:
-  TorrentRSS(QWidget *widget = 0);
+ public:
+  explicit TorrentRSS(QWidget *widget = 0);
   ~TorrentRSS();
 
   QList<QString> *getLinks();
   QList<QString> *getTitles();
 
-public slots:
+ public slots:  // NOLINT
   void fetch();
   void finished(QNetworkReply *reply);
   void readyRead();
   void metaDataChanged();
   void error(QNetworkReply::NetworkError);
 
-signals:
+ signals:
   void done();
 
-private:
+ private:
   void parseXml();
   void get(const QUrl &url);
 
@@ -48,4 +47,4 @@ private:
   QNetworkReply *currentReply;
 };
 
-#endif
+#endif  // SRC_LIB_TORRENTRSS_H_

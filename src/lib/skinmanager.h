@@ -1,36 +1,31 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef SKINMANAGER_H
-#define SKINMANAGER_H
+#ifndef SRC_LIB_SKINMANAGER_H_
+#define SRC_LIB_SKINMANAGER_H_
 
 #include <QObject>
 #include <QStringList>
 
-class SkinManager : public QObject
-{
+class SkinManager : public QObject {
   Q_OBJECT
 
-public:
+ public:
   static SkinManager* sharedManager();
-  QString get(int);
+  QString get(int i);
 
   enum SkinElements {
     AboutMascot
   };
 
-signals:
-
-public slots:
-
-private:
+ private:
   QStringList element_paths;
   static SkinManager* m_Instance;
 
 
   SkinManager();
   ~SkinManager();
-  SkinManager(const SkinManager&);
-  SkinManager& operator=(const SkinManager&);
+  SkinManager(const SkinManager &s);
+  SkinManager& operator=(const SkinManager &s);
 };
 
-#endif // SKINMANAGER_H
+#endif  // SRC_LIB_SKINMANAGER_H_

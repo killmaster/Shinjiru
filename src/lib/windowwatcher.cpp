@@ -1,4 +1,6 @@
-#include "windowwatcher.h"
+/* Copyright 2015 Kazakuri */
+
+#include "./windowwatcher.h"
 
 #include <QDebug>
 
@@ -47,21 +49,21 @@ void WindowWatcher::timeOut() {
     EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(this));
   #endif
 
-  for(int i = 0; i < windowList.length(); i++) {
+  for (int i = 0; i < windowList.length(); i++) {
     QString window = windowList.at(i);
 
-    if(!isMediaPlayer(window)) continue;
+    if (!isMediaPlayer(window)) continue;
     title = true;
     emit title_found(found_title);
     return;
   }
 
-  if(!title) emit title_found("");
+  if (!title) emit title_found("");
 }
 
 bool WindowWatcher::isMediaPlayer(QString window_title) {
-  if(video.exactMatch(window_title)) {
-    if(window_title.contains(exceptions)) return false;
+  if (video.exactMatch(window_title)) {
+    if (window_title.contains(exceptions)) return false;
 
     found_title = window_title;
 
