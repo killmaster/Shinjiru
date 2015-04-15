@@ -3,6 +3,7 @@ QT += core gui widgets network concurrent
 TARGET = Shinjiru
 VERSION = 1.6.1
 TEMPLATE = app
+ICON = Shinjiru.icns
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
 
@@ -123,4 +124,3 @@ RC_FILE = Shinjiru.rc
 macx: LIBS += -L../openssl_x86_64/
 macx: LIBS += -lssl
 macx: LIBS += -lcrypto
-macx: ICON = Shinjiru.icns
