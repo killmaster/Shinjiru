@@ -333,7 +333,7 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 
   int offset = 2;
 
-  #ifdef Q_OS_WIN32
+  #ifdef Q_OS_WIN
     offset = 24;
   #endif
 
