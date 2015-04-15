@@ -120,6 +120,6 @@ TRANSLATIONS += shinjiru_en.ts
 
 RC_FILE = Shinjiru.rc
 
+macx: LIBS += -L../openssl_x86_64/
 macx: LIBS += -lssl
 macx: LIBS += -lcrypto
-macx: LIBs += -framework Carbon
