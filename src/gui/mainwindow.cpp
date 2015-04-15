@@ -329,18 +329,22 @@ void MainWindow::resizeEvent(QResizeEvent *event) {
 
 void MainWindow::paintEvent(QPaintEvent *event) {
   QPainter p(this);
-
   p.setRenderHint(QPainter::SmoothPixmapTransform, true);
 
+  int offset = 2;
+
+  #ifdef Q_OS_WIN32
+    offset = 24;
+  #endif
 
   int notification_count = 0;
 
   if (this->hasUser) {
-    p.drawPixmap(width() - 52, 24, 42, 42, User::sharedUser()->userImage());
+    p.drawPixmap(width() - 52, offset, 42, 42, User::sharedUser()->userImage());
     notification_count = User::sharedUser()->notificationCount();
   }
 
-  p.drawRect(width() - 52, 24, 42, 42);
+  p.drawRect(width() - 52, offset, 42, 42);
 
   if (notification_count > 0) {
     p.setBrush(QColor(255, 120, 120));
@@ -348,17 +352,17 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     p.setBrush(QColor(255, 255, 255));
   }
 
-  p.drawEllipse(width() - 20.0f, 57.0f, 17.0f, 17.0f);
+  p.drawEllipse(width() - 20.0f, 33.0f + offset, 17.0f, 17.0f);
   QString notif = notification_count >= 9 ? "9+" :
                                             QString::number(notification_count);
-  p.drawText(width() - 19.0f, 57.0f, 17.0f, 17.0f, Qt::AlignCenter, notif);
+  p.drawText(width() - 19.0f, 33.0f + offset, 17.0f, 17.0f, Qt::AlignCenter, notif);
 
   QFont font = p.font();
   font.setPointSize(12);
   p.setFont(font);
 
   if (this->hasUser) {
-    p.drawText(0, 25, width() - 57, 40, Qt::AlignRight,
+    p.drawText(0, offset + 1, width() - 57, 40, Qt::AlignRight,
                User::sharedUser()->displayName());
   }
 
