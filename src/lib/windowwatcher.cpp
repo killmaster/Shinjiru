@@ -3,10 +3,13 @@
 #include "./windowwatcher.h"
 
 #include <QDebug>
+#include <QProcess>
+#include <QEventLoop>
+
+#include <cstdlib>
 
 WindowWatcher::WindowWatcher(QObject *parent) : QObject(parent) {
   timer = new QTimer(this);
-
 
   video = QRegExp("(.*(\\.mkv|\\.mp4|\\.avi)).*");
   exceptions = QRegExp("(\\.png|\\.gif|\\.jpg|\\.jpeg)");
@@ -50,15 +53,23 @@ void WindowWatcher::timeOut() {
   #endif
 
   #ifdef Q_OS_OSX
-    CFArrayRef wl =
-            CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly,
-                                       kCGNullWindowID);
+    QString script = "tell application \"System Events\" \
+                       \rget name of every window of every process \
+                     \rend tell";
 
-    for(CFIndex i = 0; i < CFArrayGetCount(wl); i++) {
-        QString win = QString::fromCFString((CFStringRef)
-                                      CFArrayGetValueAtIndex(wl, i));
-        windowList.append(win);
-    }
+    QProcess p;
+    p.setProcessChannelMode(QProcess::MergedChannels);
+
+    QEventLoop event;
+    connect(&p, SIGNAL(finished(int)), &event, SLOT(quit()));
+    p.start("osascript", QStringList() << "-e" << script);
+    event.exec();
+
+    QByteArray data = p.readAll();
+
+    QString s(data);
+
+    windowList = s.split(',');
   #endif
 
   for (int i = 0; i < windowList.length(); i++) {

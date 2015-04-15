@@ -136,8 +136,13 @@ int main(int argc, char *argv[]) {
   parser.addOption(debugOption);
 
   parser.process(a);
+  bool isMac = false;
 
-  if (parser.isSet(debugOption)) {
+  #ifdef Q_OS_MAC
+    isMac = true;
+  #endif
+
+  if (parser.isSet(debugOption) || isMac) {
     qInstallMessageHandler(noisyFailureMsgHandler);
   } else {
     QFile logFile(qApp->applicationDirPath()+"/"+VER_PRODUCTNAME_STR+".log");
