@@ -1,17 +1,8 @@
 /* Copyright 2015 Kazakuri */
 
-#include "gui/mainwindow.h"
-#include "./version.h"
-#include "./app.h"
-#include "./fvupdater.h"
-
 #ifndef Q_OS_OSX
   #include "lib/crashhandler/crash_handler.h"
 #endif
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <iostream>
 
 #include <QStandardPaths>
 #include <QApplication>
@@ -20,9 +11,19 @@
 #include <QMessageBox>
 #include <QThread>
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+
+#include "gui/mainwindow.h"
+#include "./version.h"
+#include "./app.h"
+#include "./fvupdater.h"
+
 void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &,
                             const QString & str) {
-  const char * msgAsCstring = str.toUtf8().toStdString().c_str();
+  QByteArray ba = str.toUtf8();
+  const char * msgAsCstring = ba.constData();
 
   QString msg(msgAsCstring);
   std::cerr << msgAsCstring << std::endl;
@@ -44,39 +45,30 @@ void noisyFailureMsgHandler(QtMsgType type, const QMessageLogContext &,
     type = QtDebugMsg;
   }
 
-  QCoreApplication * instance = QCoreApplication::instance();
-  const bool isGuiThread = instance &&
-                           (QThread::currentThread() == instance->thread());
-
-  if (isGuiThread) {
-    QMessageBox messageBox;
-    switch (type) {
-      case QtDebugMsg:
-        return;
-      case QtWarningMsg:
-        messageBox.setIcon(QMessageBox::Warning);
-        messageBox.setInformativeText(msg);
-        messageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-        break;
-      case QtCriticalMsg:
-        messageBox.setIcon(QMessageBox::Critical);
-        messageBox.setInformativeText(msg);
-        messageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
-        break;
-      case QtFatalMsg:
-        messageBox.setIcon(QMessageBox::Critical);
-        messageBox.setInformativeText(msg);
-        messageBox.setStandardButtons(QMessageBox::Cancel);
-        break;
-    }
-
-    int ret = messageBox.exec();
-    if (ret == QMessageBox::Cancel)
-      abort();
-  } else {
-    if (type != QtDebugMsg)
-      abort();
+  QMessageBox messageBox;
+  switch (type) {
+    case QtDebugMsg:
+      return;
+    case QtWarningMsg:
+      messageBox.setIcon(QMessageBox::Warning);
+      messageBox.setInformativeText(msg);
+      messageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+      break;
+    case QtCriticalMsg:
+      messageBox.setIcon(QMessageBox::Critical);
+      messageBox.setInformativeText(msg);
+      messageBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+      break;
+    case QtFatalMsg:
+      messageBox.setIcon(QMessageBox::Critical);
+      messageBox.setInformativeText(msg);
+      messageBox.setStandardButtons(QMessageBox::Cancel);
+      break;
   }
+
+  int ret = messageBox.exec();
+  if (ret == QMessageBox::Cancel)
+    abort();
 }
 
 void messageHandler(QtMsgType type, const QMessageLogContext &,
@@ -129,22 +121,30 @@ int main(int argc, char *argv[]) {
   }
 
   QApplication a(argc, argv);
-
-  #ifndef Q_OS_OSX
-    qInstallMessageHandler(messageHandler);
-  #endif
-
-  #ifdef QT_DEBUG
-    qInstallMessageHandler(noisyFailureMsgHandler);
-  #endif
-
-  QFile logFile(qApp->applicationDirPath()+"/"+VER_PRODUCTNAME_STR+".log");
-  if (logFile.exists()) logFile.remove();
-
   QCoreApplication::setApplicationName(VER_PRODUCTNAME_STR);
   QCoreApplication::setApplicationVersion(VER_PRODUCTVERSION_STR);
   QCoreApplication::setOrganizationName(VER_COMPANYNAME_STR);
   QCoreApplication::setOrganizationDomain(VER_COMPANYDOMAIN_STR);
+
+  QCommandLineParser parser;
+  parser.setApplicationDescription("Qt-based anime tracker for AniList");
+  parser.addHelpOption();
+  parser.addVersionOption();
+  QCommandLineOption debugOption(QStringList() << "d" << "debug",
+                                 QApplication::tr("Enable debug output"));
+
+  parser.addOption(debugOption);
+
+  parser.process(a);
+
+  if (parser.isSet(debugOption)) {
+    qInstallMessageHandler(noisyFailureMsgHandler);
+  } else {
+    QFile logFile(qApp->applicationDirPath()+"/"+VER_PRODUCTNAME_STR+".log");
+    if (logFile.exists()) logFile.remove();
+
+    qInstallMessageHandler(messageHandler);
+  }
 
   Settings *s = new Settings;
   QString release_stream =
