@@ -19,7 +19,7 @@ class API : public QObject {
   static API* sharedAPI();
   AniListAPI* sharedAniListAPI();
 
-  int verify();
+  int verifyAPI();
 
  private:
   API();

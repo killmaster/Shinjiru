@@ -49,6 +49,18 @@ void WindowWatcher::timeOut() {
     EnumWindows(EnumWindowsProc, reinterpret_cast<LPARAM>(this));
   #endif
 
+  #ifdef Q_OS_OSX
+    CFArrayRef wl =
+            CGWindowListCopyWindowInfo(kCGWindowListOptionOnScreenOnly,
+                                       kCGNullWindowID);
+
+    for(CFIndex i = 0; i < CFArrayGetCount(wl); i++) {
+        QString win = QString::fromCFString((CFStringRef)
+                                      CFArrayGetValueAtIndex(wl, i));
+        windowList.append(win);
+    }
+  #endif
+
   for (int i = 0; i < windowList.length(); i++) {
     QString window = windowList.at(i);
 

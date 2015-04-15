@@ -40,7 +40,7 @@ API::API() : QObject(0) {
 API::~API() {
 }
 
-int API::verify() {
+int API::verifyAPI() {
   qDebug() << "Verifying API client with AniList...";
 
   if (!m_API->hasAuthorizationCode()) {

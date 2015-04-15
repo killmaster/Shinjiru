@@ -228,7 +228,7 @@ MainWindow::MainWindow(QWidget *parent) :
   initTray();
   trayIcon->show();
 
-  int result = API::sharedAPI()->verify();
+  int result = API::sharedAPI()->verifyAPI();
 
   if (result == AniListAPI::OK) {
     connect(API::sharedAPI()->sharedAniListAPI(),

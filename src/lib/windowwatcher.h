@@ -11,6 +11,10 @@
   #include <qt_windows.h>
 #endif
 
+#ifdef Q_OS_MAC
+  #include <Carbon/Carbon.h>
+#endif
+
 class WindowWatcher : public QObject {
   Q_OBJECT
 
