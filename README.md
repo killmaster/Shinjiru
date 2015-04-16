@@ -6,7 +6,7 @@ Shinjiru is anime list management tool built with Qt designed to automatically u
 
 ## Installation ##
 
-Shinjiru's [website](http://app.shinjiru.me/index.php) currently hosts win32 alpha builds [here](http://app.shinjiru.me/latest.php).  
+Shinjiru's [website](http://app.shinjiru.me/index.php) currently hosts Windows builds [here](http://app.shinjiru.me/latest.php).  
 For other build needs feel free to [build](#Building) Shinjiru for yourself.
 
 
@@ -38,12 +38,11 @@ If you are using your own api information you should also change the update URL 
 If you want to contribute to Shinjiru feel free to create a pull request or an issue with suggestions/issues/features etc.
 
 Make sure your code compiles if you're contributing.  
-I don't have insanely high standards for code style but try to keep the code organized.
+I don't have insanely high standards for code style but try to keep it within the [Google Style Guide](http://google-styleguide.googlecode.com/svn/trunk/cppguide.html), or at the very least, 0 errors while running the file through cpplint.py.
 
 
 ## Contact ##
 
 - **Email**: <admin@shinjiru.me>
-- **Twitter**: [https://twitter.com/Kazakuri](https://twitter.com/Kazakuri)
 - **Website**: [http://app.shinjiru.me](http://app.shinjiru.me)
 - **GitHub**: [https://github.com/Kazakuri/Shinjiru](https://github.com/Kazakuri/Shinjiru)
