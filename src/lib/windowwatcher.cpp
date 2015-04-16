@@ -53,9 +53,10 @@ void WindowWatcher::timeOut() {
   #endif
 
   #ifdef Q_OS_OSX
+    // NOLINTNEXTLINE
     QString script = "tell application \"System Events\" \
                        \rget name of every window of every process \
-                     \rend tell";
+                     \rend tell";  // NOLINT
 
     QProcess p;
     p.setProcessChannelMode(QProcess::MergedChannels);
