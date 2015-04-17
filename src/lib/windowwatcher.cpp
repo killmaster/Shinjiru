@@ -97,7 +97,7 @@ bool WindowWatcher::isMediaPlayer(QString window_title) {
     found_title = found_title.replace(" - Google Chrome", "");
     found_title = found_title.replace(" - Internet Explorer", "");
 
-    if(found_title.contains("Crunchyroll")) {
+    if (found_title.contains("Crunchyroll")) {
       found_title = found_title.replace("Crunchyroll - Watch ", "");
       found_title = found_title.replace("Episode", "-");
       int idex = found_title.lastIndexOf("-") - 1;

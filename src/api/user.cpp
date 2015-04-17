@@ -297,7 +297,7 @@ Anime *User::getAnimeByTitle(QString title, bool smartTitle) {
   if (smartTitle) {
     Anime* a = resolveSmartTitle(title);
 
-    if(a != nullptr) return a;
+    if (a != nullptr) return a;
   }
 
   for (Anime *anime : anime_list) {
@@ -699,16 +699,16 @@ Anime *User::resolveSmartTitle(QString title) {
     if (s->contains(title)) {
       Anime *a = nullptr;
 
-      for(int i = 0; i < this->anime_list.count(); i++) {
+      for (int i = 0; i < this->anime_list.count(); i++) {
         if (anime_list.at(i)->getID() == s->getID()) {
           a = anime_list.at(i);
         }
       }
 
-      if(a != nullptr) {
+      if (a != nullptr) {
         a->setUpdateOffset(0);
 
-        if(s->hasOffset()) {
+        if (s->hasOffset()) {
           a->setUpdateOffset(s->getOffset());
         }
         return a;

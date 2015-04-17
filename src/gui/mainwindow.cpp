@@ -355,7 +355,8 @@ void MainWindow::paintEvent(QPaintEvent *event) {
   p.drawEllipse(width() - 20.0f, 33.0f + offset, 17.0f, 17.0f);
   QString notif = notification_count >= 9 ? "9+" :
                                             QString::number(notification_count);
-  p.drawText(width() - 19.0f, 33.0f + offset, 17.0f, 17.0f, Qt::AlignCenter, notif);
+  p.drawText(width() - 19.0f, 33.0f + offset,
+             17.0f, 17.0f, Qt::AlignCenter, notif);
 
   QFont font = p.font();
   font.setPointSize(12);

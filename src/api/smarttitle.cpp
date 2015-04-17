@@ -1,7 +1,8 @@
-#include "smarttitle.h"
+/* Copyright 2015 Kazakuri */
 
-SmartTitle::SmartTitle(QObject *parent, QString fileName) : QObject(parent)
-{
+#include "./smarttitle.h"
+
+SmartTitle::SmartTitle(QObject *parent, QString fileName) : QObject(parent) {
   useOffset = false;
   offset = 0;
   id = "0";
@@ -9,13 +10,12 @@ SmartTitle::SmartTitle(QObject *parent, QString fileName) : QObject(parent)
 
   this->file_name = fileName;
 
-  if(!file_name.isEmpty()) {
+  if (!file_name.isEmpty()) {
     load();
   }
 }
 
-SmartTitle::~SmartTitle()
-{
+SmartTitle::~SmartTitle() {
 }
 
 

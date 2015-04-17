@@ -1,3 +1,5 @@
+/* Copyright 2015 Kazakuri */
+
 #ifndef SRC_API_SMARTTITLE_H_
 #define SRC_API_SMARTTITLE_H_
 
@@ -43,10 +45,10 @@ class SmartTitle : public QObject {
   void save() {
     QDir d(qApp->applicationDirPath() + "/relation");
 
-    if(!d.exists())
+    if (!d.exists())
       d.mkpath(".");
 
-    if(file_name.isEmpty()) {
+    if (file_name.isEmpty()) {
       file_name = qApp->applicationDirPath() + "/relation/" +
                   id + " - " + source_title + ".json";
     }
@@ -60,7 +62,7 @@ class SmartTitle : public QObject {
     json.insert("id", id);
     json.insert("title", source_title);
 
-    if(useOffset)
+    if (useOffset)
       json.insert("offset", offset);
 
     f.write(QJsonDocument(json).toJson());
@@ -77,7 +79,7 @@ class SmartTitle : public QObject {
     this->id = json.value("id").toString("0");
     this->source_title = json.value("title").toString();
 
-    if(json.contains("offset"))
+    if (json.contains("offset"))
       this->setOffset(json.value("offset").toInt());
   }
 
@@ -88,7 +90,6 @@ class SmartTitle : public QObject {
 
   bool useOffset;
   int offset;
-
 };
 
 #endif  // SRC_API_SMARTTITLE_H_
