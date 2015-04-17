@@ -93,6 +93,9 @@ class Anime : public QObject {
   bool hasAiringSchedule();
   void setAiringSchedule(bool schedule);
 
+  int getUpdateOffset();
+  void setUpdateOffset(int offset);
+
   void downloadCover();
 
  signals:
@@ -117,6 +120,8 @@ class Anime : public QObject {
   QUrl cover_url;
   QPixmap cover_image;
   bool has_schedule;
+
+  int update_offset;
 
   int countdown;
   int next_episode;

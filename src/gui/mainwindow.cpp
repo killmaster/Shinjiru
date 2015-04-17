@@ -481,7 +481,7 @@ void MainWindow::watch(QString title) {
         return;
     }
 
-    cw_anime = User::sharedUser()->getAnimeByTitle(cw_title);
+    cw_anime = User::sharedUser()->getAnimeByTitle(cw_title, true);
 
     if (cw_anime == 0 || cw_anime->getTitle().isEmpty()) {
       QJsonObject results = API::sharedAPI()->sharedAniListAPI()->get(
@@ -491,6 +491,9 @@ void MainWindow::watch(QString title) {
             results.value("title_romaji").toString());
       if (cw_anime == 0) return;
     }
+
+    cw_episode = QString::number(cw_episode.toInt() -
+                                 cw_anime->getUpdateOffset());
 
     if (cw_anime->getMyProgress() >= cw_episode.toInt()) {
       return;
@@ -676,4 +679,24 @@ void MainWindow::elegantClose() {
   } else {
     qApp->quit();
   }
+}
+
+void MainWindow::reloadSmartTitles() {
+  QList<SmartTitle *> smart_titles;
+
+  User::sharedUser()->clearSmartTitles();
+
+  QDir smart_dir(QCoreApplication::applicationDirPath() + "/relation/");
+  smart_dir.mkdir(".");
+  smart_dir.setFilter(QDir::Files);
+  for (int i = 0; i < smart_dir.entryList().count(); i++) {
+    QString file_name = smart_dir.entryList().at(i);
+
+    SmartTitle *s = new SmartTitle(this, file_name);
+    smart_titles.append(s);
+  }
+
+  User::sharedUser()->setSmartTitles(smart_titles);
+
+  qDebug() << "Loaded" << smart_titles.length() << "smart titles";
 }

@@ -291,8 +291,15 @@ void User::loadUserList() {
   qDebug() << "Loaded" << anime_list.count() << "anime";
 }
 
-Anime *User::getAnimeByTitle(QString title) {
+Anime *User::getAnimeByTitle(QString title, bool smartTitle) {
   title = title.toLower();
+
+  if (smartTitle) {
+    Anime* a = resolveSmartTitle(title);
+
+    if(a != nullptr) return a;
+  }
+
   for (Anime *anime : anime_list) {
     if (anime->getEnglishTitle().toLower() == title ||
         anime->getJapaneseTitle().toLower() == title ||
@@ -301,7 +308,7 @@ Anime *User::getAnimeByTitle(QString title) {
     }
 
     for (QString synonym : anime->getSynonyms()) {
-      if (title== synonym) {
+      if (title == synonym.toLower()) {
         return anime;
       }
     }
@@ -673,4 +680,41 @@ QByteArray User::listJson() {
   return API::sharedAPI()->sharedAniListAPI()->get
       (API::sharedAPI()->sharedAniListAPI()->API_USER_LIST(
          this->displayName())).toJson();
+}
+
+void User::setSmartTitles(QList<SmartTitle *> s) {
+  this->smart_titles = s;
+}
+
+void User::clearSmartTitles() {
+  for (SmartTitle *s : smart_titles) {
+    delete s;
+  }
+
+  smart_titles.clear();
+}
+
+Anime *User::resolveSmartTitle(QString title) {
+  for (SmartTitle *s : smart_titles) {
+    if (s->contains(title)) {
+      Anime *a = nullptr;
+
+      for(int i = 0; i < this->anime_list.count(); i++) {
+        if (anime_list.at(i)->getID() == s->getID()) {
+          a = anime_list.at(i);
+        }
+      }
+
+      if(a != nullptr) {
+        a->setUpdateOffset(0);
+
+        if(s->hasOffset()) {
+          a->setUpdateOffset(s->getOffset());
+        }
+        return a;
+      }
+    }
+  }
+
+  return nullptr;
 }

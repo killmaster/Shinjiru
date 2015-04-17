@@ -32,6 +32,7 @@
 #include "./facetablewidgetitem.h"
 #include "./overlay.h"
 #include "./browseanime.h"
+#include "../api/smarttitle.h"
 
 namespace Ui {
 class MainWindow;
@@ -159,6 +160,8 @@ class MainWindow : public QMainWindow {
   void updateStatistics();
 
   void resetAPI();
+
+  void reloadSmartTitles();
 
   void elegantClose();
 

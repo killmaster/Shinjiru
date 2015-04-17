@@ -93,6 +93,9 @@ void       Anime::setCustomLists(QList<int> lists) { this ->custom_lists =
 bool Anime::hasAiringSchedule()              { return has_schedule; }
 void Anime::setAiringSchedule(bool schedule) { this ->has_schedule = schedule; }
 
+int  Anime::getUpdateOffset()           { return update_offset; }
+void Anime::setUpdateOffset(int offset) { this ->update_offset = offset; }
+
 void Anime::downloadCover() {
   if (!this->needsCover()) {
     qDebug() << "Redownloading cover for anime " << this->getTitle();

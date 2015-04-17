@@ -13,6 +13,7 @@
 #include "./anime.h"
 #include "../lib/filedownloader.h"
 #include "./api.h"
+#include "./smarttitle.h"
 
 class User : public QObject{
   Q_OBJECT
@@ -40,7 +41,11 @@ class User : public QObject{
 
   User *remake();
 
-  Anime *getAnimeByTitle(QString title);
+  void setSmartTitles(QList<SmartTitle *> s);
+  void clearSmartTitles();
+
+  Anime *resolveSmartTitle(QString title);
+  Anime *getAnimeByTitle(QString title, bool smartTitle = false);
   Anime *getAnimeByData(QString title, QString episodes, QString score,
                         QString type);
   QList<Anime *> getAnimeList() const { return anime_list; }
@@ -117,6 +122,7 @@ class User : public QObject{
   QVariantList custom_lists;
   int notifications;
   bool cancel;
+  QList<SmartTitle *> smart_titles;
 
   std::queue<QMap<Anime *, bool>> queue;
 

@@ -63,7 +63,8 @@ SOURCES   += \
     src/gui/overlay.cpp \
     src/gui/searchpanel.cpp \
     src/gui/browserhelper.cpp \
-    src/gui/browseanime.cpp
+    src/gui/browseanime.cpp \
+    src/api/smarttitle.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -97,7 +98,8 @@ HEADERS   += \
     src/gui/overlay.h \
     src/gui/searchpanel.h \
     src/version.h \
-    src/gui/browseanime.h
+    src/gui/browseanime.h \
+    src/api/smarttitle.h
 
 FORMS     += \
     src/gui/airinganime.ui \

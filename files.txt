@@ -9,6 +9,8 @@ src/api/anime.cpp
 src/api/anime.h
 src/api/api.cpp
 src/api/api.h
+src/api/smarttitle.cpp
+src/api/smarttitle.h
 src/api/user.cpp
 src/api/user.h
 src/gui/about.cpp

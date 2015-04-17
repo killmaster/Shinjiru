@@ -127,7 +127,5 @@ void MainWindow::updateStatistics() {
   progress_bar->reset();
   progress_bar->setMaximum(100);
 
-  /*if (layout2->count() == 0) {
-    this->loadSelectedSeason();
-  }*/
+  reloadSmartTitles();
 }

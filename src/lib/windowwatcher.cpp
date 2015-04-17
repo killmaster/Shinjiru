@@ -92,10 +92,6 @@ bool WindowWatcher::isMediaPlayer(QString window_title) {
 
     found_title = window_title;
 
-    /* TODO
-     * Fix for some basic title patterns, VLC etc
-     */
-
     found_title = found_title.replace(" - VLC media player", "");
     found_title = found_title.replace(" - Mozilla Firefox", "");
     found_title = found_title.replace(" - Google Chrome", "");
