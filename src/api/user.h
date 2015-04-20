@@ -42,6 +42,7 @@ class User : public QObject{
   User *remake();
 
   void setSmartTitles(QList<SmartTitle *> s);
+  QList<SmartTitle *> getSmartTitles();
   void clearSmartTitles();
 
   Anime *resolveSmartTitle(QString title);

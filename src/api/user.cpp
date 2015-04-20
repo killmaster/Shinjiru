@@ -686,6 +686,10 @@ void User::setSmartTitles(QList<SmartTitle *> s) {
   this->smart_titles = s;
 }
 
+QList<SmartTitle *> User::getSmartTitles() {
+  return this->smart_titles;
+}
+
 void User::clearSmartTitles() {
   for (SmartTitle *s : smart_titles) {
     delete s;

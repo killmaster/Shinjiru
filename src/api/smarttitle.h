@@ -14,7 +14,7 @@ class SmartTitle : public QObject {
   Q_OBJECT
 
  public:
-  explicit SmartTitle(QObject *parent = 0, QString fileName = "");
+  explicit SmartTitle(QObject *parent = 0);
   ~SmartTitle();
 
   void setID(QString id) {
@@ -26,6 +26,14 @@ class SmartTitle : public QObject {
     this->offset = offset;
   }
 
+  void setTitle(QString title) {
+    this->title = title;
+  }
+
+  void setCustom(QString custom) {
+    this->custom = custom;
+  }
+
   bool hasOffset() {
     return useOffset;
   }
@@ -35,58 +43,25 @@ class SmartTitle : public QObject {
   }
 
   bool contains(QString title) {
-    return this->source_title.toLower() == title.toLower();
+    return this->custom.toLower() == title.toLower();
   }
 
   QString getID() {
     return id;
   }
 
-  void save() {
-    QDir d(qApp->applicationDirPath() + "/relation");
-
-    if (!d.exists())
-      d.mkpath(".");
-
-    if (file_name.isEmpty()) {
-      file_name = qApp->applicationDirPath() + "/relation/" +
-                  id + " - " + source_title + ".json";
-    }
-
-    QFile f(file_name);
-
-    f.open(QFile::WriteOnly);
-
-    QJsonObject json;
-
-    json.insert("id", id);
-    json.insert("title", source_title);
-
-    if (useOffset)
-      json.insert("offset", offset);
-
-    f.write(QJsonDocument(json).toJson());
+  QString getCustom() {
+    return custom;
   }
 
-  void load() {
-    QFile f(qApp->applicationDirPath() + "/relation/" + file_name);
-
-    f.open(QFile::ReadOnly);
-
-    QByteArray data = f.readAll();
-    QJsonObject json = QJsonDocument::fromJson(data).object();
-
-    this->id = json.value("id").toString("0");
-    this->source_title = json.value("title").toString();
-
-    if (json.contains("offset"))
-      this->setOffset(json.value("offset").toInt());
+  QString getTitle() {
+    return title;
   }
 
  private:
-  QString file_name;
   QString id;
-  QString source_title;
+  QString title;
+  QString custom;
 
   bool useOffset;
   int offset;

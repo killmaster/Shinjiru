@@ -41,6 +41,8 @@ src/gui/scrolltext.h
 src/gui/searchpanel.cpp
 src/gui/searchpanel.h
 src/gui/settingshelper.cpp
+src/gui/smarttitlemanager.cpp
+src/gui/smarttitlemanager.h
 src/gui/statshelper.cpp
 src/gui/torrentshelper.cpp
 src/gui/trayhelper.cpp

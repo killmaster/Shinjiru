@@ -64,7 +64,8 @@ SOURCES   += \
     src/gui/searchpanel.cpp \
     src/gui/browserhelper.cpp \
     src/gui/browseanime.cpp \
-    src/api/smarttitle.cpp
+    src/api/smarttitle.cpp \
+    src/gui/smarttitlemanager.cpp
 
 HEADERS   += \
     lib/anitomy/anitomy/anitomy.h \
@@ -99,7 +100,8 @@ HEADERS   += \
     src/gui/searchpanel.h \
     src/version.h \
     src/gui/browseanime.h \
-    src/api/smarttitle.h
+    src/api/smarttitle.h \
+    src/gui/smarttitlemanager.h
 
 FORMS     += \
     src/gui/airinganime.ui \
@@ -110,7 +112,8 @@ FORMS     += \
     src/gui/apiwebview.ui \
     src/gui/rulemanager.ui \
     src/gui/searchpanel.ui \
-    src/gui/browseanime.ui
+    src/gui/browseanime.ui \
+    src/gui/smarttitlemanager.ui
 
 RESOURCES += res/res.qrc
 

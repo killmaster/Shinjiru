@@ -5,7 +5,7 @@
 #include <QDesktopServices>
 #include <QIcon>
 #include <QFileDialog>
-
+#include <QJsonArray>
 
 #include "./ui_mainwindow.h"
 #include "../app.h"
@@ -15,6 +15,7 @@
 #include "./about.h"
 #include "./overlay.h"
 #include "./searchpanel.h"
+#include "./smarttitlemanager.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -140,6 +141,12 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->actionAS, &QAction::triggered, [&]() {  // NOLINT
     SearchPanel *sp = new SearchPanel(this);
     sp->show();
+  });
+
+  connect(ui->actionARR, &QAction::triggered, [&]() {  // NOLINT
+    reloadSmartTitles();
+    SmartTitleManager *stm = new SmartTitleManager(this);
+    stm->show();
   });
 
   connect(ui->actionVAL, SIGNAL(triggered()), SLOT(viewAnimeList()));
@@ -687,13 +694,23 @@ void MainWindow::reloadSmartTitles() {
 
   User::sharedUser()->clearSmartTitles();
 
-  QDir smart_dir(QCoreApplication::applicationDirPath() + "/relation/");
-  smart_dir.mkdir(".");
-  smart_dir.setFilter(QDir::Files);
-  for (int i = 0; i < smart_dir.entryList().count(); i++) {
-    QString file_name = smart_dir.entryList().at(i);
+  QFile smart_file(QCoreApplication::applicationDirPath() + "/relations.json");
+  if (!smart_file.open(QFile::ReadOnly)) return;
 
-    SmartTitle *s = new SmartTitle(this, file_name);
+  QJsonArray relations = QJsonDocument::fromJson(smart_file.readAll()).array();
+
+  for (QJsonValue v : relations) {
+    QJsonObject relation = v.toObject();
+
+    SmartTitle *s = new SmartTitle(0);
+    s->setID(relation.value("id").toString("0"));
+    s->setCustom(relation.value("custom").toString());
+    s->setTitle(relation.value("title").toString());
+
+    if (relation.contains("offset")) {
+      s->setOffset(relation.value("offset").toInt());
+    }
+
     smart_titles.append(s);
   }
 

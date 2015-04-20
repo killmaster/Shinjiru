@@ -2,17 +2,12 @@
 
 #include "./smarttitle.h"
 
-SmartTitle::SmartTitle(QObject *parent, QString fileName) : QObject(parent) {
+SmartTitle::SmartTitle(QObject *parent) : QObject(parent) {
   useOffset = false;
   offset = 0;
   id = "0";
-  source_title = "";
-
-  this->file_name = fileName;
-
-  if (!file_name.isEmpty()) {
-    load();
-  }
+  title = "";
+  custom = "";
 }
 
 SmartTitle::~SmartTitle() {

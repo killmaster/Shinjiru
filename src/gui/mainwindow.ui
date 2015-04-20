@@ -1502,6 +1502,7 @@
     </property>
     <addaction name="actionAS"/>
     <addaction name="actionEAR"/>
+    <addaction name="actionARR"/>
     <addaction name="separator"/>
     <addaction name="actionSettings"/>
    </widget>
@@ -1585,6 +1586,11 @@
   <action name="actionExport">
    <property name="text">
     <string>Export List</string>
+   </property>
+  </action>
+  <action name="actionARR">
+   <property name="text">
+    <string>Anime Recognition Rules</string>
    </property>
   </action>
  </widget>
