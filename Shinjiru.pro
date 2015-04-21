@@ -1,7 +1,7 @@
 QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 1.5.3
+VERSION = 1.6.0
 TEMPLATE = app
 
 DEFINES += APP_VERSION=\\\"$$VERSION\\\"
@@ -11,7 +11,7 @@ CONFIG += c++11
 win32:LIBS += -L"C:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib" -lUser32 -lKernel32
 
 win32-msvc* {
-  QMAKE_CFLAGS_RELEASE = -O2 -MD -zi
+  QMAKE_CXXFLAGS_RELEASE = -O2 -MD
   QMAKE_LFLAGS_RELEASE = /INCREMENTAL:NO /DEBUG /MAP /OPT:REF
 }
 

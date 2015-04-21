@@ -12,6 +12,9 @@
 #include "../api/anime.h"
 #include "../api/smarttitle.h"
 
+const QChar sp = QChar(0x202F);
+const QString seperator = QString(sp + QString(" - "));
+
 bool animeSort(Anime *&s1, Anime *&s2) {  // NOLINT
   return s1->getTitle() < s2->getTitle();
 }
@@ -25,15 +28,14 @@ SmartTitleManager::SmartTitleManager(QWidget *parent) :
   qSort(list.begin(), list.end(), animeSort);
 
   for (Anime *a : list) {
-    ui->comboBox->addItem(a->getTitle() + " - " + a->getID());
+    ui->comboBox->addItem(a->getTitle() + seperator + a->getID());
   }
 
   QList<SmartTitle *> smart_titles = User::sharedUser()->getSmartTitles();
 
   for (SmartTitle *s : smart_titles) {
-    ui->listWidget->addItem(s->getCustom() + " - " +
-                            s->getID() + " - " +
-                            s->getTitle());
+    ui->listWidget->addItem(s->getCustom() + seperator + s->getTitle() +
+                            seperator + s->getID());
   }
 
   connect(ui->newTitle, &QPushButton::clicked, [&]() {  // NOLINT
@@ -41,17 +43,17 @@ SmartTitleManager::SmartTitleManager(QWidget *parent) :
     ui->listWidget->setCurrentRow(ui->listWidget->count() - 1);
   });
 
-  connect(ui->lineEdit, SIGNAL(textChanged(QString)), SLOT(updateName()));
+  connect(ui->lineEdit, SIGNAL(textEdited(QString)), SLOT(updateName()));
   connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
           SLOT(updateName()));
 
   connect(ui->listWidget, &QListWidget::currentItemChanged, [&]() {  // NOLINT
-    QStringList text = ui->listWidget->currentItem()->text().split(" - ");
+    QStringList text = ui->listWidget->currentItem()->text().split(seperator);
 
     ui->lineEdit->setText(text.at(0));
 
     if (text.length() > 2)
-      ui->comboBox->setCurrentText(text.at(1) + " - " + text.at(2));
+      ui->comboBox->setCurrentText(text.at(1) + seperator + text.at(2));
     else if (text.length() > 1)
       ui->comboBox->setCurrentText(text.at(1));
   });
@@ -65,7 +67,7 @@ SmartTitleManager::~SmartTitleManager() {
 }
 
 void SmartTitleManager::updateName() {
-  QString lineText = ui->lineEdit->text() + " - " +
+  QString lineText = ui->lineEdit->text() + seperator +
                      ui->comboBox->currentText();
 
   if (ui->listWidget->currentItem() != 0)
@@ -79,14 +81,14 @@ void SmartTitleManager::accept() {
   QJsonArray arr;
 
   for (int i = 0; i < ui->listWidget->count(); i++) {
-    QStringList data = ui->listWidget->item(i)->text().split(" - ");
+    QStringList data = ui->listWidget->item(i)->text().split(seperator);
 
     if (data.length() < 3) continue;
 
     QJsonObject o;
 
-    o.insert("id", data.at(1));
-    o.insert("title", data.at(2));
+    o.insert("id", data.at(2));
+    o.insert("title", data.at(1));
     o.insert("custom", data.at(0));
 
     arr.append(o);
