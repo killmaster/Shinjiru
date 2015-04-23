@@ -1,9 +1,5 @@
 /* Copyright 2015 Kazakuri */
 
-#ifdef Q_OS_WIN
-  #include "lib/crashhandler/crash_handler.h"
-#endif
-
 #include <QStandardPaths>
 #include <QApplication>
 #include <QCoreApplication>
@@ -14,6 +10,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+
+#ifdef Q_OS_WIN
+  #include "lib/crashhandler/crash_handler.h"
+#endif
 
 #include "gui/mainwindow.h"
 #include "./version.h"
