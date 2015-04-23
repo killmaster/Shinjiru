@@ -1,6 +1,6 @@
 /* Copyright 2015 Kazakuri */
 
-#ifndef Q_OS_OSX
+#ifdef Q_OS_WIN
   #include "lib/crashhandler/crash_handler.h"
 #endif
 
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
 
   FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
 
-  #ifndef Q_OS_OSX
+  #ifdef Q_OS_WIN
     Breakpad::CrashHandler::instance()->Init(qApp->applicationDirPath());
   #endif
 

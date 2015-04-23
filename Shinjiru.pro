@@ -23,7 +23,6 @@ CONFIG += fervor_gui
 DEFINES += FV_GUI
 
 win32:include(src/lib/crashhandler/crash_handler.pri)
-linux:include(src/lib/crashhandler/crash_handler.pri)
 
 SOURCES   += \
     lib/anitomy/anitomy/anitomy.cpp \
