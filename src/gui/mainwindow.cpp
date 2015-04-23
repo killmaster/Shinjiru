@@ -344,6 +344,10 @@ void MainWindow::paintEvent(QPaintEvent *event) {
     offset = 24;
   #endif
 
+  #ifdef Q_OS_LINUX
+    offset = 24;
+  #endif
+
   int notification_count = 0;
 
   if (this->hasUser) {
