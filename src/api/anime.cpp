@@ -6,6 +6,7 @@ Anime::Anime(QObject *parent) : QObject(parent) {
   anime_image_control = nullptr;
   this->needCover = true;
   this->needLoad = true;
+  this->update_offset = 0;
 }
 
 void Anime::finishReload() { emit finishedReloading(); needLoad = false;}
