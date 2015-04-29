@@ -19,6 +19,12 @@ void MainWindow::loadUser() {
     }
   });
 
+  for (QFuture<void> f : async_registry) {
+    if (f.isFinished()) {
+      async_registry.removeAll(f);
+    }
+  }
+
   async_registry.append(user_future);
 
   user_future_watcher.setFuture(user_future);
