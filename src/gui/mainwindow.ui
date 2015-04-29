@@ -201,7 +201,7 @@
              <item>
               <widget class="QLineEdit" name="listFilterLineEdit">
                <property name="placeholderText">
-                <string>Filter anime...</string>
+                <string>Filter anime or search AniList...</string>
                </property>
               </widget>
              </item>
@@ -763,8 +763,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>892</width>
-             <height>377</height>
+             <width>98</width>
+             <height>28</height>
             </rect>
            </property>
           </widget>
@@ -1392,8 +1392,8 @@
                  <rect>
                   <x>0</x>
                   <y>0</y>
-                  <width>755</width>
-                  <height>363</height>
+                  <width>98</width>
+                  <height>28</height>
                  </rect>
                 </property>
                </widget>
@@ -1433,7 +1433,7 @@
                   <x>0</x>
                   <y>0</y>
                   <width>123</width>
-                  <height>344</height>
+                  <height>28</height>
                  </rect>
                 </property>
                 <layout class="QVBoxLayout" name="verticalLayout_20">

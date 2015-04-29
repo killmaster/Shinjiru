@@ -714,7 +714,7 @@ void MainWindow::reloadSmartTitles() {
     s->setTitle(relation.value("title").toString());
 
     if (relation.contains("offset")) {
-      s->setOffset(relation.value("offset").toInt());
+      s->setOffset(relation.value("offset").toString().toInt());
     }
 
     smart_titles.append(s);

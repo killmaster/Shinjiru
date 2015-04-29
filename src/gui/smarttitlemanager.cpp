@@ -37,7 +37,9 @@ SmartTitleManager::SmartTitleManager(QWidget *parent) :
     ui->listWidget->addItem(s->getCustom() + seperator +
                             s->getTitle() + seperator +
                             s->getID() + seperator +
-                            s->getOffset());
+                            QString::number(s->getOffset()));
+
+    qDebug() << s->getOffset();
   }
 
   connect(ui->newTitle, &QPushButton::clicked, [&]() {  // NOLINT
@@ -48,11 +50,14 @@ SmartTitleManager::SmartTitleManager(QWidget *parent) :
   connect(ui->lineEdit, SIGNAL(textEdited(QString)), SLOT(updateName()));
   connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
           SLOT(updateName()));
+  connect(ui->spinBox, SIGNAL(valueChanged(int)), SLOT(updateName()));
 
   connect(ui->listWidget, &QListWidget::currentItemChanged, [&]() {  // NOLINT
     QStringList text = ui->listWidget->currentItem()->text().split(seperator);
 
     ui->lineEdit->setText(text.at(0));
+
+    ui->spinBox->setValue(text.last().toInt());
 
     if (text.length() > 2)
       ui->comboBox->setCurrentText(text.at(1) + seperator + text.at(2));
