@@ -27,6 +27,11 @@ void MainWindow::refreshTorrentListing() {
   torrents->fetch();
   rssLoop.exec();
 
+  QTableWidgetItem *item;
+  while ((item = ui->torrentTable->takeItem(0, 0))) {
+    delete item;
+  }
+
   QStringList titles = QStringList(*(torrents->getTitles()));
   QStringList links = QStringList(*(torrents->getLinks()));
   int offset = 0;
