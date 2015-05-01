@@ -270,6 +270,20 @@ MainWindow::~MainWindow() {
   delete anitomy;
   delete settings;
   delete window_watcher;
+  delete uptime_timer;
+
+  over->removeAll();
+
+  for (QTableWidgetItem *i : tableWidgets) {
+    if (i)
+      delete i;
+  }
+
+  for (QTableWidgetItem *i : torrentWidgets) {
+    if (i)
+      delete i;
+  }
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

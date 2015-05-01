@@ -48,6 +48,12 @@ void MainWindow::userListLoaded() {
   int space_per_list = remaining_space;
   int current_list = -1;
 
+  for (QTableWidgetItem *i : tableWidgets) {
+    if (i)
+      delete i;
+  }
+  this->tableWidgets.clear();
+
   while (ui->listTabs->count()) {
     delete ui->listTabs->widget(ui->listTabs->currentIndex());
   }
@@ -95,7 +101,14 @@ void MainWindow::userListLoaded() {
         status = status.at(0).toUpper() + status.right(status.length() - 1);
 
         statusData = new QTableWidgetItem(status);
+        tableWidgets.append(statusData);
       }
+
+      tableWidgets.append(titleData);
+      tableWidgets.append(progressData);
+      tableWidgets.append(scoreData);
+      tableWidgets.append(faceData);
+      tableWidgets.append(typeData);
 
       if (User::sharedUser()->scoreType() == 0 ||
           User::sharedUser()->scoreType() == 1) {

@@ -27,10 +27,11 @@ void MainWindow::refreshTorrentListing() {
   torrents->fetch();
   rssLoop.exec();
 
-  QTableWidgetItem *item;
-  while ((item = ui->torrentTable->takeItem(0, 0))) {
-    delete item;
+  for (QTableWidgetItem *i : torrentWidgets) {
+    delete i;
   }
+
+  torrentWidgets.clear();
 
   QStringList titles = QStringList(*(torrents->getTitles()));
   QStringList links = QStringList(*(torrents->getLinks()));
@@ -65,6 +66,13 @@ void MainWindow::refreshTorrentListing() {
     QTableWidgetItem *videoItem = new QTableWidgetItem(videoType);
     QTableWidgetItem *fileNameItem = new QTableWidgetItem(titles.at(i));
     QTableWidgetItem *linkItem = new QTableWidgetItem(links.at(i));
+
+    torrentWidgets.append(titleItem);
+    torrentWidgets.append(epItem);
+    torrentWidgets.append(subItem);
+    torrentWidgets.append(videoItem);
+    torrentWidgets.append(fileNameItem);
+    torrentWidgets.append(linkItem);
 
     if (episodeNumber == "") {
       offset++;

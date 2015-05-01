@@ -123,6 +123,9 @@ class MainWindow : public QMainWindow {
 
   QList<QFuture<void>> async_registry;
 
+  QList<QTableWidgetItem *> tableWidgets;
+  QList<QTableWidgetItem *> torrentWidgets;
+
  private slots:  // NOLINT
   void loadUser();
   void userLoaded();

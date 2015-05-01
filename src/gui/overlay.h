@@ -11,6 +11,7 @@ class Overlay : public QWidget {
  public:
   explicit Overlay(QWidget *parent);
   void addDrawing(QString s, QPixmap *p) {
+    removeDrawing(s);
     drawList.insert(s, p);
     update();
   }
@@ -19,6 +20,12 @@ class Overlay : public QWidget {
       delete drawList.take(s);
 
     update();
+  }
+
+  void removeAll() {
+    for (QString key : drawList.keys()) {
+      removeDrawing(key);
+    }
   }
 
   bool containsDrawing(QString s) {
