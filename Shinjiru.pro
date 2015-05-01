@@ -123,3 +123,4 @@ RC_FILE = Shinjiru.rc
 macx: LIBS += -L../openssl_x86_64/
 macx: LIBS += -lssl
 macx: LIBS += -lcrypto
+macx: ICON = Shinjiru.icns
