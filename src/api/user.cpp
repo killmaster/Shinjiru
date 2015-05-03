@@ -427,16 +427,20 @@ User* User::remake() {
   QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get
       (API::sharedAPI()->sharedAniListAPI()->API_USER).object();
 
-  this->setDisplayName(result.value("display_name") .toString());
+  QString profile_image = result.value("image_url_med").toString();
+
+  this->setDisplayName(result.value("display_name").toString());
   this->setScoreType(result.value("score_type").toInt());
-  this->setProfileImageURL(result.value("image_url_med").toString());
   this->setTitleLanguage(result.value("title_language").toString());
   this->setAnimeTime(result.value("anime_time").toInt());
   this->setCustomLists(result.value("custom_list_anime").toArray()
                        .toVariantList());
   this->setNotificationCount(result.value("notifications").toInt());
 
-  this->loadProfileImage();
+  if (this->profile_image_url != profile_image) {
+    this->setProfileImageURL(profile_image);
+    this->loadProfileImage();
+  }
 
   this->fetchUpdatedList();
 
@@ -630,6 +634,8 @@ void User::fetchUpdatedList() {
     QString key = this->customLists().at(k).toString();
     user_lists.insert(key , custom.value(key));
   }
+
+
 }
 
 void User::removeFromList(QString list, Anime *anime) {

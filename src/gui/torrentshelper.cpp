@@ -54,11 +54,20 @@ void MainWindow::refreshTorrentListing() {
       continue;
     }
 
-
     QString parsedTitle   = result.value("title");
     QString episodeNumber = result.value("episode");
     QString subGroup      = result.value("subs");
     QString videoType     = result.value("res");
+
+    if (episodeNumber == "") {
+      offset++;
+      continue;
+    }
+
+    if (links.at(i) == "") {
+      offset++;
+      continue;
+    }
 
     QTableWidgetItem *titleItem = new QTableWidgetItem(parsedTitle);
     QTableWidgetItem *epItem = new QTableWidgetItem(episodeNumber);
@@ -73,16 +82,6 @@ void MainWindow::refreshTorrentListing() {
     torrentWidgets.append(videoItem);
     torrentWidgets.append(fileNameItem);
     torrentWidgets.append(linkItem);
-
-    if (episodeNumber == "") {
-      offset++;
-      continue;
-    }
-
-    if (links.at(i) == "") {
-      offset++;
-      continue;
-    }
 
     ui->torrentTable->setItem(i - offset, 0, titleItem);
     ui->torrentTable->setItem(i - offset, 1, epItem);
