@@ -20,6 +20,7 @@ class User : public QObject{
 
  public:
   static User *sharedUser();
+  static void deleteInstance();
 
  public slots:  // NOLINT
   QString displayName() const

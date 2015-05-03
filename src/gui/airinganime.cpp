@@ -46,7 +46,7 @@ void AiringAnime::paintEvent(QPaintEvent *event) {
   QString next = anime->getNextEpisode() == 0 ?
         "?" : QString::number(anime->getNextEpisode());
   p.drawText(QRect(5, height() - 20, width() - 5, 20), Qt::AlignLeft,
-             "Ep. " + next);
+             QString("Ep. ") + next);
 
   QString cd = "";
 

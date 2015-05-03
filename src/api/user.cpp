@@ -26,6 +26,14 @@ User* User::sharedUser() {
   return m_Instance;
 }
 
+void User::deleteInstance() {
+  static QMutex mutex;
+  mutex.lock();
+  delete m_Instance;
+  m_Instance = 0;
+  mutex.unlock();
+}
+
 User::User() : QObject(0) {
   QJsonObject result =
       API::sharedAPI()->sharedAniListAPI()->get
@@ -48,6 +56,7 @@ User::User() : QObject(0) {
 }
 
 User::~User() {
+  this->clearSmartTitles();
   for (Anime *a : anime_list) {
     delete a;
   }

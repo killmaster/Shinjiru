@@ -284,6 +284,9 @@ MainWindow::~MainWindow() {
       delete i;
   }
 
+  User::deleteInstance();
+  API::deleteInstance();
+  FvUpdater::drop();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

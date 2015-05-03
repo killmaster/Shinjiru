@@ -29,6 +29,14 @@ API* API::sharedAPI() {
   return m_Instance;
 }
 
+void API::deleteInstance() {
+  static QMutex mutex;
+  mutex.lock();
+  delete m_Instance;
+  m_Instance = 0;
+  mutex.unlock();
+}
+
 AniListAPI* API::sharedAniListAPI() {
   return m_API;
 }
@@ -38,6 +46,7 @@ API::API() : QObject(0) {
 }
 
 API::~API() {
+  delete m_API;
 }
 
 int API::verifyAPI() {

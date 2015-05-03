@@ -17,6 +17,7 @@ class API : public QObject {
 
  public:
   static API* sharedAPI();
+  static void deleteInstance();
   AniListAPI* sharedAniListAPI();
 
   int verifyAPI();
