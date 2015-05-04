@@ -47,20 +47,38 @@ SmartTitleManager::SmartTitleManager(QWidget *parent) :
     ui->listWidget->setCurrentRow(ui->listWidget->count() - 1);
   });
 
+  connect(ui->deleteTitle, &QPushButton::clicked, [&](){  // NOLINT
+    QListWidgetItem *current = ui->listWidget->currentItem();
+
+    if (current != 0 && current != nullptr) {
+      int row = ui->listWidget->row(current);
+      delete ui->listWidget->currentItem();
+
+      ui->listWidget->setCurrentRow(qMax(row - 1, 0));
+    }
+  });
+
   connect(ui->lineEdit, SIGNAL(textEdited(QString)), SLOT(updateName()));
   connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
           SLOT(updateName()));
   connect(ui->spinBox, SIGNAL(valueChanged(int)), SLOT(updateName()));
 
   connect(ui->listWidget, &QListWidget::currentItemChanged, [&]() {  // NOLINT
+    if (ui->listWidget->currentItem() == 0) return;
+    if (ui->listWidget->currentItem() == nullptr) return;
+
     QStringList text = ui->listWidget->currentItem()->text().split(seperator);
 
     ui->lineEdit->setText(text.at(0));
 
     ui->spinBox->setValue(text.last().toInt());
 
-    if (text.length() > 2)
+    if (text.length() > 2) {
+      ui->comboBox->disconnect(this);
       ui->comboBox->setCurrentText(text.at(1) + seperator + text.at(2));
+      connect(ui->comboBox, SIGNAL(currentIndexChanged(int)),
+              SLOT(updateName()));
+    }
 
     if (text.length() > 3)
       ui->spinBox->setValue(text.at(3).toInt());

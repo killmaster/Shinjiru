@@ -643,8 +643,6 @@ void User::fetchUpdatedList() {
     QString key = this->customLists().at(k).toString();
     user_lists.insert(key , custom.value(key));
   }
-
-
 }
 
 void User::removeFromList(QString list, Anime *anime) {
