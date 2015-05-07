@@ -6,13 +6,9 @@
 TorrentRSS::TorrentRSS(QWidget *parent) : QWidget(parent), currentReply(0) {
   connect(&manager, SIGNAL(finished(QNetworkReply*)),
           SLOT(finished(QNetworkReply*)));
-  links = new QList<QString>;
-  titles = new QList<QString>;
 }
 
 TorrentRSS::~TorrentRSS() {
-  delete links;
-  delete titles;
 }
 
 void TorrentRSS::get(const QUrl &url) {
@@ -37,6 +33,7 @@ void TorrentRSS::fetch() {
   get(url);
 
   delete s;
+  s = nullptr;
 }
 
 void TorrentRSS::metaDataChanged() {
@@ -73,8 +70,8 @@ void TorrentRSS::parseXml() {
       currentTag = xml.name().toString();
     } else if (xml.isEndElement()) {
       if (xml.name() == "item") {
-        titles->append(titleString);
-        links->append(linkString);
+        titles.append(titleString);
+        links.append(linkString);
         titleString.clear();
         linkString.clear();
         metItem = false;
@@ -93,16 +90,16 @@ void TorrentRSS::parseXml() {
   }
 }
 
-QList<QString>* TorrentRSS::getTitles() {
+QList<QString> TorrentRSS::getTitles() {
   return titles;
 }
 
-QList<QString>* TorrentRSS::getLinks() {
+QList<QString> TorrentRSS::getLinks() {
   return links;
 }
 
 void TorrentRSS::error(QNetworkReply::NetworkError) {
   currentReply->disconnect(this);
   currentReply->deleteLater();
-  currentReply = 0;
+  currentReply = nullptr;
 }

@@ -50,7 +50,7 @@ SmartTitleManager::SmartTitleManager(QWidget *parent) :
   connect(ui->deleteTitle, &QPushButton::clicked, [&](){  // NOLINT
     QListWidgetItem *current = ui->listWidget->currentItem();
 
-    if (current != 0 && current != nullptr) {
+    if (current != nullptr) {
       int row = ui->listWidget->row(current);
       delete ui->listWidget->currentItem();
 
@@ -64,7 +64,6 @@ SmartTitleManager::SmartTitleManager(QWidget *parent) :
   connect(ui->spinBox, SIGNAL(valueChanged(int)), SLOT(updateName()));
 
   connect(ui->listWidget, &QListWidget::currentItemChanged, [&]() {  // NOLINT
-    if (ui->listWidget->currentItem() == 0) return;
     if (ui->listWidget->currentItem() == nullptr) return;
 
     QStringList text = ui->listWidget->currentItem()->text().split(seperator);

@@ -63,6 +63,7 @@ int API::verifyAPI() {
       waiter.exec();
 
       delete wv;
+      wv = nullptr;
     } else {
       bool ok;
       QDesktopServices::openUrl(QUrl(VER_AUTHPINURL_STR));

@@ -35,9 +35,8 @@ void User::deleteInstance() {
 }
 
 User::User() : QObject(0) {
-  QJsonObject result =
-      API::sharedAPI()->sharedAniListAPI()->get
-        (API::sharedAPI()->sharedAniListAPI()->API_USER).object();
+  QUrl user = API::sharedAPI()->sharedAniListAPI()->API_USER;
+  QJsonObject result = API::sharedAPI()->sharedAniListAPI()->get(user).object();
 
   user_image_control = nullptr;
 
@@ -78,7 +77,7 @@ bool User::loadProfileImage() {
 
   this->setUserImage(user_image_control->downloadedData());
 
-  delete user_image_control;
+  user_image_control->deleteLater();
   user_image_control = nullptr;
 
   return true;

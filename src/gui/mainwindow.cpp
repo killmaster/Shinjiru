@@ -275,13 +275,11 @@ MainWindow::~MainWindow() {
   over->removeAll();
 
   for (QTableWidgetItem *i : tableWidgets) {
-    if (i)
-      delete i;
+    delete i;
   }
 
   for (QTableWidgetItem *i : torrentWidgets) {
-    if (i)
-      delete i;
+    delete i;
   }
 
   User::deleteInstance();

@@ -49,13 +49,12 @@ void MainWindow::userListLoaded() {
   int current_list = -1;
 
   for (QTableWidgetItem *i : tableWidgets) {
-    if (i)
-      delete i;
+    delete i;
   }
   this->tableWidgets.clear();
 
   while (ui->listTabs->count()) {
-    delete ui->listTabs->widget(ui->listTabs->currentIndex());
+    delete ui->listTabs->currentWidget();
   }
 
   ui->listTabs->clear();

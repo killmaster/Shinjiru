@@ -106,5 +106,6 @@ void Anime::downloadCover() {
   connect(anime_image_control, &FileDownloader::downloaded, [&]() { //NOLINT
     this->setCoverImageData(anime_image_control->downloadedData());
     anime_image_control->deleteLater();
+    anime_image_control = nullptr;
   });
 }

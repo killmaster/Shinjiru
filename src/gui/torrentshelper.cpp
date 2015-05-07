@@ -33,8 +33,8 @@ void MainWindow::refreshTorrentListing() {
 
   torrentWidgets.clear();
 
-  QStringList titles = QStringList(*(torrents->getTitles()));
-  QStringList links = QStringList(*(torrents->getLinks()));
+  QStringList titles = torrents->getTitles();
+  QStringList links = torrents->getLinks();
   int offset = 0;
 
   for (int i = 0; i < titles.length(); i++) {
@@ -94,7 +94,8 @@ void MainWindow::refreshTorrentListing() {
     offset--;
   }
 
-  delete torrents;
+  torrents->deleteLater();
+  torrents = nullptr;
   qDebug() << ui->torrentTable->rowCount() << "torrents loaded";
 
   ui->torrentTable->resizeColumnsToContents();

@@ -172,6 +172,7 @@ int main(int argc, char *argv[]) {
   w.show();
 
   delete s;
+  s = nullptr;
 
   return a.exec();
 }

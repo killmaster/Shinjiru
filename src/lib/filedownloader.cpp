@@ -22,6 +22,7 @@ void FileDownloader::fileDownloaded(QNetworkReply* pReply) {
 
   m_DownloadedData = pReply->readAll();
   pReply->deleteLater();
+  pReply = nullptr;
   emit downloaded();
 }
 

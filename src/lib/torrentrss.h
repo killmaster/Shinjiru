@@ -18,8 +18,8 @@ class TorrentRSS : public QWidget {
   explicit TorrentRSS(QWidget *widget = 0);
   ~TorrentRSS();
 
-  QList<QString> *getLinks();
-  QList<QString> *getTitles();
+  QList<QString> getLinks();
+  QList<QString> getTitles();
 
  public slots:  // NOLINT
   void fetch();
@@ -40,8 +40,8 @@ class TorrentRSS : public QWidget {
   QString linkString;
   QString titleString;
 
-  QList<QString> *titles;
-  QList<QString> *links;
+  QList<QString> titles;
+  QList<QString> links;
 
   QNetworkAccessManager manager;
   QNetworkReply *currentReply;
