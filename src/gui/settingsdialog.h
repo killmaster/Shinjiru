@@ -17,6 +17,8 @@ public:
 
 private:
   Ui::SettingsDialog *ui;
+  void loadSettings();
+  void defaultSettings();
 };
 
 #endif // SETTINGSDIALOG_H

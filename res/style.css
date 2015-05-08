@@ -1,7 +1,7 @@
-QTabWidget {
-  border:none;
+#tabWidget, #listTabs {
+  border: none;
 }
 
-QTabWidget::pane {
+#tabWidget::pane, #listTabs::pane {
   border: none;
 }

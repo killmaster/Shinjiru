@@ -16,6 +16,7 @@
 #include "./overlay.h"
 #include "./searchpanel.h"
 #include "./smarttitlemanager.h"
+#include "./settingsdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent), ui(new Ui::MainWindow) {
@@ -118,7 +119,7 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->airingButton,     SIGNAL(clicked()),   SLOT(showAiringTab()));
   connect(ui->torrentsButton,   SIGNAL(clicked()),   SLOT(showTorrentsTab()));
   connect(ui->seasonsButton,    SIGNAL(clicked()),   SLOT(showBrowseTab()));
-  connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettingsTab()));
+  connect(ui->actionSettings,   SIGNAL(triggered()), SLOT(showSettings()));
   connect(ui->statisticsButton, SIGNAL(clicked()),   SLOT(showStatisticsTab()));
 
   connect(ui->actionExit, &QAction::triggered, [&]() {  // NOLINT
@@ -397,7 +398,6 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 }
 
 void MainWindow::showAnimeTab() { ui->tabWidget->setCurrentIndex(0); }
-void MainWindow::showSettingsTab() { ui->tabWidget->setCurrentIndex(1); }
 void MainWindow::showTorrentsTab() { ui->tabWidget->setCurrentIndex(2); }
 void MainWindow::showAiringTab() {
   ui->tabWidget->setCurrentIndex(3);
@@ -422,6 +422,12 @@ void MainWindow::showBrowseTab() {
   }
 
   layout2->setContentsMargins((width-cwidth)/2, 0, 0, 0);
+}
+
+
+void MainWindow::showSettings() {
+  SettingsDialog *s = new SettingsDialog(this);
+  s->show();
 }
 
 void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {

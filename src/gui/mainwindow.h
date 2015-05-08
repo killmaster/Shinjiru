@@ -144,7 +144,7 @@ class MainWindow : public QMainWindow {
   void toggleAnimeRecognition(bool ar);
 
   void showAnimeTab();
-  void showSettingsTab();
+  void showSettings();
   void showTorrentsTab();
   void showBrowseTab();
   void showAiringTab();

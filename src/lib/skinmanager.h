@@ -4,7 +4,7 @@
 #define SRC_LIB_SKINMANAGER_H_
 
 #include <QObject>
-#include <QStringList>
+#include <QMap>
 
 class SkinManager : public QObject {
   Q_OBJECT
@@ -14,11 +14,16 @@ class SkinManager : public QObject {
   QString get(int i);
 
   enum SkinElements {
-    AboutMascot
+    AboutMascot,
+    ApplicationIcon,
+    AnimeListIcon,
+    AdvancedIcon,
+    RecognitionIcon,
+    TorrentsIcon
   };
 
  private:
-  QStringList element_paths;
+  QMap<int, QString> element_paths;
   static SkinManager* m_Instance;
 
 

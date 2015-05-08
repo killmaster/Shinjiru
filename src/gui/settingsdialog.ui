@@ -31,45 +31,25 @@
         <property name="text">
          <string>Application</string>
         </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../../res/application.png</normaloff>../../res/application.png</iconset>
-        </property>
        </item>
        <item>
         <property name="text">
          <string>Anime List</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../../res/list.png</normaloff>../../res/list.png</iconset>
         </property>
        </item>
        <item>
         <property name="text">
          <string>Recognition</string>
         </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../../res/recognition.png</normaloff>../../res/recognition.png</iconset>
-        </property>
        </item>
        <item>
         <property name="text">
          <string>Torrents</string>
         </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../../res/rss.png</normaloff>../../res/rss.png</iconset>
-        </property>
        </item>
        <item>
         <property name="text">
          <string>Advanced</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>../../res/advanced.png</normaloff>../../res/advanced.png</iconset>
         </property>
        </item>
       </widget>
@@ -77,7 +57,7 @@
      <item>
       <widget class="QTabWidget" name="settingsTypeTabs">
        <property name="currentIndex">
-        <number>0</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -104,25 +84,62 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_2">
             <item>
-             <widget class="QCheckBox" name="checkBox">
+             <widget class="QCheckBox" name="startOnBootCheck">
               <property name="text">
                <string>Start on Boot</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_4">
+             <widget class="QCheckBox" name="checkforUpdatesCheck">
               <property name="text">
                <string>Check for Updates</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_5">
+             <widget class="QCheckBox" name="startMinimizedCheck">
               <property name="text">
                <string>Start Minimized</string>
               </property>
              </widget>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item>
+          <widget class="QGroupBox" name="groupBox_11">
+           <property name="title">
+            <string>Update Settings</string>
+           </property>
+           <layout class="QVBoxLayout" name="verticalLayout_21">
+            <item>
+             <layout class="QFormLayout" name="formLayout_5">
+              <property name="fieldGrowthPolicy">
+               <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+              </property>
+              <item row="0" column="0">
+               <widget class="QLabel" name="updateStreamLabel">
+                <property name="text">
+                 <string>Update Stream</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QComboBox" name="updateStreamComboBox">
+                <item>
+                 <property name="text">
+                  <string>Stable</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Nightly</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+             </layout>
             </item>
            </layout>
           </widget>
@@ -134,14 +151,14 @@
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_3">
             <item>
-             <widget class="QCheckBox" name="checkBox_2">
+             <widget class="QCheckBox" name="minimizeToTrayCheck">
               <property name="text">
                <string>Minimize to Tray</string>
               </property>
              </widget>
             </item>
             <item>
-             <widget class="QCheckBox" name="checkBox_3">
+             <widget class="QCheckBox" name="closeToTrayCheck">
               <property name="text">
                <string>Close to Tray</string>
               </property>
@@ -164,11 +181,11 @@
           </spacer>
          </item>
         </layout>
-        <zorder>settingsTypeList</zorder>
         <zorder>groupBox</zorder>
         <zorder>groupBox_2</zorder>
         <zorder>verticalSpacer</zorder>
         <zorder>label</zorder>
+        <zorder>groupBox_11</zorder>
        </widget>
        <widget class="QWidget" name="tab_7">
         <attribute name="title">
@@ -260,82 +277,207 @@
           </widget>
          </item>
          <item>
-          <widget class="QGroupBox" name="groupBox_3">
-           <property name="title">
-            <string>General Recognition Settings</string>
+          <widget class="QTabWidget" name="tabWidget">
+           <property name="currentIndex">
+            <number>1</number>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <item>
-             <widget class="QCheckBox" name="checkBox_6">
-              <property name="text">
-               <string>Enable Anime Recognition</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
+           <widget class="QWidget" name="tab_8">
+            <attribute name="title">
+             <string>Recognition Settings</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_23">
+             <item>
+              <widget class="QGroupBox" name="groupBox_3">
+               <property name="title">
+                <string>General Recognition Settings</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_6">
+                <item>
+                 <widget class="QCheckBox" name="EARCheck">
+                  <property name="text">
+                   <string>Enable Anime Recognition</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_4">
+               <property name="title">
+                <string>Notification Settings</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_7">
+                <item>
+                 <widget class="QCheckBox" name="detectNotifyCheck">
+                  <property name="text">
+                   <string>Notify When Media is Detected</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="updateNotifyCheck">
+                  <property name="text">
+                   <string>Notify When List is Updated</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupBox_5">
+               <property name="title">
+                <string>Update Settings</string>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_8">
+                <item>
+                 <layout class="QFormLayout" name="formLayout">
+                  <property name="fieldGrowthPolicy">
+                   <enum>QFormLayout::FieldsStayAtSizeHint</enum>
+                  </property>
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="updateDelayLabel">
+                    <property name="text">
+                     <string>Update Delay:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QSpinBox" name="updateDelaySpinBox">
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <spacer name="verticalSpacer_2">
+               <property name="orientation">
+                <enum>Qt::Vertical</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>20</width>
+                 <height>40</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
+           </widget>
+           <widget class="QWidget" name="tab_9">
+            <attribute name="title">
+             <string>Smart Title Rules</string>
+            </attribute>
+            <layout class="QVBoxLayout" name="verticalLayout_22">
+             <item>
+              <widget class="QListWidget" name="smartTitleList">
+               <property name="editTriggers">
+                <set>QAbstractItemView::NoEditTriggers</set>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,9">
+               <item>
+                <widget class="QLabel" name="label_6">
+                 <property name="text">
+                  <string>Title:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QComboBox" name="titleComboBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="editable">
+                  <bool>true</bool>
+                 </property>
+                 <property name="sizeAdjustPolicy">
+                  <enum>QComboBox::AdjustToMinimumContentsLength</enum>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="1,9">
+               <item>
+                <widget class="QLabel" name="label_8">
+                 <property name="text">
+                  <string>Alias:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="aliasLineEdit"/>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,9">
+               <item>
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Offset:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QSpinBox" name="offsetSpinBox">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <spacer name="horizontalSpacer_4">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item>
+                <widget class="QPushButton" name="newTitle">
+                 <property name="text">
+                  <string>New</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QPushButton" name="deleteTitle">
+                 <property name="text">
+                  <string>Delete</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_4">
-           <property name="title">
-            <string>Notification Settings</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_7">
-            <item>
-             <widget class="QCheckBox" name="checkBox_7">
-              <property name="text">
-               <string>Notify When Media is Detected</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QCheckBox" name="checkBox_8">
-              <property name="text">
-               <string>Notify When List is Updated</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <widget class="QGroupBox" name="groupBox_5">
-           <property name="title">
-            <string>Update Settings</string>
-           </property>
-           <layout class="QVBoxLayout" name="verticalLayout_8">
-            <item>
-             <layout class="QFormLayout" name="formLayout">
-              <property name="fieldGrowthPolicy">
-               <enum>QFormLayout::FieldsStayAtSizeHint</enum>
-              </property>
-              <item row="0" column="0">
-               <widget class="QLabel" name="updateDelayLabel">
-                <property name="text">
-                 <string>Update Delay:</string>
-                </property>
-               </widget>
-              </item>
-              <item row="0" column="1">
-               <widget class="QSpinBox" name="updateDelaySpinBox"/>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
-           </property>
-          </spacer>
          </item>
         </layout>
        </widget>
@@ -358,9 +500,9 @@
           </widget>
          </item>
          <item>
-          <widget class="QTabWidget" name="tabWidget">
+          <widget class="QTabWidget" name="torrentTabs">
            <property name="currentIndex">
-            <number>0</number>
+            <number>1</number>
            </property>
            <widget class="QWidget" name="tab_5">
             <attribute name="title">
@@ -374,7 +516,7 @@
                </property>
                <layout class="QVBoxLayout" name="verticalLayout_10">
                 <item>
-                 <widget class="QCheckBox" name="checkBox_9">
+                 <widget class="QCheckBox" name="torrentCheck">
                   <property name="text">
                    <string>Check for New Releases Automatically</string>
                   </property>
@@ -393,7 +535,11 @@
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="QSpinBox" name="refreshIntervalSpinBox"/>
+                   <widget class="QSpinBox" name="refreshIntervalSpinBox">
+                    <property name="maximum">
+                     <number>99999</number>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </item>
@@ -404,14 +550,14 @@
                   </property>
                   <layout class="QVBoxLayout" name="verticalLayout_9">
                    <item>
-                    <widget class="QRadioButton" name="radioButton">
+                    <widget class="QRadioButton" name="notifyRadio">
                      <property name="text">
                       <string>Notify Me</string>
                      </property>
                     </widget>
                    </item>
                    <item>
-                    <widget class="QRadioButton" name="radioButton_2">
+                    <widget class="QRadioButton" name="downloadRadio">
                      <property name="text">
                       <string>Download Automatically</string>
                      </property>
@@ -464,14 +610,14 @@
                   </spacer>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton_2">
+                  <widget class="QPushButton" name="newTorrentRule">
                    <property name="text">
                     <string>New</string>
                    </property>
                   </widget>
                  </item>
                  <item>
-                  <widget class="QPushButton" name="pushButton">
+                  <widget class="QPushButton" name="deleteTorrentRule">
                    <property name="text">
                     <string>Delete</string>
                    </property>
@@ -637,9 +783,6 @@
               </layout>
              </item>
             </layout>
-            <zorder>verticalLayoutWidget</zorder>
-            <zorder>verticalLayoutWidget_2</zorder>
-            <zorder>groupBox_8</zorder>
            </widget>
           </widget>
          </item>

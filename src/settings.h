@@ -29,7 +29,14 @@ class Settings : public QObject {
     ListOrder,
     DownloadCount,
     RuleCount,
-    ReleaseStream
+    ReleaseStream,
+    CheckUpdates,
+    StartMinimized,
+    AnimeDetectNotify,
+    AnimeUpdateNotify,
+    TorrentsEnabled,
+    AutoDownload,
+    AutoNotify
   };
 
  private:
