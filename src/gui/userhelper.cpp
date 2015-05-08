@@ -34,6 +34,9 @@ void MainWindow::userLoaded() {
   progress_bar->setValue(20);
   progress_bar->setFormat(tr("User Loaded"));
 
+  User::sharedUser()->disconnect(this);
+  this->disconnect(User::sharedUser());
+
   connect(User::sharedUser(), SIGNAL(reloadRequested()),
           this, SLOT(userListLoaded()));
 
