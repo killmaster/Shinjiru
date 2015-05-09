@@ -270,25 +270,38 @@ void MainWindow::checkForMatches() {
 }
 
 void MainWindow::verifyAndDownload(int row) {
+  bool auto_download =
+      settings->getValue(Settings::AutoDownload, true).toBool();
+  bool auto_notify =
+      settings->getValue(Settings::AutoNotify, false).toBool();
+
   QString title = ui->torrentTable->item(row, 4)->text();
   QString file = title + ".dl";
   QDir history_dir(QCoreApplication::applicationDirPath() + "/history/");
   history_dir.mkdir(".");
   QFile f(history_dir.absoluteFilePath(file));
   if (!f.exists()) {
-    qDebug() << "Downloading" << title << "from torrent rule";
-    download(row);
-    download_rule++;
-    rule_total++;
+    if(auto_notify) {
+      trayIcon->showMessage("Shinjiru", tr("New matching torrents found."));
+      return;
+    }
 
-    ui->labelRulesLaunch->setText(QString::number(download_rule));
-    ui->labelRulesTotal->setText(QString::number(rule_total));
+    if(auto_download) {
+      qDebug() << "Downloading" << title << "from torrent rule";
+      download(row);
+      download_rule++;
+      rule_total++;
 
-    settings->setValue(Settings::RuleCount, rule_total);
+      ui->labelRulesLaunch->setText(QString::number(download_rule));
+      ui->labelRulesTotal->setText(QString::number(rule_total));
 
-    trayIcon->showMessage("Shinjiru", title + tr(" has started downloading."));
-    f.open(QFile::WriteOnly);
-    f.write("0");
+      settings->setValue(Settings::RuleCount, rule_total);
+
+      trayIcon->showMessage("Shinjiru", tr("%1 has started downloading.")
+                                        .arg(title));
+      f.open(QFile::WriteOnly);
+      f.write("0");
+    }
   }
 }
 

@@ -4,6 +4,11 @@
 #include "../settings.h"
 #include "../lib/skinmanager.h"
 
+#ifdef Q_OS_WIN
+  const QString winkey =
+      "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
+#endif
+
 SettingsDialog::SettingsDialog(QWidget *parent) :
   QDialog(parent), ui(new Ui::SettingsDialog) {
   ui->setupUi(this);
@@ -28,6 +33,23 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui->settingsTypeTabs->tabBar()->hide();
   ui->settingsTypeTabs->setCurrentIndex(0);
 
+  awesome = new QtAwesome(qApp);
+  awesome->initFontAwesome();
+
+  QVariantMap black;
+  black.insert("color", QColor(0, 0, 0));
+  black.insert("color-active", QColor(0, 0, 0));
+  black.insert("color-disabled", QColor(0, 0, 0));
+  black.insert("color-selected", QColor(0, 0, 0));
+
+  ui->moveDownButton->setIcon(awesome->icon(fa::arrowdown, black));
+  ui->moveUpButton->setIcon(awesome->icon(fa::arrowup, black));
+  ui->moveUpButton->setText("");
+  ui->moveDownButton->setText("");
+
+  connect(ui->moveUpButton, SIGNAL(clicked()), SLOT(moveUp()));
+  connect(ui->moveDownButton, SIGNAL(clicked()), SLOT(moveDown()));
+
   QFont font = ui->orderListWidget->font();
   font.setCapitalization(QFont::Capitalize);
   ui->orderListWidget->setFont(font);
@@ -37,6 +59,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
 SettingsDialog::~SettingsDialog() {
   delete ui;
+  delete awesome;
 }
 
 void SettingsDialog::accept() {
@@ -53,6 +76,15 @@ void SettingsDialog::loadSettings() {
   bool start_on_boot = s->getValue(Settings::StartOnBoot, false).toBool();
   bool check_for_updates = s->getValue(Settings::CheckUpdates, true).toBool();
   bool start_minimized = s->getValue(Settings::StartMinimized, false).toBool();
+
+
+  if (start_on_boot) {
+    #ifdef Q_OS_WIN
+      QSettings reg(winkey, QSettings::NativeFormat);
+      QString path = reg.value("Shinjiru", QString("")).toString();
+      if (path.isEmpty()) start_on_boot = false;
+    #endif
+  }
 
   ui->startOnBootCheck->setChecked(start_on_boot);
   ui->checkforUpdatesCheck->setChecked(check_for_updates);
@@ -176,6 +208,20 @@ void SettingsDialog::applySettings() {
   s->setValue(Settings::CheckUpdates, check_for_updates);
   s->setValue(Settings::StartMinimized, start_minimized);
 
+
+  if (start_on_boot) {
+    #ifdef Q_OS_WIN
+      QSettings reg(winkey, QSettings::NativeFormat);
+      reg.setValue("Shinjiru", "\"" +
+                   qApp->applicationFilePath().replace("/", "\\") + "\"");
+    #endif
+  } else {
+    #ifdef Q_OS_WIN
+      QSettings reg(winkey, QSettings::NativeFormat);
+      reg.remove("Shinjiru");
+    #endif
+  }
+
   // Update Settings
   QString update_stream = ui->updateStreamComboBox->currentText();
 
@@ -233,4 +279,29 @@ void SettingsDialog::applySettings() {
   // ...
 
   delete s;
+}
+
+
+void SettingsDialog::moveUp() {
+  if (ui->orderListWidget->selectedItems().count() == 1) {
+    int row =
+       ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
+    if (row != 0) {
+      ui->orderListWidget->insertItem(
+           row - 1, ui->orderListWidget->takeItem(row)->text());
+      ui->orderListWidget->setCurrentRow(row - 1);
+    }
+  }
+}
+
+void SettingsDialog::moveDown() {
+  if (ui->orderListWidget->selectedItems().count() == 1) {
+    int row =
+        ui->orderListWidget->row(ui->orderListWidget->selectedItems().at(0));
+    if (row != ui->orderListWidget->count()) {
+      ui->orderListWidget->insertItem(
+            row + 1, ui->orderListWidget->takeItem(row)->text());
+      ui->orderListWidget->setCurrentRow(row + 1);
+    }
+  }
 }

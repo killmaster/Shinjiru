@@ -107,14 +107,12 @@ class MainWindow : public QMainWindow {
   int user_refresh_time;
   int default_time;
 
+  bool torrents_enabled;
+
   QAction *quitAction;
   QAction *restoreAction;
   QAction *animeRecognitionAction;
   QAction *cancelUpdateAction;
-
-  int auto_update_delay;
-  bool minimize_to_tray;
-  bool close_to_tray;
 
   QString showFunc;
 
@@ -188,9 +186,6 @@ class MainWindow : public QMainWindow {
   void createActions();
 
   void updateStatus(int row, QTableWidget *table, QString status);
-
-  void moveUp();
-  void moveDown();
 
   void addSearchPrompt();
   void addNoAnimePrompt();

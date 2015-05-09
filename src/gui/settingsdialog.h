@@ -2,6 +2,7 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QtAwesome.h>
 
 namespace Ui {
 class SettingsDialog;
@@ -21,8 +22,12 @@ private:
   void defaultSettings();
   void applySettings();
 
+  QtAwesome *awesome;
+
 private slots:
   void accept();
+  void moveUp();
+  void moveDown();
 };
 
 #endif // SETTINGSDIALOG_H

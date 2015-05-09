@@ -91,11 +91,6 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->animeButton     ->setIcon(awesome->icon(fa::bars,      black));
   ui->seasonsButton   ->setIcon(awesome->icon(fa::th,        black));
   ui->statisticsButton->setIcon(awesome->icon(fa::piechart,  black));
-  ui->moveDownButton  ->setIcon(awesome->icon(fa::arrowdown, black));
-  ui->moveUpButton    ->setIcon(awesome->icon(fa::arrowup,   black));
-
-  ui->moveUpButton->setText("");
-  ui->moveDownButton->setText("");
 
   ui->tabWidget->tabBar()->hide();
   ui->tabWidget->setCurrentIndex(0);
@@ -191,8 +186,6 @@ MainWindow::MainWindow(QWidget *parent) :
           SLOT(settingsChanged()));
   connect(ui->applyButton, SIGNAL(clicked()),  SLOT(applySettings()));
   connect(ui->defaultButton, SIGNAL(clicked()), SLOT(defaultSettings()));
-  connect(ui->moveUpButton, SIGNAL(clicked()), SLOT(moveUp()));
-  connect(ui->moveDownButton, SIGNAL(clicked()), SLOT(moveDown()));
   connect(ui->openSkinsFolderButton, &QPushButton::clicked, [&]() {  // NOLINT
     QDesktopServices::openUrl(QUrl(qApp->applicationDirPath() + "/data/skin/"));
   });
@@ -289,7 +282,8 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-  if (trayIcon->isVisible() && close_to_tray) {
+  if (trayIcon->isVisible() &&
+      settings->getValue(Settings::CloseToTray, true).toBool()) {
     hide();
     event->ignore();
   } else {
@@ -315,7 +309,8 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event) {
 
 void MainWindow::changeEvent(QEvent *event) {
   if (event->type() == QEvent::WindowStateChange) {
-    if (isMinimized() && minimize_to_tray) {
+    if (isMinimized() &&
+        settings->getValue(Settings::MinimizeToTray, true).toBool()) {
       this->hide();
       event->ignore();
     }
@@ -428,6 +423,14 @@ void MainWindow::showBrowseTab() {
 void MainWindow::showSettings() {
   SettingsDialog *s = new SettingsDialog(this);
   s->show();
+
+  connect(s, &QDialog::accepted, [&] () {
+    toggleAnimeRecognition(
+          settings->getValue(Settings::AnimeRecognitionEnabled, true).toBool());
+
+    torrents_enabled =
+        settings->getValue(Settings::TorrentsEnabled, true).toBool();
+  });
 }
 
 void MainWindow::showAnimePanel(int row, int column, QTableWidget *source) {
@@ -496,7 +499,6 @@ void MainWindow::toggleAnimeRecognition(bool checked) {
   }
 
   ui->actionEAR->setChecked(checked);
-  ui->autoRecognitionCheckBox->setChecked(checked);
 }
 
 void MainWindow::watch(QString title) {
@@ -537,12 +539,17 @@ void MainWindow::watch(QString title) {
       return;
     }
 
+    int auto_update_delay =
+        settings->getValue(Settings::AutoUpdateDelay, 120).toInt();
+
     this->watch_timer->start(1000 * auto_update_delay);
-    this->trayIcon->showMessage("Shinjiru",
-                                tr("Updating %1 to episode %2 in %3 seconds")
-                                .arg(cw_anime->getTitle())
-                                .arg(cw_episode)
-                                .arg(QString::number(auto_update_delay)));
+
+    if(settings->getValue(Settings::AnimeDetectNotify, true).toBool())
+      this->trayIcon->showMessage("Shinjiru",
+                                  tr("Updating %1 to episode %2 in %3 seconds")
+                                  .arg(cw_anime->getTitle())
+                                  .arg(cw_episode)
+                                  .arg(QString::number(auto_update_delay)));
   }
 }
 
@@ -567,6 +574,8 @@ void MainWindow::updateEpisode() {
   QJsonObject response = API::sharedAPI()->sharedAniListAPI()->put(
         API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data).object();
 
+  if(!settings->getValue(Settings::AnimeUpdateNotify, true).toBool()) return;
+
   if (response != QJsonObject()) {
     trayIcon->showMessage("Shinjiru", tr("%1 updated to episode %2")
                           .arg(cw_anime->getTitle())
@@ -582,8 +591,17 @@ void MainWindow::updateEpisode() {
 }
 
 void MainWindow::eventTick() {
-  if (torrent_refresh_time == 0) {
-    refreshTorrentListing();
+  if(torrents_enabled) {
+    if (torrent_refresh_time == 0) {
+      refreshTorrentListing();
+    }
+
+    torrent_refresh_time--;
+
+    ui->refreshButton->setText(tr("Refresh (%1)")
+                               .arg(QString::number(torrent_refresh_time)));
+  } else {
+    ui->refreshButton->setText(tr("Refresh"));
   }
 
   if (user_refresh_time == 0) {
@@ -598,10 +616,7 @@ void MainWindow::eventTick() {
         aa->tick();
   }
 
-  torrent_refresh_time--;
   user_refresh_time--;
-  ui->refreshButton->setText(tr("Refresh (%1)")
-                             .arg(QString::number(torrent_refresh_time)));
 
   qint64 seconds = uptime_timer->elapsed() / 1000;
   int minutes = seconds / 60;

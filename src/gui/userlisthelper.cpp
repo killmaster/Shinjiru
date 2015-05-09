@@ -47,6 +47,8 @@ void MainWindow::userListLoaded() {
   int remaining_space = progress_bar->maximum() - starting_value;
   int space_per_list = remaining_space;
   int current_list = -1;
+  QStringList list_order =
+      settings->getValue(Settings::ListOrder, QStringList()).toStringList();
 
   for (QTableWidgetItem *i : tableWidgets) {
     delete i;
@@ -171,14 +173,14 @@ void MainWindow::userListLoaded() {
     bool found = false;
     int index = -1;
 
-    for (int i = 0; i < ui->orderListWidget->count(); i++) {
-      if (ui->orderListWidget->item(i)->text() == tab_title) {
+    for (int i = 0; i < list_order.count(); i++) {
+      if (list_order.at(i) == tab_title) {
         found = true;
         index = i;
       }
     }
 
-    if (!found) ui->orderListWidget->addItem(tab_title);
+    if (!found) list_order.append(tab_title);
 
     if (index == -1)
       ui->listTabs->addTab(page, tab_title + " (" + tab_total + ")");
@@ -205,8 +207,8 @@ void MainWindow::userListLoaded() {
 
   QTabBar *tb = ui->listTabs->tabBar();
 
-  for (int i = 0; i < ui->orderListWidget->count(); i++) {
-    QString current = ui->orderListWidget->item(i)->text().toLower();
+  for (int i = 0; i < list_order.count(); i++) {
+    QString current = list_order.at(i).toLower();
     QStringList tab_texts;
     for (int j = 0; j < ui->listTabs->count(); j++) {
       tab_texts << ui->listTabs->tabText(j).toLower();
@@ -231,6 +233,8 @@ void MainWindow::userListLoaded() {
   ui->actionRL->setEnabled(true);
 
   ui->listTabs->setCurrentIndex(index);
+
+  settings->setValue(Settings::ListOrder, list_order);
 
   updateStatistics();
 }
