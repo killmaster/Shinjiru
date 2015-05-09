@@ -65,7 +65,6 @@ SOURCES   += \
     src/gui/browserhelper.cpp \
     src/gui/browseanime.cpp \
     src/api/smarttitle.cpp \
-    src/gui/smarttitlemanager.cpp \
     src/gui/settingsdialog.cpp
 
 HEADERS   += \
@@ -102,7 +101,6 @@ HEADERS   += \
     src/version.h \
     src/gui/browseanime.h \
     src/api/smarttitle.h \
-    src/gui/smarttitlemanager.h \
     src/gui/settingsdialog.h
 
 FORMS     += \
@@ -115,7 +113,6 @@ FORMS     += \
     src/gui/rulemanager.ui \
     src/gui/searchpanel.ui \
     src/gui/browseanime.ui \
-    src/gui/smarttitlemanager.ui \
     src/gui/settingsdialog.ui
 
 RESOURCES += res/res.qrc

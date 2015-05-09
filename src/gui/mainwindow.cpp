@@ -15,7 +15,6 @@
 #include "./about.h"
 #include "./overlay.h"
 #include "./searchpanel.h"
-#include "./smarttitlemanager.h"
 #include "./settingsdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -139,8 +138,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
   connect(ui->actionARR, &QAction::triggered, [&]() {  // NOLINT
     reloadSmartTitles();
-    SmartTitleManager *stm = new SmartTitleManager(this);
-    stm->show();
+    SettingsDialog *s = new SettingsDialog(this);
+    s->showSmartTitles();
   });
 
   connect(ui->actionVAL, SIGNAL(triggered()), SLOT(viewAnimeList()));

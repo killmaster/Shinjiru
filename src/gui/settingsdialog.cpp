@@ -3,18 +3,26 @@
 
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDir>
 
 #include "../settings.h"
 #include "../lib/skinmanager.h"
+#include "../api/anime.h"
+#include "../api/user.h"
 
 #ifdef Q_OS_WIN
   const QString winkey =
       "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Run";
 #endif
 
+const QChar sp = QChar(0x202F);
+const QString seperator = QString(sp + QString(" - "));
+
 SettingsDialog::SettingsDialog(QWidget *parent) :
   QDialog(parent), ui(new Ui::SettingsDialog) {
   ui->setupUi(this);
+  setAttribute(Qt::WA_DeleteOnClose);
+  setWindowFlags(windowFlags() & ~Qt::WindowContextHelpButtonHint);
 
   ui->settingsTypeList->item(0)->setIcon(QIcon(QPixmap(
             SkinManager::sharedManager()->get(SkinManager::ApplicationIcon))));
@@ -36,10 +44,53 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   connect(ui->openSkinsFolderButton, &QPushButton::clicked, [&]() {  // NOLINT
     QDesktopServices::openUrl(QUrl(qApp->applicationDirPath() + "/data/skin/"));
   });
+  connect(ui->newTitle, &QPushButton::clicked, [&]() {  // NOLINT
+    ui->smartTitleList->addItem("**New**");
+    ui->smartTitleList->setCurrentRow(ui->listWidget->count() - 1);
+  });
+
+  connect(ui->deleteTitle, &QPushButton::clicked, [&](){  // NOLINT
+    QListWidgetItem *current = ui->smartTitleList->currentItem();
+
+    if (current != nullptr) {
+      int row = ui->smartTitleList->row(current);
+      delete ui->smartTitleList->currentItem();
+
+      ui->smartTitleList->setCurrentRow(qMax(row - 1, 0));
+    }
+  });
+  connect(ui->aliasLineEdit, SIGNAL(textEdited(QString)),
+          SLOT(updateSmartTitleName()));
+  connect(ui->titleComboBox, SIGNAL(currentIndexChanged(int)),
+          SLOT(updateSmartTitleName()));
+  connect(ui->offsetSpinBox, SIGNAL(valueChanged(int)), SLOT(updateSmartTitleName()));
+
+  connect(ui->smartTitleList, &QListWidget::currentItemChanged, [&]() {  // NOLINT
+    if (ui->smartTitleList->currentItem() == nullptr) return;
+
+    QStringList text = ui->smartTitleList->currentItem()->text().split(seperator);
+
+    ui->aliasLineEdit->setText(text.at(0));
+
+    ui->offsetSpinBox->setValue(text.last().toInt());
+
+    if (text.length() > 2) {
+      ui->titleComboBox->disconnect(this);
+      ui->titleComboBox->setCurrentText(text.at(1) + seperator + text.at(2));
+      connect(ui->titleComboBox, SIGNAL(currentIndexChanged(int)),
+              SLOT(updateSmartTitleName()));
+    }
+
+    if (text.length() > 3)
+      ui->spinBox->setValue(text.at(3).toInt());
+  });
+
 
   ui->torrentTabs->setCurrentIndex(0);
   ui->settingsTypeTabs->tabBar()->hide();
   ui->settingsTypeTabs->setCurrentIndex(0);
+  ui->smartTitleList->setCurrentRow(0);
+  updateSmartTitleName();
 
   awesome = new QtAwesome(qApp);
   awesome->initFontAwesome();
@@ -134,6 +185,9 @@ void SettingsDialog::loadSettings() {
 
   ui->updateDelaySpinBox->setValue(update_delay);
 
+  // Smart Titles
+  loadSmartTitles();
+
   /* --- TORRENT SETTINGS --- */
 
   // Automation
@@ -148,7 +202,7 @@ void SettingsDialog::loadSettings() {
   ui->notifyRadio->setChecked(auto_notify);
 
   // Torrent Rules
-  //loadTorrentRules();
+  loadTorrentRules();
 
   /* --- ADVANCED SETTINGS --- */
 
@@ -186,6 +240,9 @@ void SettingsDialog::defaultSettings() {
 
   // Update Settings
   ui->updateDelaySpinBox->setValue(120);
+
+  // Smart Titles
+  //loadSmartTitles();
 
   /* --- TORRENT SETTINGS --- */
 
@@ -271,6 +328,9 @@ void SettingsDialog::applySettings() {
   int update_delay = ui->updateDelaySpinBox->value();
   s->setValue(Settings::AutoUpdateDelay, update_delay);
 
+  // Smart Titles
+  saveSmartTitles();
+
   /* --- TORRENT SETTINGS --- */
 
   // Automation
@@ -317,4 +377,85 @@ void SettingsDialog::moveDown() {
       ui->orderListWidget->setCurrentRow(row + 1);
     }
   }
+}
+
+void SettingsDialog::loadTorrentRules() {
+
+}
+
+void SettingsDialog::saveTorrentRules() {
+
+}
+
+void SettingsDialog::loadSmartTitles() {
+  QList<Anime *> list = User::sharedUser()->getAnimeList();
+
+  qSort(list.begin(), list.end(), [](Anime *&s1, Anime*&s2) {  // NOLINT
+    return s1->getTitle() < s2->getTitle();
+  });
+
+  for (Anime *a : list) {
+    ui->titleComboBox->addItem(a->getTitle() + seperator + a->getID());
+  }
+
+  QFile smart_file(QCoreApplication::applicationDirPath() + "/relations.json");
+  if (!smart_file.open(QFile::ReadOnly)) return;
+
+  QJsonArray relations = QJsonDocument::fromJson(smart_file.readAll()).array();
+
+  for (QJsonValue v : relations) {
+    QJsonObject relation = v.toObject();
+
+    QString id = relation.value("id").toString("0");
+    QString custom = relation.value("custom").toString();
+    QString title = relation.value("title").toString();
+    int offset = relation.value("offset").toString().toInt(0);
+
+    ui->smartTitleList->addItem(custom + seperator +
+                                title + seperator +
+                                id + seperator +
+                                QString::number(offset));
+  }
+}
+
+void SettingsDialog::saveSmartTitles() {
+  QFile f(QApplication::applicationDirPath() + "/relations.json");
+  f.open(QFile::WriteOnly);
+
+  QJsonArray arr;
+
+  for (int i = 0; i < ui->smartTitleList->count(); i++) {
+    QStringList data = ui->smartTitleList->item(i)->text().split(seperator);
+
+    if (data.length() < 3) continue;
+
+    QJsonObject o;
+
+    o.insert("id", data.at(2));
+    o.insert("title", data.at(1));
+    o.insert("custom", data.at(0));
+    o.insert("offset", data.at(3));
+
+    arr.append(o);
+  }
+
+  f.write(QJsonDocument(arr).toJson());
+}
+void SettingsDialog::updateSmartTitleName() {
+  QString lineText = ui->aliasLineEdit->text() + seperator +
+                     ui->titleComboBox->currentText() + seperator +
+                     QString::number(ui->offsetSpinBox->value());
+
+  if (ui->smartTitleList->currentItem() != 0)
+    ui->smartTitleList->currentItem()->setText(lineText);
+}
+
+void SettingsDialog::showSmartTitles() {
+  this->show();
+  ui->settingsTypeTabs->setCurrentIndex(2);
+  ui->settingsTypeList->setCurrentRow(2);
+  ui->recognitionTab->setCurrentIndex(1);
+
+  if(ui->smartTitleList->count() > 0)
+    ui->smartTitleList->setCurrentRow(0);
 }
