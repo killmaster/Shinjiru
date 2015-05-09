@@ -134,7 +134,7 @@
                 </item>
                 <item>
                  <property name="text">
-                  <string>Nightly</string>
+                  <string>Beta</string>
                  </property>
                 </item>
                </widget>
