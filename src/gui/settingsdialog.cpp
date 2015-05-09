@@ -138,10 +138,12 @@ void SettingsDialog::loadSettings() {
 
   // Automation
   bool enable_torrents = s->getValue(Settings::TorrentsEnabled, true).toBool();
+  int refresh_interval = s->getValue(Settings::TorrentRefreshTime, 900).toInt();
   bool auto_download = s->getValue(Settings::AutoDownload, true).toBool();
   bool auto_notify = s->getValue(Settings::AutoNotify, false).toBool();
 
   ui->torrentCheck->setChecked(enable_torrents);
+  ui->refreshIntervalSpinBox->setValue(refresh_interval);
   ui->downloadRadio->setChecked(auto_download);
   ui->notifyRadio->setChecked(auto_notify);
 
@@ -189,6 +191,7 @@ void SettingsDialog::defaultSettings() {
 
   // Automation
   ui->torrentCheck->setChecked(true);
+  ui->refreshIntervalSpinBox->setValue(900);
   ui->downloadRadio->setChecked(true);
   ui->notifyRadio->setChecked(false);
 
@@ -272,10 +275,12 @@ void SettingsDialog::applySettings() {
 
   // Automation
   bool enable_torrents = ui->torrentCheck->isChecked();
+  int refresh_interval = ui->refreshIntervalSpinBox->value();
   bool auto_download = ui->downloadRadio->isChecked();
   bool auto_notify = ui->notifyRadio->isChecked();
 
   s->setValue(Settings::TorrentsEnabled, enable_torrents);
+  s->setValue(Settings::TorrentRefreshTime, refresh_interval);
   s->setValue(Settings::AutoDownload, auto_download);
   s->setValue(Settings::AutoNotify, auto_notify);
 
