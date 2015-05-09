@@ -176,11 +176,7 @@ class MainWindow : public QMainWindow {
   void verifyAndDownload(int row);
   void showRuleManager();
 
-  void settingsChanged();
-  void applySettings();
   void applyEAR();
-  void loadSettings();
-  void defaultSettings();
 
   void initTray();
   void createActions();

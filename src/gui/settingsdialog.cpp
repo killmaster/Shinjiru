@@ -1,6 +1,9 @@
 #include "./settingsdialog.h"
 #include "./ui_settingsdialog.h"
 
+#include <QDesktopServices>
+#include <QUrl>
+
 #include "../settings.h"
 #include "../lib/skinmanager.h"
 
@@ -27,6 +30,11 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   connect(ui->settingsTypeList, &QListWidget::currentRowChanged,
     [&](int row) {  //NOLINT
     ui->settingsTypeTabs->setCurrentIndex(row);
+  });
+  connect(ui->disconnectButton, SIGNAL(clicked()), SLOT(resetAPI()));
+  connect(ui->defaultButton, SIGNAL(clicked()), SLOT(defaultSettings()));
+  connect(ui->openSkinsFolderButton, &QPushButton::clicked, [&]() {  // NOLINT
+    QDesktopServices::openUrl(QUrl(qApp->applicationDirPath() + "/data/skin/"));
   });
 
   ui->torrentTabs->setCurrentIndex(0);

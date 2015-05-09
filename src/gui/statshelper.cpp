@@ -8,6 +8,12 @@ void MainWindow::updateStatistics() {
   progress_bar->reset();
   QList<Anime*> animes = User::sharedUser()->getAnimeList();
 
+  int count_total = settings->getValue(Settings::DownloadCount, 0).toInt();
+  int rule_total = settings->getValue(Settings::RuleCount, 0).toInt();
+
+  ui->labelDownloadedTotal->setText(QString::number(count_total));
+  ui->labelRulesTotal->setText(QString::number(rule_total));
+
   progress_bar->setMaximum(animes.count());
 
   int    episodes_watched = 0;

@@ -54,12 +54,10 @@ MainWindow::MainWindow(QWidget *parent) :
   watch_timer->setSingleShot(true);
 
   awesome->initFontAwesome();
-  loadSettings();
 
   QFont font = ui->listTabs->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
   ui->listTabs->tabBar()->setFont(font);
-  ui->orderListWidget->setFont(font);
 
   int currentYear = QDate::currentDate().year();
   int lowerYear = currentYear - 10;
@@ -154,8 +152,6 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->actionUpdate, SIGNAL(triggered()),
           FvUpdater::sharedUpdater(), SLOT(CheckForUpdatesNotSilent()));
 
-  connect(ui->disconnectButton, SIGNAL(clicked()), SLOT(resetAPI()));
-
   connect(window_watcher, SIGNAL(title_found(QString)), SLOT(watch(QString)));
   connect(watch_timer, SIGNAL(timeout()), SLOT(updateEpisode()));
   connect(event_timer, SIGNAL(timeout()), SLOT(eventTick()));
@@ -170,25 +166,6 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->ruleManagerButton, SIGNAL(clicked()), SLOT(showRuleManager()));
 
   connect(ui->actionEAR, SIGNAL(toggled(bool)), SLOT(applyEAR()));
-  connect(ui->torrentRefreshIntervalLineEdit, SIGNAL(textEdited(QString)),
-          SLOT(settingsChanged()));
-  connect(ui->autoRecognitionCheckBox, SIGNAL(toggled(bool)),
-          SLOT(settingsChanged()));
-  connect(ui->defaultTorrentRuleModeComboBox,
-          SIGNAL(currentTextChanged(QString)), SLOT(settingsChanged()));
-  connect(ui->startOnBootCheckBox, SIGNAL(toggled(bool)),
-          SLOT(settingsChanged()));
-  connect(ui->updateStreamComboBox, SIGNAL(currentTextChanged(QString)),
-          SLOT(settingsChanged()));
-  connect(ui->minimizeToTrayCheckBox, SIGNAL(toggled(bool)),
-          SLOT(settingsChanged()));
-  connect(ui->closeToTrayCheckBox, SIGNAL(toggled(bool)),
-          SLOT(settingsChanged()));
-  connect(ui->applyButton, SIGNAL(clicked()),  SLOT(applySettings()));
-  connect(ui->defaultButton, SIGNAL(clicked()), SLOT(defaultSettings()));
-  connect(ui->openSkinsFolderButton, &QPushButton::clicked, [&]() {  // NOLINT
-    QDesktopServices::openUrl(QUrl(qApp->applicationDirPath() + "/data/skin/"));
-  });
 
   connect(ui->tabWidget, &QTabWidget::currentChanged, [&](int tab) {  // NOLINT
     if (tab != 0) {
@@ -393,9 +370,9 @@ void MainWindow::paintEvent(QPaintEvent *event) {
 }
 
 void MainWindow::showAnimeTab() { ui->tabWidget->setCurrentIndex(0); }
-void MainWindow::showTorrentsTab() { ui->tabWidget->setCurrentIndex(2); }
+void MainWindow::showTorrentsTab() { ui->tabWidget->setCurrentIndex(1); }
 void MainWindow::showAiringTab() {
-  ui->tabWidget->setCurrentIndex(3);
+  ui->tabWidget->setCurrentIndex(2);
   int width = layout->geometry().width();
   int cwidth = layout->contentsWidth();
 
@@ -405,9 +382,9 @@ void MainWindow::showAiringTab() {
   }
   layout->setContentsMargins((width-cwidth)/2, 0, 0, 0);
 }
-void MainWindow::showStatisticsTab() { ui->tabWidget->setCurrentIndex(4); }
+void MainWindow::showStatisticsTab() { ui->tabWidget->setCurrentIndex(3); }
 void MainWindow::showBrowseTab() {
-  ui->tabWidget->setCurrentIndex(5);
+  ui->tabWidget->setCurrentIndex(4);
   int width = layout2->geometry().width();
   int cwidth = layout2->contentsWidth();
 
