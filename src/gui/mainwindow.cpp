@@ -583,7 +583,6 @@ void MainWindow::updateEpisode() {
 
 void MainWindow::eventTick() {
   if (torrent_refresh_time == 0) {
-    torrent_refresh_time = torrent_interval;
     refreshTorrentListing();
   }
 

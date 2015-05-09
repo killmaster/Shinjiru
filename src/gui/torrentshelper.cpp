@@ -19,7 +19,8 @@ void MainWindow::refreshTorrentListing() {
            << "(" + QString::number(torrent_refresh_time) + ")";
 
   ui->refreshButton->setText("Refresh (0)");
-  torrent_refresh_time = torrent_interval;
+  torrent_refresh_time =
+      settings->getValue(Settings::TorrentRefreshTime, 900).toInt();
 
   TorrentRSS *torrents = new TorrentRSS(0);
   QEventLoop rssLoop;

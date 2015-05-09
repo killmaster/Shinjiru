@@ -162,14 +162,27 @@ int main(int argc, char *argv[]) {
   else
     FvUpdater::sharedUpdater()->SetFeedURL(VER_UPDATEFEED_STR);
 
-  FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
+  bool check_for_updates = s->getValue(Settings::CheckUpdates, true).toBool();
+
+  if(check_for_updates) {
+    FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
+  }
 
   #ifdef Q_OS_WIN
     Breakpad::CrashHandler::instance()->Init(qApp->applicationDirPath());
   #endif
 
   MainWindow w;
-  w.show();
+
+  if (s->getValue(Settings::StartMinimized, false).toBool()) {
+    if (!s->getValue(Settings::MinimizeToTray, false).toBool()) {
+      w.showMinimized();
+    } else {
+      w.hide();
+    }
+  } else {
+    w.show();
+  }
 
   delete s;
   s = nullptr;

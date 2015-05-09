@@ -9,8 +9,6 @@
 #endif
 
 void MainWindow::loadSettings() {
-  torrent_interval =
-      settings->getValue(Settings::TorrentRefreshTime, 900).toInt();
   default_rule =
       settings->getValue(Settings::DefaultRuleType, "basic")
       .toString().toLower();
@@ -40,8 +38,6 @@ void MainWindow::loadSettings() {
   }
 
   ui->startOnBootCheckBox->setChecked(sob);
-  ui->torrentRefreshIntervalLineEdit->setText(
-        QString::number(torrent_interval));
   ui->defaultTorrentRuleModeComboBox->setCurrentText(default_rule);
   ui->autoUpdateDelayLineEdit->setText(QString::number(auto_update_delay));
   ui->minimizeToTrayCheckBox->setChecked(minimize_to_tray);

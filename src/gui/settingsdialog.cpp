@@ -39,6 +39,11 @@ SettingsDialog::~SettingsDialog() {
   delete ui;
 }
 
+void SettingsDialog::accept() {
+  applySettings();
+  done(QDialog::Accepted);
+}
+
 void SettingsDialog::loadSettings() {
   Settings *s = new Settings;
 
@@ -154,6 +159,78 @@ void SettingsDialog::defaultSettings() {
 
   // ...
 
- // applySettings();
+  applySettings();
 }
 
+void SettingsDialog::applySettings() {
+  Settings *s = new Settings;
+
+  /* --- APPLICATION SETTINGS --- */
+
+  // Startup
+  bool start_on_boot = ui->startOnBootCheck->isChecked();
+  bool check_for_updates = ui->checkforUpdatesCheck->isChecked();
+  bool start_minimized = ui->startMinimizedCheck->isChecked();
+
+  s->setValue(Settings::StartOnBoot, start_on_boot);
+  s->setValue(Settings::CheckUpdates, check_for_updates);
+  s->setValue(Settings::StartMinimized, start_minimized);
+
+  // Update Settings
+  QString update_stream = ui->updateStreamComboBox->currentText();
+
+  s->setValue(Settings::ReleaseStream, update_stream);
+
+  // System Tray
+  bool minimize_to_tray = ui->minimizeToTrayCheck->isChecked();
+  bool close_to_tray = ui->closeToTrayCheck->isChecked();
+
+  s->setValue(Settings::MinimizeToTray, minimize_to_tray);
+  s->setValue(Settings::CloseToTray, close_to_tray);
+
+  /* --- ANIME LIST --- */
+  QStringList list_order;
+
+  for(int i = 0; i < ui->orderListWidget->count(); i++) {
+    list_order << ui->orderListWidget->item(i)->text();
+  }
+
+  s->setValue(Settings::ListOrder, list_order);
+
+  /* --- RECOGNITION SETTINGS --- */
+
+  // General Recognition Settings
+  bool ear = ui->EARCheck->isChecked();
+  s->setValue(Settings::AnimeRecognitionEnabled, ear);
+
+  // Notification Settings
+  bool detect_notify = ui->detectNotifyCheck->isChecked();
+  bool update_notify = ui->updateNotifyCheck->isChecked();
+
+  s->setValue(Settings::AnimeDetectNotify, detect_notify);
+  s->setValue(Settings::AnimeUpdateNotify, update_notify);
+
+  // Update Settings
+  int update_delay = ui->updateDelaySpinBox->value();
+  s->setValue(Settings::AutoUpdateDelay, update_delay);
+
+  /* --- TORRENT SETTINGS --- */
+
+  // Automation
+  bool enable_torrents = ui->torrentCheck->isChecked();
+  bool auto_download = ui->downloadRadio->isChecked();
+  bool auto_notify = ui->notifyRadio->isChecked();
+
+  s->setValue(Settings::TorrentsEnabled, enable_torrents);
+  s->setValue(Settings::AutoDownload, auto_download);
+  s->setValue(Settings::AutoNotify, auto_notify);
+
+  // Torrent Rules
+  //saveTorrentRules();
+
+  /* --- ADVANCED SETTINGS --- */
+
+  // ...
+
+  delete s;
+}

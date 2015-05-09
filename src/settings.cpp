@@ -47,6 +47,20 @@ QString Settings::parseEnum(int setting) {
       return "rule_total";
     case ReleaseStream:
       return "release_stream";
+    case CheckUpdates:
+      return "update_on_boot";
+    case StartMinimized:
+      return "start_minimized";
+    case AnimeDetectNotify:
+      return "anime_detect_notify";
+    case AnimeUpdateNotify:
+      return "anime_update_notify";
+    case TorrentsEnabled:
+      return "torrents_enabled";
+    case AutoDownload:
+      return "auto_download";
+    case AutoNotify:
+      return "auto_notify";
   }
 
   return "unknown";

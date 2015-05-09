@@ -88,7 +88,6 @@ class MainWindow : public QMainWindow {
   QString title_style;
 
   int torrent_refresh_time;
-  int torrent_interval;
 
   int download_count;
   int download_rule;
