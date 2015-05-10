@@ -86,13 +86,12 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   });
 
   connect(ui->torrentRuleList, &QListWidget::currentItemChanged, [&]() {  // NOLINT
+    if(ui->torrentRuleList->count() == 0) return;
+
     if(!current_rule.isEmpty()) {
       torrent_rules.remove(current_rule);
       QListWidgetItem *item =
           ui->torrentRuleList->findItems(current_rule, Qt::MatchExactly).at(0);
-      int index = ui->torrentRuleList->row(item);
-
-      delete item;
 
       QJsonObject new_rule;
       QString key;
@@ -111,8 +110,10 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
         new_rule.insert("regex", ui->fileRegexLineEdit->text());
       }
 
+      if(key.isEmpty()) key = "**New**";
+
       torrent_rules.insert(key, new_rule);
-      ui->torrentRuleList->insertItem(index, key);
+      item->setText(key);
     }
 
     QString key = ui->torrentRuleList->currentItem()->text();
@@ -147,6 +148,26 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
   connect(ui->basicBox, SIGNAL(toggled(bool)), SLOT(toggleBasic(bool)));
   connect(ui->advancedBox, SIGNAL(toggled(bool)), SLOT(toggleAdvanced(bool)));
+  connect(ui->newTorrentRule, &QPushButton::clicked, [&]() {  // NOLINT
+    ui->torrentRuleList->addItem("**New**");
+    ui->torrentRuleList->setCurrentRow(ui->torrentRuleList->count() - 1);
+
+    ui->fileRegexLineEdit->setText("");
+    ui->animeTitleLineEdit->setText("");
+    ui->animeResolutionComboBox->setCurrentText("720p");
+    ui->subGroupLineEdit->setText("");
+  });
+
+  connect(ui->deleteTorrentRule, &QPushButton::clicked, [&](){  // NOLINT
+    QListWidgetItem *current = ui->torrentRuleList->currentItem();
+
+    if (current != nullptr) {
+      int row = ui->torrentRuleList->row(current);
+      delete current;
+
+      ui->torrentRuleList->setCurrentRow(qMax(row - 1, 0));
+    }
+  });
 
   ui->torrentTabs->setCurrentIndex(0);
   ui->settingsTypeTabs->tabBar()->hide();
