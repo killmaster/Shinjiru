@@ -624,146 +624,98 @@
               </layout>
              </item>
              <item>
-              <layout class="QVBoxLayout" name="verticalLayout_16">
-               <item>
-                <widget class="QGroupBox" name="groupBox_8">
-                 <property name="title">
-                  <string>Basic</string>
-                 </property>
-                 <property name="checkable">
-                  <bool>true</bool>
-                 </property>
-                 <layout class="QVBoxLayout" name="verticalLayout_14">
-                  <item>
-                   <layout class="QFormLayout" name="formLayout_3">
-                    <item row="0" column="0">
-                     <widget class="QLabel" name="animeTitleLabel">
-                      <property name="text">
-                       <string>Anime Title:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="0" column="1">
-                     <widget class="QLineEdit" name="animeTitleLineEdit"/>
-                    </item>
-                    <item row="1" column="0">
-                     <widget class="QLabel" name="animeResolutionLabel">
-                      <property name="text">
-                       <string>Anime Resolution:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="1" column="1">
-                     <widget class="QComboBox" name="animeResolutionComboBox">
-                      <property name="currentIndex">
-                       <number>1</number>
-                      </property>
-                      <item>
-                       <property name="text">
-                        <string>480p</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>720p</string>
-                       </property>
-                      </item>
-                      <item>
-                       <property name="text">
-                        <string>1080p</string>
-                       </property>
-                      </item>
-                     </widget>
-                    </item>
-                    <item row="2" column="0">
-                     <widget class="QLabel" name="subGroupLabel">
-                      <property name="text">
-                       <string>Sub Group:</string>
-                      </property>
-                     </widget>
-                    </item>
-                    <item row="2" column="1">
-                     <widget class="QLineEdit" name="subGroupLineEdit"/>
-                    </item>
-                   </layout>
-                  </item>
-                  <item>
-                   <widget class="QGroupBox" name="groupBox_9">
-                    <property name="title">
-                     <string>Advanced</string>
+              <widget class="QGroupBox" name="basicBox">
+               <property name="title">
+                <string>Basic</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_14">
+                <item>
+                 <layout class="QFormLayout" name="formLayout_3">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="animeTitleLabel">
+                    <property name="text">
+                     <string>Anime Title:</string>
                     </property>
-                    <property name="checkable">
-                     <bool>true</bool>
-                    </property>
-                    <property name="checked">
-                     <bool>false</bool>
-                    </property>
-                    <layout class="QVBoxLayout" name="verticalLayout_15">
-                     <item>
-                      <layout class="QFormLayout" name="formLayout_4">
-                       <item row="0" column="0">
-                        <widget class="QLabel" name="fileRegexLabel">
-                         <property name="text">
-                          <string>File Regex:</string>
-                         </property>
-                        </widget>
-                       </item>
-                       <item row="0" column="1">
-                        <widget class="QLineEdit" name="fileRegexLineEdit"/>
-                       </item>
-                      </layout>
-                     </item>
-                    </layout>
                    </widget>
                   </item>
-                  <item>
-                   <layout class="QHBoxLayout" name="horizontalLayout_4">
-                    <property name="topMargin">
-                     <number>10</number>
+                  <item row="0" column="1">
+                   <widget class="QLineEdit" name="animeTitleLineEdit"/>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="animeResolutionLabel">
+                    <property name="text">
+                     <string>Anime Resolution:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QComboBox" name="animeResolutionComboBox">
+                    <property name="currentIndex">
+                     <number>1</number>
                     </property>
                     <item>
-                     <widget class="QLabel" name="label_4">
-                      <property name="text">
-                       <string>Expires in:</string>
-                      </property>
-                     </widget>
+                     <property name="text">
+                      <string>480p</string>
+                     </property>
                     </item>
                     <item>
-                     <widget class="QSpinBox" name="spinBox">
-                      <property name="minimum">
-                       <number>-1</number>
-                      </property>
-                      <property name="value">
-                       <number>12</number>
-                      </property>
-                     </widget>
+                     <property name="text">
+                      <string>720p</string>
+                     </property>
                     </item>
                     <item>
-                     <widget class="QLabel" name="label_5">
-                      <property name="text">
-                       <string>weeks</string>
-                      </property>
-                     </widget>
+                     <property name="text">
+                      <string>1080p</string>
+                     </property>
                     </item>
-                    <item>
-                     <spacer name="horizontalSpacer_2">
-                      <property name="orientation">
-                       <enum>Qt::Horizontal</enum>
-                      </property>
-                      <property name="sizeHint" stdset="0">
-                       <size>
-                        <width>40</width>
-                        <height>20</height>
-                       </size>
-                      </property>
-                     </spacer>
-                    </item>
-                   </layout>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="subGroupLabel">
+                    <property name="text">
+                     <string>Sub Group:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLineEdit" name="subGroupLineEdit"/>
                   </item>
                  </layout>
-                </widget>
-               </item>
-              </layout>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="advancedBox">
+               <property name="title">
+                <string>Advanced</string>
+               </property>
+               <property name="checkable">
+                <bool>true</bool>
+               </property>
+               <property name="checked">
+                <bool>false</bool>
+               </property>
+               <layout class="QVBoxLayout" name="verticalLayout_15">
+                <item>
+                 <layout class="QFormLayout" name="formLayout_4">
+                  <item row="0" column="0">
+                   <widget class="QLabel" name="fileRegexLabel">
+                    <property name="text">
+                     <string>File Regex:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1">
+                   <widget class="QLineEdit" name="fileRegexLineEdit"/>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </widget>
              </item>
             </layout>
            </widget>

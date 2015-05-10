@@ -32,6 +32,7 @@ private:
   QList<QMap<QString, QVariant>> adv_rules;
 
   QJsonObject torrent_rules;
+  QString current_rule;
 
 private slots:
   void accept();
@@ -41,6 +42,9 @@ private slots:
 
   void loadTorrentRules();
   void saveTorrentRules();
+
+  void toggleBasic(bool);
+  void toggleAdvanced(bool);
 
   void loadSmartTitles();
   void saveSmartTitles();

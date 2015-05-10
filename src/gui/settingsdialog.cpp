@@ -82,9 +82,71 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     }
 
     if (text.length() > 3)
-      ui->spinBox->setValue(text.at(3).toInt());
+      ui->offsetSpinBox->setValue(text.at(3).toInt());
   });
 
+  connect(ui->torrentRuleList, &QListWidget::currentItemChanged, [&]() {  // NOLINT
+    if(!current_rule.isEmpty()) {
+      torrent_rules.remove(current_rule);
+      QListWidgetItem *item =
+          ui->torrentRuleList->findItems(current_rule, Qt::MatchExactly).at(0);
+      int index = ui->torrentRuleList->row(item);
+
+      delete item;
+
+      QJsonObject new_rule;
+      QString key;
+
+      if(ui->basicBox->isChecked()) {
+        key = ui->animeTitleLineEdit->text();
+
+        new_rule.insert("rule_type", "basic");
+        new_rule.insert("anime", ui->animeTitleLineEdit->text());
+        new_rule.insert("subgroup", ui->subGroupLineEdit->text());
+        new_rule.insert("resolution", ui->animeResolutionComboBox->currentText());
+      } else {
+        key = ui->fileRegexLineEdit->text();
+
+        new_rule.insert("rule_type", "advanced");
+        new_rule.insert("regex", ui->fileRegexLineEdit->text());
+      }
+
+      torrent_rules.insert(key, new_rule);
+      ui->torrentRuleList->insertItem(index, key);
+    }
+
+    QString key = ui->torrentRuleList->currentItem()->text();
+    QJsonObject rule = torrent_rules.value(key).toObject();
+
+    QString rule_type = rule.value("rule_type").toString();
+
+    if(rule_type == "basic") {
+      ui->basicBox->setChecked(true);
+      ui->advancedBox->setChecked(false);
+
+      ui->animeTitleLineEdit->setText(rule.value("anime").toString());
+      ui->subGroupLineEdit->setText(rule.value("subgroup").toString());
+      ui->animeResolutionComboBox->setCurrentText(rule.value("resolution").toString());
+    } else {
+      ui->basicBox->setChecked(true);
+      ui->advancedBox->setChecked(false);
+
+      ui->fileRegexLineEdit->setText(rule.value("regex").toString());
+    }
+
+    current_rule = key;
+  });
+
+  connect(ui->animeTitleLineEdit, &QLineEdit::textEdited, [&]() {
+    ui->torrentRuleList->currentItem()->setText(ui->animeTitleLineEdit->text());
+  });
+
+  connect(ui->fileRegexLineEdit, &QLineEdit::textEdited, [&]() {
+    ui->torrentRuleList->currentItem()->setText(ui->fileRegexLineEdit->text());
+  });
+
+  connect(ui->basicBox, SIGNAL(toggled(bool)), SLOT(toggleBasic(bool)));
+  connect(ui->advancedBox, SIGNAL(toggled(bool)), SLOT(toggleAdvanced(bool)));
 
   ui->torrentTabs->setCurrentIndex(0);
   ui->settingsTypeTabs->tabBar()->hide();
@@ -345,7 +407,7 @@ void SettingsDialog::applySettings() {
   s->setValue(Settings::AutoNotify, auto_notify);
 
   // Torrent Rules
-  //saveTorrentRules();
+  saveTorrentRules();
 
   /* --- ADVANCED SETTINGS --- */
 
@@ -389,6 +451,35 @@ void SettingsDialog::loadTorrentRules() {
 }
 
 void SettingsDialog::saveTorrentRules() {
+  if(!current_rule.isEmpty()) {
+    torrent_rules.remove(current_rule);
+    QListWidgetItem *item =
+        ui->torrentRuleList->findItems(current_rule, Qt::MatchExactly).at(0);
+    int index = ui->torrentRuleList->row(item);
+
+    delete item;
+
+    QJsonObject new_rule;
+    QString key;
+
+    if(ui->basicBox->isChecked()) {
+      key = ui->animeTitleLineEdit->text();
+
+      new_rule.insert("rule_type", "basic");
+      new_rule.insert("anime", ui->animeTitleLineEdit->text());
+      new_rule.insert("subgroup", ui->subGroupLineEdit->text());
+      new_rule.insert("resolution", ui->animeResolutionComboBox->currentText());
+    } else {
+      key = ui->fileRegexLineEdit->text();
+
+      new_rule.insert("rule_type", "advanced");
+      new_rule.insert("regex", ui->fileRegexLineEdit->text());
+    }
+
+    torrent_rules.insert(key, new_rule);
+    ui->torrentRuleList->insertItem(index, key);
+  }
+
   QFile tor_rule_file(QCoreApplication::applicationDirPath() + "/rules.json");
   tor_rule_file.open(QFile::WriteOnly);
 
@@ -466,4 +557,15 @@ void SettingsDialog::showSmartTitles() {
 
   if(ui->smartTitleList->count() > 0)
     ui->smartTitleList->setCurrentRow(0);
+}
+
+
+void SettingsDialog::toggleBasic(bool en) {
+  ui->basicBox->setChecked(en);
+  ui->advancedBox->setChecked(!en);
+}
+
+void SettingsDialog::toggleAdvanced(bool en) {
+  ui->basicBox->setChecked(!en);
+  ui->advancedBox->setChecked(en);
 }
