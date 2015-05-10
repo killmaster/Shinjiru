@@ -256,6 +256,23 @@ void MainWindow::reloadRules() {
     tor_rule_file.write(QJsonDocument(torrent_rules).toJson());
   }
 
+  for(QString key: torrent_rules.keys()) {
+    QJsonObject rule = torrent_rules.value(key).toObject();
+
+    QMap<QString, QVariant> values;
+    if(rule.value("rule_type").toString() == "advanced") {
+      values.insert("regex", QRegExp(rule.value("regex").toString()));
+
+      adv_rules.append(values);
+    } else {
+      values.insert("anime", rule.value("anime").toString());
+      values.insert("subgroup", rule.value("subgroup").toString());
+      values.insert("resolution", rule.value("resolution").toString());
+
+      basic_rules.append(values);
+    }
+  }
+
   qDebug() << "Loaded" << adv_rules.count() << "advanced rules";
   qDebug() << "Loaded" << basic_rules.count() << "basic rules";
 }
