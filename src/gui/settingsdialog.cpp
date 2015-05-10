@@ -325,7 +325,12 @@ void SettingsDialog::defaultSettings() {
   ui->updateDelaySpinBox->setValue(120);
 
   // Smart Titles
-  //loadSmartTitles();
+  ui->smartTitleList->clear();
+  ui->titleComboBox->setCurrentIndex(0);
+  ui->aliasLineEdit->setText("");
+  ui->offsetSpinBox->setValue(0);
+
+  saveSmartTitles();
 
   /* --- TORRENT SETTINGS --- */
 
@@ -336,7 +341,13 @@ void SettingsDialog::defaultSettings() {
   ui->notifyRadio->setChecked(false);
 
   // Torrent Rules
-  //loadTorrentRules();
+  ui->torrentRuleList->clear();
+  ui->animeTitleLineEdit->setText("");
+  ui->animeResolutionComboBox->setCurrentText("720p");
+  ui->subGroupLineEdit->setText("");
+  ui->fileRegexLineEdit->setText("");
+
+  saveTorrentRules();
 
   /* --- ADVANCED SETTINGS --- */
 
