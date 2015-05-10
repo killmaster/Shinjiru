@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QtAwesome.h>
+#include <QJsonObject>
 
 namespace Ui {
 class SettingsDialog;
@@ -29,6 +30,8 @@ private:
 
   QList<QMap<QString, QVariant>> basic_rules;
   QList<QMap<QString, QVariant>> adv_rules;
+
+  QJsonObject torrent_rules;
 
 private slots:
   void accept();

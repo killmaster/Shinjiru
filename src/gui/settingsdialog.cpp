@@ -46,7 +46,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   });
   connect(ui->newTitle, &QPushButton::clicked, [&]() {  // NOLINT
     ui->smartTitleList->addItem("**New**");
-    ui->smartTitleList->setCurrentRow(ui->listWidget->count() - 1);
+    ui->smartTitleList->setCurrentRow(ui->smartTitleList->count() - 1);
   });
 
   connect(ui->deleteTitle, &QPushButton::clicked, [&](){  // NOLINT
@@ -380,11 +380,19 @@ void SettingsDialog::moveDown() {
 }
 
 void SettingsDialog::loadTorrentRules() {
+  QFile tor_rule_file(QCoreApplication::applicationDirPath() + "/rules.json");
+  tor_rule_file.open(QFile::ReadWrite);
 
+  torrent_rules = QJsonDocument::fromJson(tor_rule_file.readAll()).object();
+
+  ui->torrentRuleList->addItems(torrent_rules.keys());
 }
 
 void SettingsDialog::saveTorrentRules() {
+  QFile tor_rule_file(QCoreApplication::applicationDirPath() + "/rules.json");
+  tor_rule_file.open(QFile::WriteOnly);
 
+  tor_rule_file.write(QJsonDocument(torrent_rules).toJson());
 }
 
 void SettingsDialog::loadSmartTitles() {

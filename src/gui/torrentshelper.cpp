@@ -195,36 +195,65 @@ void MainWindow::reloadRules() {
   adv_rules.clear();
 
   QDir rule_dir(QCoreApplication::applicationDirPath() + "/rules/");
-  rule_dir.mkdir(".");
   rule_dir.setFilter(QDir::Files);
-  for (int i = 0; i < rule_dir.entryList().count(); i++) {
-    QString file_name = rule_dir.entryList().at(i);
-    QFile file(rule_dir.absoluteFilePath(file_name));
-    file.open(QFile::ReadOnly);
-    QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
 
-    QDate expires = QDate::currentDate();
-    expires = expires.addDays(7 * json["expires"].toInt());
+  QFile tor_rule_file(QCoreApplication::applicationDirPath() + "/rules.json");
+  tor_rule_file.open(QFile::ReadWrite);
+  QJsonObject torrent_rules =
+      QJsonDocument::fromJson(tor_rule_file.readAll()).object();
 
-    if (QDate::currentDate().daysTo(expires) < 0) {
+  if(rule_dir.exists()) {
+    for (int i = 0; i < rule_dir.entryList().count(); i++) {
+      QJsonObject rule;
+      QString file_name = rule_dir.entryList().at(i);
+      QFile file(rule_dir.absoluteFilePath(file_name));
+      file.open(QFile::ReadOnly);
+      QJsonObject json = QJsonDocument::fromJson(file.readAll()).object();
+
+      QDate expires = QDate::currentDate();
+      expires = expires.addDays(7 * json["expires"].toInt());
+
+      if (QDate::currentDate().daysTo(expires) < 0) {
+        file.remove();
+        continue;
+      }
+
+      QString title;
+
+      if (json["rule_type"] == "advanced") {
+        QMap<QString, QVariant> values;
+        values.insert("regexp", QRegExp(json["file_regex"].toString()));
+        values.insert("expires", expires);
+        adv_rules.append(values);
+
+        rule.insert("rule_type",json["rule_type"]);
+        rule.insert("regexp", json["file_regex"].toString());
+        rule.insert("expires", expires.toString());
+
+        title = rule.value("regexp").toString();
+      } else {
+        QMap<QString, QVariant> values;
+        values.insert("anime", json["anime_name"].toString());
+        values.insert("subgroup", json["sub_group"].toString());
+        values.insert("resolution", json["resolution"].toString());
+        values.insert("expires", expires);
+
+        rule.insert("rule_type",json["rule_type"]);
+        rule.insert("anime", json["anime_name"].toString());
+        rule.insert("subgroup", json["sub_group"].toString());
+        rule.insert("resolution", json["resolution"].toString());
+        rule.insert("expires", expires.toString());
+
+        title = rule.value("anime").toString();
+        basic_rules.append(values);
+      }
+
       file.remove();
-      continue;
+      torrent_rules.insert(title, rule);
     }
 
-    if (json["rule_type"] == "advanced") {
-      QMap<QString, QVariant> values;
-      values.insert("regexp", QRegExp(json["file_regex"].toString()));
-      values.insert("expires", expires);
-      adv_rules.append(values);
-    } else {
-      QMap<QString, QVariant> values;
-      values.insert("anime", json["anime_name"].toString());
-      values.insert("subgroup", json["sub_group"].toString());
-      values.insert("resolution", json["resolution"].toString());
-      values.insert("expires", expires);
-
-      basic_rules.append(values);
-    }
+    rule_dir.removeRecursively();
+    tor_rule_file.write(QJsonDocument(torrent_rules).toJson());
   }
 
   qDebug() << "Loaded" << adv_rules.count() << "advanced rules";
