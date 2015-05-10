@@ -23,8 +23,9 @@ private:
   Ui::SettingsDialog *ui;
 
   void loadSettings();
-  void defaultSettings();
   void applySettings();
+  void setAdvancedSetting(QString, QString);
+  QString getAdvancedSetting(QString);
 
   QtAwesome *awesome;
 
@@ -36,6 +37,8 @@ private:
 
 private slots:
   void accept();
+
+  void defaultSettings();
 
   void moveUp();
   void moveDown();

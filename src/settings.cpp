@@ -61,6 +61,8 @@ QString Settings::parseEnum(int setting) {
       return "auto_download";
     case AutoNotify:
       return "auto_notify";
+    case UserRefreshTime:
+      return "user_refresh_time";
   }
 
   return "unknown";

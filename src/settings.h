@@ -36,7 +36,8 @@ class Settings : public QObject {
     AnimeUpdateNotify,
     TorrentsEnabled,
     AutoDownload,
-    AutoNotify
+    AutoNotify,
+    UserRefreshTime
   };
 
  private:

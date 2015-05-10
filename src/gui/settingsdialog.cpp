@@ -4,6 +4,7 @@
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDir>
+#include <QMessageBox>
 
 #include "../settings.h"
 #include "../lib/skinmanager.h"
@@ -39,8 +40,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     [&](int row) {  //NOLINT
     ui->settingsTypeTabs->setCurrentIndex(row);
   });
-  connect(ui->disconnectButton, SIGNAL(clicked()), SLOT(resetAPI()));
-  connect(ui->defaultButton, SIGNAL(clicked()), SLOT(defaultSettings()));
+  connect(ui->disconnectButton, SIGNAL(clicked(bool)), SLOT(resetAPI()));
+  connect(ui->defaultButton, SIGNAL(clicked(bool)), SLOT(defaultSettings()));
   connect(ui->openSkinsFolderButton, &QPushButton::clicked, [&]() {  // NOLINT
     QDesktopServices::openUrl(QUrl(qApp->applicationDirPath() + "/data/skin/"));
   });
@@ -83,6 +84,16 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     if (text.length() > 3)
       ui->offsetSpinBox->setValue(text.at(3).toInt());
+  });
+
+  connect(ui->advancedValue, &QLineEdit::textEdited, [&]() {
+    int row = ui->advancedTable->currentRow();
+    ui->advancedTable->item(row, 1)->setText(ui->advancedValue->text());
+  });
+
+  connect(ui->advancedTable, &QTableWidget::currentItemChanged, [&]() {
+    int row = ui->advancedTable->currentRow();
+    ui->advancedValue->setText(ui->advancedTable->item(row, 1)->text());
   });
 
   connect(ui->torrentRuleList, &QListWidget::currentItemChanged, [&]() {  // NOLINT
@@ -188,6 +199,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui->moveUpButton->setIcon(awesome->icon(fa::arrowup, black));
   ui->moveUpButton->setText("");
   ui->moveDownButton->setText("");
+  ui->advancedTable->resizeColumnToContents(0);
+  ui->advancedTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
 
   connect(ui->moveUpButton, SIGNAL(clicked()), SLOT(moveUp()));
   connect(ui->moveDownButton, SIGNAL(clicked()), SLOT(moveDown()));
@@ -288,13 +301,34 @@ void SettingsDialog::loadSettings() {
   loadTorrentRules();
 
   /* --- ADVANCED SETTINGS --- */
+  int user_refresh_time = s->getValue(Settings::UserRefreshTime, 900).toInt();
 
-  // ...
+  setAdvancedSetting("User_Refresh_Time", QString::number(user_refresh_time));
 
   delete s;
 }
 
+void SettingsDialog::setAdvancedSetting(QString s, QString value) {
+  QTableWidgetItem *item =
+      ui->advancedTable->findItems(s, Qt::MatchExactly).at(0);
+  int row = ui->advancedTable->row(item);
+
+  ui->advancedTable->setItem(row, 1, new QTableWidgetItem(value));
+}
+
+QString SettingsDialog::getAdvancedSetting(QString s) {
+  QTableWidgetItem *item =
+      ui->advancedTable->findItems(s, Qt::MatchExactly).at(0);
+  int row = ui->advancedTable->row(item);
+
+  return ui->advancedTable->item(row, 1)->text();
+}
+
 void SettingsDialog::defaultSettings() {
+  if (QMessageBox::No == QMessageBox::question(this, "Shinjiru",
+     tr("Are you sure you want to reset the settings to their default values?"),
+     QMessageBox::Yes|QMessageBox::No)) return;
+
   /* --- APPLICATION SETTINGS --- */
 
   // Startup
@@ -350,8 +384,7 @@ void SettingsDialog::defaultSettings() {
   saveTorrentRules();
 
   /* --- ADVANCED SETTINGS --- */
-
-  // ...
+  setAdvancedSetting("User_Refresh_Time", "1200");
 
   applySettings();
 }
@@ -442,8 +475,8 @@ void SettingsDialog::applySettings() {
   saveTorrentRules();
 
   /* --- ADVANCED SETTINGS --- */
-
-  // ...
+  s->setValue(Settings::UserRefreshTime,
+              getAdvancedSetting("User_Refresh_Time").toInt());
 
   delete s;
 }

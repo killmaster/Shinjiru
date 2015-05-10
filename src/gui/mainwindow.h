@@ -105,7 +105,6 @@ class MainWindow : public QMainWindow {
   QMenu *trayIconMenu;
 
   int user_refresh_time;
-  int default_time;
 
   bool torrents_enabled;
 

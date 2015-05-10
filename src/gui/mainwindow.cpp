@@ -43,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
   progress_bar         = new QProgressBar(ui->statusBar);
   over                 = new Overlay(this);
   torrent_refresh_time = 0;
-  default_time         = 15 * 60;
-  user_refresh_time    = default_time;
+  user_refresh_time    =
+      settings->getValue(Settings::UserRefreshTime, 900).toInt();
   download_rule        = 0;
   download_count       = 0;
   hasUser              = false;
@@ -179,6 +179,9 @@ MainWindow::MainWindow(QWidget *parent) :
       }
     }
   });
+
+  ui->actionEAR->setChecked(
+        settings->getValue(Settings::AnimeRecognitionEnabled, true).toBool());
 
   // NOLINTNEXTLINE
   QString genrelist = "Action, Adult, Adventure, Cars, Comedy, Dementia, Demons, Doujinshi, Drama, Ecchi, Fantasy, Game, Gender Bender, Harem, Hentai, Historical, Horror, Josei, Kids, Magic, Martial Arts, Mature, Mecha, Military, Motion Comic, Music, Mystery, Mythological , Parody, Police, Psychological, Romance, Samurai, School, Sci-Fi, Seinen, Shoujo, Shoujo Ai, Shounen, Shounen Ai, Slice of Life, Space, Sports, Super Power, Supernatural, Thriller, Tragedy, Vampire, Yaoi, Yuri";
@@ -581,7 +584,8 @@ void MainWindow::eventTick() {
   }
 
   if (user_refresh_time == 0) {
-    user_refresh_time = default_time;
+    user_refresh_time =
+        settings->getValue(Settings::UserRefreshTime, 900).toInt();
     loadUser();
   }
 
