@@ -1,5 +1,7 @@
-#ifndef SETTINGSDIALOG_H
-#define SETTINGSDIALOG_H
+/* Copyright 2015 Kazakuri */
+
+#ifndef SRC_GUI_SETTINGSDIALOG_H_
+#define SRC_GUI_SETTINGSDIALOG_H_
 
 #include <QDialog>
 #include <QtAwesome.h>
@@ -9,23 +11,22 @@ namespace Ui {
 class SettingsDialog;
 }
 
-class SettingsDialog : public QDialog
-{
+class SettingsDialog : public QDialog {
   Q_OBJECT
 
-public:
+ public:
   explicit SettingsDialog(QWidget *parent = 0);
   ~SettingsDialog();
 
   void showSmartTitles();
 
-private:
+ private:
   Ui::SettingsDialog *ui;
 
   void loadSettings();
   void applySettings();
-  void setAdvancedSetting(QString, QString);
-  QString getAdvancedSetting(QString);
+  void setAdvancedSetting(QString key, QString value);
+  QString getAdvancedSetting(QString key);
 
   QtAwesome *awesome;
 
@@ -35,7 +36,7 @@ private:
   QJsonObject torrent_rules;
   QString current_rule;
 
-private slots:
+ private slots:  // NOLINT
   void accept();
 
   void defaultSettings();
@@ -46,8 +47,8 @@ private slots:
   void loadTorrentRules();
   void saveTorrentRules();
 
-  void toggleBasic(bool);
-  void toggleAdvanced(bool);
+  void toggleBasic(bool en);
+  void toggleAdvanced(bool en);
 
   void loadSmartTitles();
   void saveSmartTitles();
@@ -55,4 +56,4 @@ private slots:
   void updateSmartTitleName();
 };
 
-#endif // SETTINGSDIALOG_H
+#endif  // SRC_GUI_SETTINGSDIALOG_H_

@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
 
   bool check_for_updates = s->getValue(Settings::CheckUpdates, true).toBool();
 
-  if(check_for_updates) {
+  if (check_for_updates) {
     FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
   }
 

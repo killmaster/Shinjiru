@@ -403,7 +403,7 @@ void MainWindow::showSettings() {
   SettingsDialog *s = new SettingsDialog(this);
   s->show();
 
-  connect(s, &QDialog::accepted, [&] () {
+  connect(s, &QDialog::accepted, [&] () {  // NOLINT
     toggleAnimeRecognition(
           settings->getValue(Settings::AnimeRecognitionEnabled, true).toBool());
 
@@ -523,7 +523,7 @@ void MainWindow::watch(QString title) {
 
     this->watch_timer->start(1000 * auto_update_delay);
 
-    if(settings->getValue(Settings::AnimeDetectNotify, true).toBool())
+    if (settings->getValue(Settings::AnimeDetectNotify, true).toBool())
       this->trayIcon->showMessage("Shinjiru",
                                   tr("Updating %1 to episode %2 in %3 seconds")
                                   .arg(cw_anime->getTitle())
@@ -553,7 +553,7 @@ void MainWindow::updateEpisode() {
   QJsonObject response = API::sharedAPI()->sharedAniListAPI()->put(
         API::sharedAPI()->sharedAniListAPI()->API_EDIT_LIST, data).object();
 
-  if(!settings->getValue(Settings::AnimeUpdateNotify, true).toBool()) return;
+  if (!settings->getValue(Settings::AnimeUpdateNotify, true).toBool()) return;
 
   if (response != QJsonObject()) {
     trayIcon->showMessage("Shinjiru", tr("%1 updated to episode %2")
@@ -570,7 +570,7 @@ void MainWindow::updateEpisode() {
 }
 
 void MainWindow::eventTick() {
-  if(torrents_enabled) {
+  if (torrents_enabled) {
     if (torrent_refresh_time == 0) {
       refreshTorrentListing();
     }

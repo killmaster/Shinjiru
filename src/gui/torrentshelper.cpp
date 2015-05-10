@@ -202,7 +202,7 @@ void MainWindow::reloadRules() {
   QJsonObject torrent_rules =
       QJsonDocument::fromJson(tor_rule_file.readAll()).object();
 
-  if(rule_dir.exists()) {
+  if (rule_dir.exists()) {
     for (int i = 0; i < rule_dir.entryList().count(); i++) {
       QJsonObject rule;
       QString file_name = rule_dir.entryList().at(i);
@@ -226,7 +226,7 @@ void MainWindow::reloadRules() {
         values.insert("expires", expires);
         adv_rules.append(values);
 
-        rule.insert("rule_type",json["rule_type"]);
+        rule.insert("rule_type", json["rule_type"]);
         rule.insert("regexp", json["file_regex"].toString());
         rule.insert("expires", expires.toString());
 
@@ -238,7 +238,7 @@ void MainWindow::reloadRules() {
         values.insert("resolution", json["resolution"].toString());
         values.insert("expires", expires);
 
-        rule.insert("rule_type",json["rule_type"]);
+        rule.insert("rule_type", json["rule_type"]);
         rule.insert("anime", json["anime_name"].toString());
         rule.insert("subgroup", json["sub_group"].toString());
         rule.insert("resolution", json["resolution"].toString());
@@ -256,11 +256,11 @@ void MainWindow::reloadRules() {
     tor_rule_file.write(QJsonDocument(torrent_rules).toJson());
   }
 
-  for(QString key: torrent_rules.keys()) {
+  for (QString key : torrent_rules.keys()) {
     QJsonObject rule = torrent_rules.value(key).toObject();
 
     QMap<QString, QVariant> values;
-    if(rule.value("rule_type").toString() == "advanced") {
+    if (rule.value("rule_type").toString() == "advanced") {
       values.insert("regex", QRegExp(rule.value("regex").toString()));
 
       adv_rules.append(values);
@@ -327,12 +327,12 @@ void MainWindow::verifyAndDownload(int row) {
   history_dir.mkdir(".");
   QFile f(history_dir.absoluteFilePath(file));
   if (!f.exists()) {
-    if(auto_notify) {
+    if (auto_notify) {
       trayIcon->showMessage("Shinjiru", tr("New matching torrents found."));
       return;
     }
 
-    if(auto_download) {
+    if (auto_download) {
       qDebug() << "Downloading" << title << "from torrent rule";
       download(row);
       download_rule++;

@@ -1,11 +1,13 @@
+/* Copyright 2015 Kazakuri */
+
 #include "./settingsdialog.h"
-#include "./ui_settingsdialog.h"
 
 #include <QDesktopServices>
 #include <QUrl>
 #include <QDir>
 #include <QMessageBox>
 
+#include "./ui_settingsdialog.h"
 #include "../settings.h"
 #include "../lib/skinmanager.h"
 #include "../api/anime.h"
@@ -64,12 +66,15 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
           SLOT(updateSmartTitleName()));
   connect(ui->titleComboBox, SIGNAL(currentIndexChanged(int)),
           SLOT(updateSmartTitleName()));
-  connect(ui->offsetSpinBox, SIGNAL(valueChanged(int)), SLOT(updateSmartTitleName()));
+  connect(ui->offsetSpinBox, SIGNAL(valueChanged(int)),
+          SLOT(updateSmartTitleName()));
 
-  connect(ui->smartTitleList, &QListWidget::currentItemChanged, [&]() {  // NOLINT
+  connect(ui->smartTitleList, &QListWidget::currentItemChanged,
+    [&]() {  // NOLINT
     if (ui->smartTitleList->currentItem() == nullptr) return;
 
-    QStringList text = ui->smartTitleList->currentItem()->text().split(seperator);
+    QStringList text =
+        ui->smartTitleList->currentItem()->text().split(seperator);
 
     ui->aliasLineEdit->setText(text.at(0));
 
@@ -86,20 +91,22 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
       ui->offsetSpinBox->setValue(text.at(3).toInt());
   });
 
-  connect(ui->advancedValue, &QLineEdit::textEdited, [&]() {
+  connect(ui->advancedValue, &QLineEdit::textEdited, [&]() {  // NOLINT
     int row = ui->advancedTable->currentRow();
     ui->advancedTable->item(row, 1)->setText(ui->advancedValue->text());
   });
 
-  connect(ui->advancedTable, &QTableWidget::currentItemChanged, [&]() {
+  connect(ui->advancedTable, &QTableWidget::currentItemChanged,
+    [&]() {  // NOLINT
     int row = ui->advancedTable->currentRow();
     ui->advancedValue->setText(ui->advancedTable->item(row, 1)->text());
   });
 
-  connect(ui->torrentRuleList, &QListWidget::currentItemChanged, [&]() {  // NOLINT
-    if(ui->torrentRuleList->count() == 0) return;
+  connect(ui->torrentRuleList, &QListWidget::currentItemChanged,
+    [&]() {  // NOLINT
+    if (ui->torrentRuleList->count() == 0) return;
 
-    if(!current_rule.isEmpty()) {
+    if (!current_rule.isEmpty()) {
       torrent_rules.remove(current_rule);
       QListWidgetItem *item =
           ui->torrentRuleList->findItems(current_rule, Qt::MatchExactly).at(0);
@@ -107,13 +114,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
       QJsonObject new_rule;
       QString key;
 
-      if(ui->basicBox->isChecked()) {
+      if (ui->basicBox->isChecked()) {
         key = ui->animeTitleLineEdit->text();
 
         new_rule.insert("rule_type", "basic");
         new_rule.insert("anime", ui->animeTitleLineEdit->text());
         new_rule.insert("subgroup", ui->subGroupLineEdit->text());
-        new_rule.insert("resolution", ui->animeResolutionComboBox->currentText());
+        new_rule.insert("resolution",
+                        ui->animeResolutionComboBox->currentText());
       } else {
         key = ui->fileRegexLineEdit->text();
 
@@ -121,7 +129,7 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
         new_rule.insert("regex", ui->fileRegexLineEdit->text());
       }
 
-      if(key.isEmpty()) key = "**New**";
+      if (key.isEmpty()) key = "**New**";
 
       torrent_rules.insert(key, new_rule);
       item->setText(key);
@@ -132,13 +140,14 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
 
     QString rule_type = rule.value("rule_type").toString();
 
-    if(rule_type == "basic") {
+    if (rule_type == "basic") {
       ui->basicBox->setChecked(true);
       ui->advancedBox->setChecked(false);
 
       ui->animeTitleLineEdit->setText(rule.value("anime").toString());
       ui->subGroupLineEdit->setText(rule.value("subgroup").toString());
-      ui->animeResolutionComboBox->setCurrentText(rule.value("resolution").toString());
+      ui->animeResolutionComboBox->setCurrentText(
+            rule.value("resolution").toString());
     } else {
       ui->basicBox->setChecked(true);
       ui->advancedBox->setChecked(false);
@@ -149,11 +158,11 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
     current_rule = key;
   });
 
-  connect(ui->animeTitleLineEdit, &QLineEdit::textEdited, [&]() {
+  connect(ui->animeTitleLineEdit, &QLineEdit::textEdited, [&]() {  // NOLINT
     ui->torrentRuleList->currentItem()->setText(ui->animeTitleLineEdit->text());
   });
 
-  connect(ui->fileRegexLineEdit, &QLineEdit::textEdited, [&]() {
+  connect(ui->fileRegexLineEdit, &QLineEdit::textEdited, [&]() {  // NOLINT
     ui->torrentRuleList->currentItem()->setText(ui->fileRegexLineEdit->text());
   });
 
@@ -200,7 +209,8 @@ SettingsDialog::SettingsDialog(QWidget *parent) :
   ui->moveUpButton->setText("");
   ui->moveDownButton->setText("");
   ui->advancedTable->resizeColumnToContents(0);
-  ui->advancedTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+  ui->advancedTable->horizontalHeader()->
+      setSectionResizeMode(QHeaderView::Fixed);
 
   connect(ui->moveUpButton, SIGNAL(clicked()), SLOT(moveUp()));
   connect(ui->moveDownButton, SIGNAL(clicked()), SLOT(moveDown()));
@@ -432,7 +442,7 @@ void SettingsDialog::applySettings() {
   /* --- ANIME LIST --- */
   QStringList list_order;
 
-  for(int i = 0; i < ui->orderListWidget->count(); i++) {
+  for (int i = 0; i < ui->orderListWidget->count(); i++) {
     list_order << ui->orderListWidget->item(i)->text();
   }
 
@@ -516,7 +526,7 @@ void SettingsDialog::loadTorrentRules() {
 }
 
 void SettingsDialog::saveTorrentRules() {
-  if(!current_rule.isEmpty()) {
+  if (!current_rule.isEmpty()) {
     torrent_rules.remove(current_rule);
     QListWidgetItem *item =
         ui->torrentRuleList->findItems(current_rule, Qt::MatchExactly).at(0);
@@ -527,7 +537,7 @@ void SettingsDialog::saveTorrentRules() {
     QJsonObject new_rule;
     QString key;
 
-    if(ui->basicBox->isChecked()) {
+    if (ui->basicBox->isChecked()) {
       key = ui->animeTitleLineEdit->text();
 
       new_rule.insert("rule_type", "basic");
@@ -620,7 +630,7 @@ void SettingsDialog::showSmartTitles() {
   ui->settingsTypeList->setCurrentRow(2);
   ui->recognitionTab->setCurrentIndex(1);
 
-  if(ui->smartTitleList->count() > 0)
+  if (ui->smartTitleList->count() > 0)
     ui->smartTitleList->setCurrentRow(0);
 }
 
