@@ -183,6 +183,8 @@ MainWindow::MainWindow(QWidget *parent) :
   ui->actionEAR->setChecked(
         settings->getValue(Settings::AnimeRecognitionEnabled, true).toBool());
 
+  this->toggleAnimeRecognition(ui->actionEAR->isChecked());
+
   // NOLINTNEXTLINE
   QString genrelist = "Action, Adult, Adventure, Cars, Comedy, Dementia, Demons, Doujinshi, Drama, Ecchi, Fantasy, Game, Gender Bender, Harem, Hentai, Historical, Horror, Josei, Kids, Magic, Martial Arts, Mature, Mecha, Military, Motion Comic, Music, Mystery, Mythological , Parody, Police, Psychological, Romance, Samurai, School, Sci-Fi, Seinen, Shoujo, Shoujo Ai, Shounen, Shounen Ai, Slice of Life, Space, Sports, Super Power, Supernatural, Thriller, Tragedy, Vampire, Yaoi, Yuri";
   QStringList genres = genrelist.split(", ");
