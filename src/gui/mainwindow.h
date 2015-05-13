@@ -158,8 +158,6 @@ class MainWindow : public QMainWindow {
 
   void updateStatistics();
 
-  void resetAPI();
-
   void reloadSmartTitles();
 
   void elegantClose();

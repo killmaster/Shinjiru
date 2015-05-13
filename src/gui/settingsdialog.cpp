@@ -644,3 +644,17 @@ void SettingsDialog::toggleAdvanced(bool en) {
   ui->basicBox->setChecked(!en);
   ui->advancedBox->setChecked(en);
 }
+
+void SettingsDialog::resetAPI() {
+  Settings *s = new Settings;
+  API::sharedAPI()->sharedAniListAPI()->setAuthorizationCode("");
+  API::sharedAPI()->sharedAniListAPI()->setAuthorizationPin("");
+
+  s->setValue(Settings::AniListAccess, "");
+  s->setValue(Settings::AniListExpires, QDateTime::currentDateTimeUtc());
+  s->setValue(Settings::AniListRefresh, "");
+
+  delete s;
+  QProcess::startDetached(QApplication::applicationFilePath());
+  exit(0);
+}

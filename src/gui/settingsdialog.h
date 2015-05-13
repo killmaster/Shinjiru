@@ -54,6 +54,8 @@ class SettingsDialog : public QDialog {
   void saveSmartTitles();
 
   void updateSmartTitleName();
+
+  void resetAPI();
 };
 
 #endif  // SRC_GUI_SETTINGSDIALOG_H_
