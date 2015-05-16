@@ -162,10 +162,14 @@ int main(int argc, char *argv[]) {
   else
     FvUpdater::sharedUpdater()->SetFeedURL(VER_UPDATEFEED_STR);
 
-  bool check_for_updates = s->getValue(Settings::CheckUpdates, true).toBool();
+  QDir app_dir(qApp->applicationDirPath());
+  QStringList files = app_dir.entryList(QDir::NoDotAndDotDot | QDir::System |
+                                        QDir::Hidden  | QDir::AllDirs |
+                                        QDir::Files, QDir::DirsFirst);
 
-  if (check_for_updates) {
-    FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
+  for(QString f : files) {
+    if(f.endsWith("oldversion"))
+      app_dir.remove(f);
   }
 
   #ifdef Q_OS_WIN

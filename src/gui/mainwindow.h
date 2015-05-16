@@ -160,7 +160,7 @@ class MainWindow : public QMainWindow {
 
   void reloadSmartTitles();
 
-  void elegantClose();
+  void elegantClose(bool quit = true);
 
   void filterTorrents(QString text, bool hide);
   void filterTorrents(bool hide);

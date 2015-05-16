@@ -54,6 +54,21 @@ MainWindow::MainWindow(QWidget *parent) :
 
   awesome->initFontAwesome();
 
+  bool check_for_updates =
+      settings->getValue(Settings::CheckUpdates, true).toBool();
+
+  if (check_for_updates) {
+    connect(FvUpdater::sharedUpdater(), &FvUpdater::restartRequested, [&]() {
+      QString app = QApplication::applicationFilePath();
+      QStringList arguments = QApplication::arguments();
+      QString wd = QDir::currentPath();
+      QProcess::startDetached(app, arguments, wd);
+      elegantClose(true);
+    });
+
+    FvUpdater::sharedUpdater()->CheckForUpdatesSilent();
+  }
+
   QFont font = ui->listTabs->tabBar()->font();
   font.setCapitalization(QFont::Capitalize);
   ui->listTabs->tabBar()->setFont(font);
@@ -141,6 +156,8 @@ MainWindow::MainWindow(QWidget *parent) :
     SettingsDialog *s = new SettingsDialog(this);
     s->showSmartTitles();
   });
+
+  connect(qApp, SIGNAL(aboutToQuit()), SLOT(elegantClose()));
 
   connect(ui->actionVAL, SIGNAL(triggered()), SLOT(viewAnimeList()));
   connect(ui->actionVD, SIGNAL(triggered()), SLOT(viewDashboard()));
@@ -681,7 +698,9 @@ void MainWindow::showSearch() {
   sp->show();
 }
 
-void MainWindow::elegantClose() {
+void MainWindow::elegantClose(bool quit) {
+  qDebug() << "Exiting eleganty.";
+
   QSettings s;
   s.setValue("mainWindowGeometry", saveGeometry());
   s.setValue("mainWindowState", saveState());
@@ -703,6 +722,8 @@ void MainWindow::elegantClose() {
       f.waitForFinished();
     }
   }
+
+  if(!quit) return;
 
   if (this->hasUser) {
     connect(User::sharedUser(), SIGNAL(quitFinished()), qApp, SLOT(quit()));
