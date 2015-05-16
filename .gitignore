@@ -5,9 +5,21 @@
 # Sensitive API data thing
 app.h
 
-# Top Secret project stuff
-premium.h
-premium.cpp
+# MSVC Ignores folder
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
 
 # C++ objects and libs
 
@@ -54,7 +66,8 @@ Makefile*
 .LSOverride
 
 # Icon must end with two \r
-Icon
+Icon
+
 
 # Thumbnails
 ._*
