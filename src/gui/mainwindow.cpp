@@ -557,8 +557,6 @@ void MainWindow::updateEpisode() {
   data.insert("episodes_watched", cw_episode);
   data.insert("list_status", "watching");
 
-  cw_episode += cw_anime->getUpdateOffset();
-
   cw_anime->setMyProgress(cw_episode.toInt());
 
   if (cw_anime->getMyProgress() == cw_anime->getEpisodeCount() &&
