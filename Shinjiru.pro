@@ -51,7 +51,6 @@ SOURCES   += \
     src/gui/userlisthelper.cpp \
     src/gui/userhelper.cpp \
     src/lib/windowwatcher.cpp \
-    src/gui/rulewizard.cpp \
     src/gui/trayhelper.cpp \
     src/gui/torrentshelper.cpp \
     src/lib/skinmanager.cpp \
@@ -59,7 +58,6 @@ SOURCES   += \
     src/gui/settingshelper.cpp \
     src/gui/statshelper.cpp \
     src/gui/apiwebview.cpp \
-    src/gui/rulemanager.cpp \
     src/gui/overlay.cpp \
     src/gui/searchpanel.cpp \
     src/gui/browserhelper.cpp \
@@ -90,12 +88,10 @@ HEADERS   += \
     src/api/api.h \
     src/settings.h \
     src/lib/windowwatcher.h \
-    src/gui/rulewizard.h \
     src/lib/skinmanager.h \
     src/gui/about.h \
     src/gui/apiwebview.h \
     src/gui/facetablewidgetitem.h \
-    src/gui/rulemanager.h \
     src/gui/overlay.h \
     src/gui/searchpanel.h \
     src/version.h \

@@ -11,8 +11,7 @@
 #include "./mainwindow.h"
 #include "./ui_mainwindow.h"
 #include "../lib/torrentrss.h"
-#include "./rulewizard.h"
-#include "./rulemanager.h"
+#include "./settingsdialog.h"
 
 void MainWindow::refreshTorrentListing() {
   qDebug() << "Refreshing torrent listing..."
@@ -150,10 +149,10 @@ void MainWindow::createRule(int row) {
   QString res   = ui->torrentTable->item(row, 3)->text();
   QString file  = ui->torrentTable->item(row, 4)->text();
 
-  RuleWizard *rw = new RuleWizard(this, title, sub, res, file, default_rule);
-  rw->show();
+  SettingsDialog *s = new SettingsDialog(this);
+  s->showTorrentRules(title, sub, res, file);
 
-  connect(rw, SIGNAL(accepted()), SLOT(reloadRules()));
+  connect(s, SIGNAL(accepted()), SLOT(reloadRules()));
 }
 
 
@@ -349,11 +348,4 @@ void MainWindow::verifyAndDownload(int row) {
       f.write("0");
     }
   }
-}
-
-void MainWindow::showRuleManager() {
-  RuleManager *rm = new RuleManager(this, default_rule);
-  rm->show();
-
-  connect(rm, SIGNAL(accepted()), SLOT(reloadRules()));
 }

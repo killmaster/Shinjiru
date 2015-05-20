@@ -171,7 +171,6 @@ class MainWindow : public QMainWindow {
   void reloadRules();
   void checkForMatches();
   void verifyAndDownload(int row);
-  void showRuleManager();
 
   void applyEAR();
 

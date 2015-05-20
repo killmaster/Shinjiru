@@ -19,6 +19,7 @@ class SettingsDialog : public QDialog {
   ~SettingsDialog();
 
   void showSmartTitles();
+  void showTorrentRules(QString title, QString sub, QString res, QString file);
 
  private:
   Ui::SettingsDialog *ui;

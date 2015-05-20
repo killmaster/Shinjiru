@@ -179,7 +179,6 @@ MainWindow::MainWindow(QWidget *parent) :
   connect(ui->chkHideUnknown, SIGNAL(toggled(bool)),
           SLOT(filterTorrents(bool)));
   connect(ui->refreshButton, SIGNAL(clicked()), SLOT(refreshTorrentListing()));
-  connect(ui->ruleManagerButton, SIGNAL(clicked()), SLOT(showRuleManager()));
 
   connect(ui->actionEAR, SIGNAL(toggled(bool)), SLOT(applyEAR()));
 
@@ -532,10 +531,11 @@ void MainWindow::watch(QString title) {
       return;
     }
 
-    if (cw_anime->getMyStatus() != "watching" &&
-        cw_anime->getMyStatus() != "plan to watch") {
+   /* if (cw_anime->getMyStatus() != "watching" &&
+        cw_anime->getMyStatus() != "plan to watch" &&
+        cw_anime->getMyStatus() != "on hold") {
       return;
-    }
+    }*/
 
     int auto_update_delay =
         settings->getValue(Settings::AutoUpdateDelay, 120).toInt();

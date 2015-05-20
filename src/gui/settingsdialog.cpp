@@ -520,7 +520,12 @@ void SettingsDialog::loadTorrentRules() {
   QFile tor_rule_file(QCoreApplication::applicationDirPath() + "/rules.json");
   tor_rule_file.open(QFile::ReadWrite);
 
-  torrent_rules = QJsonDocument::fromJson(tor_rule_file.readAll()).object();
+  QByteArray data = tor_rule_file.readAll();
+
+  torrent_rules = QJsonDocument::fromJson(data).object();
+
+  QStringList s = torrent_rules.keys();
+  QString sb = QJsonDocument(torrent_rules).toJson();
 
   ui->torrentRuleList->addItems(torrent_rules.keys());
 }
@@ -632,6 +637,23 @@ void SettingsDialog::showSmartTitles() {
 
   if (ui->smartTitleList->count() > 0)
     ui->smartTitleList->setCurrentRow(0);
+}
+
+void SettingsDialog::showTorrentRules(QString title, QString sub,
+                                      QString res, QString file) {
+  this->show();
+  ui->settingsTypeTabs->setCurrentIndex(3);
+  ui->settingsTypeList->setCurrentRow(3);
+  ui->torrentTabs->setCurrentIndex(1);
+  ui->newTorrentRule->click();
+  ui->torrentRuleList->setCurrentRow(ui->torrentRuleList->count() - 1);
+
+  ui->animeTitleLineEdit->setText(title);
+  ui->animeResolutionComboBox->setCurrentText(res);
+  ui->subGroupLineEdit->setText(sub);
+  ui->fileRegexLineEdit->setText(file);
+
+  ui->torrentRuleList->currentItem()->setText(ui->animeTitleLineEdit->text());
 }
 
 
