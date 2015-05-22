@@ -152,9 +152,19 @@ MainWindow::MainWindow(QWidget *parent) :
   });
 
   connect(ui->actionARR, &QAction::triggered, [&]() {  // NOLINT
-    reloadSmartTitles();
     SettingsDialog *s = new SettingsDialog(this);
     s->showSmartTitles();
+
+    connect(s, &QDialog::accepted, [&] () {  // NOLINT
+      toggleAnimeRecognition(
+            settings->getValue(Settings::AnimeRecognitionEnabled, true).toBool());
+
+      torrents_enabled =
+          settings->getValue(Settings::TorrentsEnabled, true).toBool();
+
+      reloadSmartTitles();
+      reloadRules();
+    });
   });
 
   connect(qApp, SIGNAL(aboutToQuit()), SLOT(elegantClose()));
@@ -427,6 +437,9 @@ void MainWindow::showSettings() {
 
     torrents_enabled =
         settings->getValue(Settings::TorrentsEnabled, true).toBool();
+
+    reloadSmartTitles();
+    reloadRules();
   });
 }
 

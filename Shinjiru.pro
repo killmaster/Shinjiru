@@ -1,7 +1,7 @@
 QT += core gui widgets network concurrent
 
 TARGET = Shinjiru
-VERSION = 1.7.2
+VERSION = 1.7.3
 TEMPLATE = app
 ICON = Shinjiru.icns
 

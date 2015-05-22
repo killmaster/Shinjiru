@@ -152,7 +152,16 @@ void MainWindow::createRule(int row) {
   SettingsDialog *s = new SettingsDialog(this);
   s->showTorrentRules(title, sub, res, file);
 
-  connect(s, SIGNAL(accepted()), SLOT(reloadRules()));
+  connect(s, &QDialog::accepted, [&] () {  // NOLINT
+    toggleAnimeRecognition(
+          settings->getValue(Settings::AnimeRecognitionEnabled, true).toBool());
+
+    torrents_enabled =
+        settings->getValue(Settings::TorrentsEnabled, true).toBool();
+
+    reloadSmartTitles();
+    reloadRules();
+  });
 }
 
 
