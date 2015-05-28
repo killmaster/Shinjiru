@@ -100,7 +100,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <AdditionalIncludeDirectories>.;lib\QtAwesome\QtAwesome;lib\AniListAPI;..\..\qt\5.4\msvc2013\include\QtZlib;lib\fervor\quazip;lib\fervor;src\lib\crashhandler;src\lib\crashhandler\src;..\..\qt\5.4\msvc2013\include;..\..\qt\5.4\msvc2013\include\QtWebKitWidgets;..\..\qt\5.4\msvc2013\include\QtWidgets;..\..\qt\5.4\msvc2013\include\QtWebKit;..\..\qt\5.4\msvc2013\include\QtGui;..\..\qt\5.4\msvc2013\include\QtANGLE;..\..\qt\5.4\msvc2013\include\QtNetwork;..\..\qt\5.4\msvc2013\include\QtConcurrent;..\..\qt\5.4\msvc2013\include\QtCore;debug;.;..\..\qt\5.4\msvc2013\mkspecs\win32-msvc2013;.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;lib\QtAwesome\QtAwesome;lib\AniListAPI;C:\Qt\5.4\msvc2013\include\QtZlib;lib\fervor\quazip;lib\fervor;src\lib\crashhandler;src\lib\crashhandler\src;C:\Qt\5.4\msvc2013\include;C:\Qt\5.4\msvc2013\include\QtWebKitWidgets;C:\Qt\5.4\msvc2013\include\QtWidgets;C:\Qt\5.4\msvc2013\include\QtWebKit;C:\Qt\5.4\msvc2013\include\QtGui;C:\Qt\5.4\msvc2013\include\QtANGLE;C:\Qt\5.4\msvc2013\include\QtNetwork;C:\Qt\5.4\msvc2013\include\QtConcurrent;C:\Qt\5.4\msvc2013\include\QtCore;debug;C:\Qt\5.4\msvc2013\mkspecs\win32-msvc2013;.\GeneratedFiles;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalOptions>-Zm200 -w34100 -w34189 %(AdditionalOptions)</AdditionalOptions>
       <AssemblerListingLocation>debug\</AssemblerListingLocation>
       <BrowseInformation>false</BrowseInformation>
@@ -119,7 +119,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>$(QTDIR)\lib\qtmaind.lib;shell32.lib;$(QTDIR)\lib\Qt5Cored.lib;"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\User32.lib";"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib\Kernel32.lib";$(QTDIR)\lib\Qt5WebKitWidgetsd.lib;$(QTDIR)\lib\Qt5Widgetsd.lib;$(QTDIR)\lib\Qt5WebKitd.lib;$(QTDIR)\lib\Qt5Guid.lib;$(QTDIR)\lib\Qt5Networkd.lib;$(QTDIR)\lib\Qt5Concurrentd.lib;$(QTDIR)\lib\Qt5Cored.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTDIR)\lib;$(QTDIR)\lib;"C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib";%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Qt\5.4\msvc2013\lib;C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>"/MANIFESTDEPENDENCY:type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' publicKeyToken='6595b64144ccf1df' language='*' processorArchitecture='*'" %(AdditionalOptions)</AdditionalOptions>
       <DataExecutionPrevention>true</DataExecutionPrevention>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -192,12 +192,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Debug\moc_quazipfile.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_rulemanager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_rulewizard.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Debug\moc_scrolltext.cpp">
@@ -296,12 +290,6 @@
     <ClCompile Include="Release\moc_quazipfile.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Release\moc_rulemanager.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="Release\moc_rulewizard.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="Release\moc_scrolltext.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
@@ -367,8 +355,6 @@
     <ClCompile Include="lib\fervor\quazip\quazipfile.cpp" />
     <ClCompile Include="lib\fervor\quazip\quazipfileinfo.cpp" />
     <ClCompile Include="lib\fervor\quazip\quazipnewinfo.cpp" />
-    <ClCompile Include="src\gui\rulemanager.cpp" />
-    <ClCompile Include="src\gui\rulewizard.cpp" />
     <ClCompile Include="src\gui\scrolltext.cpp" />
     <ClCompile Include="src\gui\searchpanel.cpp" />
     <ClCompile Include="src\settings.cpp" />
@@ -418,8 +404,6 @@ endlocal
     <ClInclude Include="GeneratedFiles\ui_fvupdatedownloadprogress.h" />
     <ClInclude Include="GeneratedFiles\ui_fvupdatewindow.h" />
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h" />
-    <ClInclude Include="GeneratedFiles\ui_rulemanager.h" />
-    <ClInclude Include="GeneratedFiles\ui_rulewizard.h" />
     <ClInclude Include="GeneratedFiles\ui_searchpanel.h" />
     <ClInclude Include="GeneratedFiles\ui_settingsdialog.h" />
     <ClInclude Include="lib\fervor\quazip\JlCompress.h" />
@@ -755,42 +739,6 @@ endlocal
     </CustomBuild>
     <ClInclude Include="lib\fervor\quazip\quazipfileinfo.h" />
     <ClInclude Include="lib\fervor\quazip\quazipnewinfo.h" />
-    <CustomBuild Include="src\gui\rulemanager.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-if errorlevel 1 goto VCEnd
-if errorlevel 1 goto VCEnd
-endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DAPP_VERSION=\"1.7.1\" -DFV_APP_NAME=\"Shinjiru\" -DFV_APP_VERSION=\"1.7.1\" -DQUAZIP_BUILD -DQUAZIP_STATIC -DFV_GUI -DQT_NO_DEBUG -DQT_WEBKITWIDGETS_LIB -DQT_WIDGETS_LIB -DQT_WEBKIT_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB -DNDEBUG  "-I." "-I.\lib\QtAwesome\QtAwesome" "-I.\lib\AniListAPI" "-I.\..\..\qt\5.4\msvc2013\include\QtZlib" "-I.\lib\fervor\quazip" "-I.\lib\fervor" "-I.\src\lib\crashhandler" "-I.\src\lib\crashhandler\src" "-I.\..\..\qt\5.4\msvc2013\include" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKitWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKit" "-I.\..\..\qt\5.4\msvc2013\include\QtGui" "-I.\..\..\qt\5.4\msvc2013\include\QtANGLE" "-I.\..\..\qt\5.4\msvc2013\include\QtNetwork" "-I.\..\..\qt\5.4\msvc2013\include\QtConcurrent" "-I.\..\..\qt\5.4\msvc2013\include\QtCore" "-I.\release" "-I.\..\..\qt\5.4\msvc2013\mkspecs\win32-msvc2013" "-I.\GeneratedFiles" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing rulemanager.h...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-if errorlevel 1 goto VCEnd
-if errorlevel 1 goto VCEnd
-endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DAPP_VERSION=\"1.7.1\" -DFV_APP_NAME=\"Shinjiru\" -DFV_APP_VERSION=\"1.7.1\" -DQUAZIP_BUILD -DQUAZIP_STATIC -DFV_GUI -DQT_WEBKITWIDGETS_LIB -DQT_WIDGETS_LIB -DQT_WEBKIT_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB  "-I." "-I.\lib\QtAwesome\QtAwesome" "-I.\lib\AniListAPI" "-I.\..\..\qt\5.4\msvc2013\include\QtZlib" "-I.\lib\fervor\quazip" "-I.\lib\fervor" "-I.\src\lib\crashhandler" "-I.\src\lib\crashhandler\src" "-I.\..\..\qt\5.4\msvc2013\include" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKitWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKit" "-I.\..\..\qt\5.4\msvc2013\include\QtGui" "-I.\..\..\qt\5.4\msvc2013\include\QtANGLE" "-I.\..\..\qt\5.4\msvc2013\include\QtNetwork" "-I.\..\..\qt\5.4\msvc2013\include\QtConcurrent" "-I.\..\..\qt\5.4\msvc2013\include\QtCore" "-I.\debug" "-I.\..\..\qt\5.4\msvc2013\mkspecs\win32-msvc2013" "-I.\GeneratedFiles" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing rulemanager.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-    </CustomBuild>
-    <CustomBuild Include="src\gui\rulewizard.h">
-      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
-if errorlevel 1 goto VCEnd
-if errorlevel 1 goto VCEnd
-endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DAPP_VERSION=\"1.7.1\" -DFV_APP_NAME=\"Shinjiru\" -DFV_APP_VERSION=\"1.7.1\" -DQUAZIP_BUILD -DQUAZIP_STATIC -DFV_GUI -DQT_NO_DEBUG -DQT_WEBKITWIDGETS_LIB -DQT_WIDGETS_LIB -DQT_WEBKIT_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB -DNDEBUG  "-I." "-I.\lib\QtAwesome\QtAwesome" "-I.\lib\AniListAPI" "-I.\..\..\qt\5.4\msvc2013\include\QtZlib" "-I.\lib\fervor\quazip" "-I.\lib\fervor" "-I.\src\lib\crashhandler" "-I.\src\lib\crashhandler\src" "-I.\..\..\qt\5.4\msvc2013\include" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKitWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKit" "-I.\..\..\qt\5.4\msvc2013\include\QtGui" "-I.\..\..\qt\5.4\msvc2013\include\QtANGLE" "-I.\..\..\qt\5.4\msvc2013\include\QtNetwork" "-I.\..\..\qt\5.4\msvc2013\include\QtConcurrent" "-I.\..\..\qt\5.4\msvc2013\include\QtCore" "-I.\release" "-I.\..\..\qt\5.4\msvc2013\mkspecs\win32-msvc2013" "-I.\GeneratedFiles" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Moc%27ing rulewizard.h...</Message>
-      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
-if errorlevel 1 goto VCEnd
-if errorlevel 1 goto VCEnd
-endlocal
-"$(QTDIR)\bin\moc.exe"  "%(FullPath)" -o "$(ConfigurationName)\moc_%(Filename).cpp"  -D_WINDOWS -DUNICODE -DWIN32 -DAPP_VERSION=\"1.7.1\" -DFV_APP_NAME=\"Shinjiru\" -DFV_APP_VERSION=\"1.7.1\" -DQUAZIP_BUILD -DQUAZIP_STATIC -DFV_GUI -DQT_WEBKITWIDGETS_LIB -DQT_WIDGETS_LIB -DQT_WEBKIT_LIB -DQT_GUI_LIB -DQT_NETWORK_LIB -DQT_CONCURRENT_LIB -DQT_CORE_LIB  "-I." "-I.\lib\QtAwesome\QtAwesome" "-I.\lib\AniListAPI" "-I.\..\..\qt\5.4\msvc2013\include\QtZlib" "-I.\lib\fervor\quazip" "-I.\lib\fervor" "-I.\src\lib\crashhandler" "-I.\src\lib\crashhandler\src" "-I.\..\..\qt\5.4\msvc2013\include" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKitWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWidgets" "-I.\..\..\qt\5.4\msvc2013\include\QtWebKit" "-I.\..\..\qt\5.4\msvc2013\include\QtGui" "-I.\..\..\qt\5.4\msvc2013\include\QtANGLE" "-I.\..\..\qt\5.4\msvc2013\include\QtNetwork" "-I.\..\..\qt\5.4\msvc2013\include\QtConcurrent" "-I.\..\..\qt\5.4\msvc2013\include\QtCore" "-I.\debug" "-I.\..\..\qt\5.4\msvc2013\mkspecs\win32-msvc2013" "-I.\GeneratedFiles" "-IC:\Program Files (x86)\Visual Leak Detector\include"</Command>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Moc%27ing rulewizard.h...</Message>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ConfigurationName)\moc_%(Filename).cpp</Outputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
-    </CustomBuild>
     <ClInclude Include="src\lib\crashhandler\src\common\scoped_ptr.h" />
     <CustomBuild Include="src\gui\scrolltext.h">
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal

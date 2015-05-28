@@ -190,12 +190,6 @@
     <ClCompile Include="lib\fervor\quazip\quazipnewinfo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\gui\rulemanager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="src\gui\rulewizard.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\gui\scrolltext.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -365,18 +359,6 @@
       <Filter>Generated Files\Debug</Filter>
     </ClCompile>
     <ClCompile Include="Release\moc_quazipfile.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_rulemanager.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_rulemanager.cpp">
-      <Filter>Generated Files\Release</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug\moc_rulewizard.cpp">
-      <Filter>Generated Files\Debug</Filter>
-    </ClCompile>
-    <ClCompile Include="Release\moc_rulewizard.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
     <ClCompile Include="Debug\moc_scrolltext.cpp">
@@ -576,12 +558,6 @@
     <ClInclude Include="lib\fervor\quazip\quazipnewinfo.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <CustomBuild Include="src\gui\rulemanager.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="src\gui\rulewizard.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <ClInclude Include="src\lib\crashhandler\src\common\scoped_ptr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -726,12 +702,6 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_mainwindow.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_rulemanager.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="GeneratedFiles\ui_rulewizard.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="GeneratedFiles\ui_searchpanel.h">

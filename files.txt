@@ -32,10 +32,6 @@ src/gui/mainwindow.h
 src/gui/overlay.cpp
 src/gui/overlay.h
 src/gui/progresstablewidgetitem.h
-src/gui/rulemanager.cpp
-src/gui/rulemanager.h
-src/gui/rulewizard.cpp
-src/gui/rulewizard.h
 src/gui/scrolltext.cpp
 src/gui/scrolltext.h
 src/gui/searchpanel.cpp
